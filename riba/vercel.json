@@ -1,36 +1,13 @@
 {
   "version": 2,
   "name": "ribar-lot-pwa",
-  "builds": [
-    {
-      "src": "pwa-example/**",
-      "use": "@vercel/static"
-    }
-  ],
+  "public": true,
+  "buildCommand": null,
+  "outputDirectory": ".",
   "routes": [
     {
-      "src": "/",
-      "dest": "/pwa-example/index.html"
-    },
-    {
-      "src": "/(.*)\\.(js|css|json|csv)",
-      "dest": "/pwa-example/$1.$2"
-    },
-    {
-      "src": "/js/(.*)",
-      "dest": "/pwa-example/js/$1"
-    },
-    {
-      "src": "/manifest.json",
-      "dest": "/pwa-example/manifest.json"
-    },
-    {
-      "src": "/sw.js",
-      "dest": "/pwa-example/sw.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/pwa-example/$1"
+      "src": "/favicon.ico",
+      "dest": "/favicon.ico"
     }
   ],
   "headers": [
@@ -38,7 +15,7 @@
       "source": "/sw.js",
       "headers": [
         {
-          "key": "Cache-Control",
+          "key": "Cache-Control", 
           "value": "no-cache, no-store, must-revalidate"
         },
         {
