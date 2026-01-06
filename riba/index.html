@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ribar LOT - Sljedivost ribe</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    
+    <!-- Apple PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Ribar LOT">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Ekran 1: Novi ulov -->
+        <div id="screen-home" class="screen active">
+            <header class="header">
+                <h1>🐟 RIBAR LOT</h1>
+                <div class="status-bar">
+                    <span id="location-status">📍 Dohvaćam lokaciju...</span>
+                    <span id="date-time">📅 Loading...</span>
+                    <span id="offline-status" class="offline">💾 Offline: ✓</span>
+                </div>
+            </header>
+            
+            <main class="main-content">
+                <button id="new-catch-btn" class="primary-btn large">
+                    🎣 NOVI ULOV
+                </button>
+                
+                <div class="daily-stats">
+                    <p>📊 Današnji ulovi: <span id="daily-count">0</span></p>
+                </div>
+            </main>
+        </div>
+
+        <!-- Ekran 2: Odabir vrste -->
+        <div id="screen-species" class="screen">
+            <header class="header">
+                <button class="back-btn" onclick="goToScreen('screen-home')">← NATRAG</button>
+                <h2>ODABERI VRSTU</h2>
+            </header>
+            
+            <main class="main-content">
+                <div class="search-bar">
+                    <input type="text" id="species-search" placeholder="🔍 Pretraži po imenu">
+                </div>
+                
+                <div id="species-grid" class="species-grid">
+                    <!-- Dinamički generirane vrste -->
+                </div>
+            </main>
+        </div>
+
+        <!-- Ekran 3: Unos količine -->
+        <div id="screen-quantity" class="screen">
+            <header class="header">
+                <button class="back-btn" onclick="goToScreen('screen-species')">← NATRAG</button>
+                <h2 id="selected-species-name">VRSTA</h2>
+            </header>
+            
+            <main class="main-content">
+                <div class="species-info">
+                    <p>FAO: <span id="species-fao">---</span></p>
+                    <p>Znanstveno: <span id="species-scientific">---</span></p>
+                </div>
+                
+                <div class="quantity-input">
+                    <label>UKUPNO KILOGRAM:</label>
+                    <input type="text" id="weight-display" readonly value="0">
+                </div>
+                
+                <div class="keypad">
+                    <button class="key-btn" onclick="addDigit('1')">1</button>
+                    <button class="key-btn" onclick="addDigit('2')">2</button>
+                    <button class="key-btn" onclick="addDigit('3')">3</button>
+                    <button class="key-btn" onclick="addDigit('4')">4</button>
+                    <button class="key-btn" onclick="addDigit('5')">5</button>
+                    <button class="key-btn" onclick="addDigit('6')">6</button>
+                    <button class="key-btn" onclick="addDigit('7')">7</button>
+                    <button class="key-btn" onclick="addDigit('8')">8</button>
+                    <button class="key-btn" onclick="addDigit('9')">9</button>
+                    <button class="key-btn" onclick="addDigit('.')">.</button>
+                    <button class="key-btn" onclick="addDigit('0')">0</button>
+                    <button class="key-btn delete" onclick="deleteDigit()">⌫</button>
+                    <button class="key-btn clear" onclick="clearWeight()">C</button>
+                </div>
+                
+                <div class="min-size-section">
+                    <label>
+                        <input type="checkbox" id="below-min-size"> 
+                        ⚠️ Ima li ribe ispod minimalne veličine?
+                    </label>
+                    <div id="min-size-inputs" class="hidden">
+                        <input type="number" id="min-size-count" placeholder="Broj komada">
+                        <input type="number" id="min-size-weight" placeholder="Težina (kg)">
+                    </div>
+                </div>
+                
+                <button id="continue-btn" class="primary-btn" onclick="generateLOT()">
+                    DALJE
+                </button>
+            </main>
+        </div>
+
+        <!-- Ekran 4: LOT rezultat -->
+        <div id="screen-result" class="screen">
+            <header class="header">
+                <h2>✅ LOT KREIRAN</h2>
+            </header>
+            
+            <main class="main-content">
+                <div class="lot-summary" id="lot-summary">
+                    <!-- Dinamički generiran sažetak -->
+                </div>
+                
+                <div class="export-buttons">
+                    <button class="export-btn" onclick="downloadPDF()">
+                        📄 PREUZMI PDF
+                    </button>
+                    <button class="export-btn" onclick="downloadCSV()">
+                        📊 PREUZMI CSV
+                    </button>
+                    <button class="export-btn" onclick="showQR()">
+                        📱 PRIKAŽI QR KOD
+                    </button>
+                    <button class="export-btn" onclick="generateLabel()">
+                        🏷️ NALIJEPNICA ZA AMBALAŽU
+                    </button>
+                </div>
+                
+                <div class="compliance-warning">
+                    <p>⚠️ <strong>OBAVEZNO:</strong> LOT broj mora biti fizički označen na ambalaži proizvoda (Uredba EU 2023/2842, čl. 58)</p>
+                </div>
+                
+                <button class="primary-btn" onclick="newCatch()">
+                    🔄 NOVI ULOV
+                </button>
+            </main>
+        </div>
+
+        <!-- QR Code Modal -->
+        <div id="qr-modal" class="modal hidden">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <div id="qr-code"></div>
+                <p>LOT ID: <span id="qr-lot-id"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- AGGRESSIVE CACHE CLEAR - FORCE RELOAD ALL FILES -->
+    <script>
+        console.log('🗑️ AGGRESSIVE CACHE CLEAR - FORCING FRESH LOAD');
+        
+        // Clear IndexedDB
+        indexedDB.deleteDatabase('FishermanLOT');
+        
+        // Clear all caches
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => {
+                    console.log('🗑️ Deleting cache:', name);
+                    caches.delete(name);
+                });
+            });
+        }
+        
+        // Clear localStorage and sessionStorage
+        localStorage.clear();
+        sessionStorage.clear();
+        
+        console.log('🔄 All caches cleared - loading fresh files');
+    </script>
+    
+    <!-- Scripts for Vercel deployment -->
+    <script src="js/db.js"></script>
+    <script src="js/gps.js"></script>
+    <script src="js/lot-generator.js"></script>
+    <script src="js/export.js"></script>
+    <script src="js/app.js"></script>
+    
+    <!-- SERVICE WORKER DISABLED - NO CACHING DURING DEVELOPMENT -->
+    <script>
+        console.log('🚫 Service Worker disabled to prevent caching issues');
+        
+        // Unregister any existing service workers
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistrations().then(registrations => {
+                registrations.forEach(registration => {
+                    console.log('🗑️ Unregistering Service Worker:', registration);
+                    registration.unregister();
+                });
+            });
+        }
+        
+        console.log('✅ No caching - files will load fresh every time');
+    </script>
+</body>
+</html>

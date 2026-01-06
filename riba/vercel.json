@@ -1,0 +1,60 @@
+{
+  "version": 2,
+  "name": "ribar-lot-pwa",
+  "builds": [
+    {
+      "src": "pwa-example/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/",
+      "dest": "/pwa-example/index.html"
+    },
+    {
+      "src": "/(.*)\\.(js|css|json|csv)",
+      "dest": "/pwa-example/$1.$2"
+    },
+    {
+      "src": "/js/(.*)",
+      "dest": "/pwa-example/js/$1"
+    },
+    {
+      "src": "/manifest.json",
+      "dest": "/pwa-example/manifest.json"
+    },
+    {
+      "src": "/sw.js",
+      "dest": "/pwa-example/sw.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/pwa-example/$1"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json"
+        }
+      ]
+    }
+  ]
+}
