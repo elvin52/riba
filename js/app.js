@@ -1,7 +1,7 @@
 // Main Application Controller
 class FishermanApp {
     constructor() {
-        this.currentScreen = 'screen-home';
+        this.currentScreen = 'screen-species'; // Skip home, go directly to species selection
         this.currentWeight = '0';
         this.isInitialized = false;
         this.allSpecies = [];
@@ -49,11 +49,20 @@ class FishermanApp {
             this.updateDailyCount();
             this.renderSpeciesGrid();
             
+            // Automatically start new catch (skip "Novi Ulov" screen)
+            console.log('🚀 Automatski pokretanje novog ulova...');
+            await window.lotGenerator.startNewCatch();
+            console.log('✅ Novi ulov automatski pokrenut');
+            
+            // Navigate directly to species selection
+            this.goToScreen('screen-species');
+            console.log('📱 Navigiran na izbor vrsta');
+            
             // Start time updates
             setInterval(() => this.updateDateTime(), 1000);
             
             this.isInitialized = true;
-            console.log('🎣 Aplikacija spremna!');
+            console.log('🎣 Aplikacija spremna - direktno na izbor vrsta!');
             
         } catch (error) {
             console.error('❌ Detaljne greške pri inicijalizaciji:');
