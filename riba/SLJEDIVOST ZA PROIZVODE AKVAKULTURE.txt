@@ -1,0 +1,318 @@
+SLJEDIVOST ZA PROIZVODE AKVAKULTURE
+INFORMACIJEZA PROIZVOĐAČE (UZGAJIVAČE) TEMELJEM
+UREDBE (EU) 2023/2842
+1. UVOD
+Obzirom da 10. siječnja 2026. godine stupaju na snagu nove odredbe vezane za sljedivost
+proizvoda ribarstva i akvakulturu za svježu, rashlađenu i smrznutu robnu skupinu, koje
+propisuju obvezu uvođenja digitalne sljedivosti za sve subjekte u distribucijskom lancu, od
+proizvođača odnosno od ulova/izlova do krajnjeg potrošača, u ovom dokumentu smo
+pripremili kratke i osnovne informacije za osiguranje sljedivosti proizvoda akvakulture za
+uzgajivače i sljedeće kupce u lancu distribucije. Važno je napomenuti da su svi podaci koje je
+potrebno osigurati u smislu sljedivosti dostupni svakom uzgajivaču na Portalu gospodarskog
+ribarstva (PGR). ovim informacijama smo nastojali u glavnim crtama pojasniti koje su obveze
+i kako ih je moguće primijeniti u praksi, imajući u vidu što je trenutno dostupno kroz propisan
+i uspostavljen način unosa i dostave podataka o proizvodnji u akvakulturi.
+• Uredba (EU) 2023/2842 je stupila na snagu 9. siječnja 2024.
+• Dio koji se odnosi na sljedivost proizvoda akvakulture u primjeni je od 10. siječnja 2026.
+godine
+• Cilj je osigurati od strane proizvođača digitalnu sljedivost proizvoda akvakulture kroz
+sve faze proizvodnje, prerade i distribucije od nasada, izlova ili sakupljanja do maloprodaje
+(krajnjeg potrošača) – uz mogućnost kontrole i identifikacije svake serije/LOT broja
+proizvoda u digitalnom obliku.
+2. KLJUČNE ODREDBE ČLANKA 58 UREDBE (EU) 2023/2842 I OSTALIH
+POVEZANIH ODREDBI U ODNOSU NA SLJEDIVOST PROIZVODA
+RIBARSTVA
+Članak 58. Što propisuje i kako to provoditi u praksi?
+Stavak 1. Ne dovodeći u pitanje zahtjeve u pogledu sljedivosti utvrđene u Uredbi
+(EZ) br. 178/2002 Europskog parlamenta i Vijeća, gospodarski subjekti
+razvrstavaju proizvode ribarstva i akvakulture u serije i oni moraju biti
+sljedivi u svim fazama proizvodnje, prerade i distribucije, od faze
+nasada, izlova ili sakupljanja do faze maloprodaje.
+Kako primijeniti u praksi:
+Osiguravanje sljedivosti ovisi o načinu na koji će proizvođač organizirati
+sljedivost odnosno osigurati da je proizvod koji stavlja na tržište sljediv od
+samog početka proizvodnog procesa (nasada) pa sve do krajnjeg potrošača.
+To podrazumijeva da se razvrstavanje proizvoda koji se stavljaju na tržište
+u serije može organizirati već nakon nasada koji se evidentira jedinstvenom
+oznakom (primjerice: vrsta proizvoda / datum nasada / lokacija / broj kaveza
+Sljedivost za proizvode akvakulture od 10. siječnja 2026. godine
+2
+po potrebi). Ta oznaka potom prati ribu/školjke kroz cijeli uzgojni proces,
+sve do plasmana na tržište, kada je obvezno dodavanje kombinirane
+nomenkalturne oznake koja ovisi o prezentaciji proizvoda – radi li se o
+svježim, smrznutim, filetiranim, konzerviranim i sl. proizvodima akvakulture.
+Način razvrstavanja proizvoda u serije nije propisan, ali je definirano da se
+proizvodi akvakulture razvrstavaju u istu seriju ako se radi o istoj vrsti
+prezentiranoj na isti način koji potječu iz iste proizvodne jedinice u
+akvakulturi (članak 56.a stavak 2.b). Niže je jedan od mogućih primjera
+kako kreirati LOT broj od podataka dostupnih na PGR-u, za jednu pošiljku
+po vrsti. U LOT broj dodan je i datum izlova.
+HRVAQUXXXXXXFAO – DD/MM/GG
+- HRVAQUXXXXXX – broj lokacije uzgajališta
+- FAO – oznaka vrste
+- DD/MM/GG – dan, mjesec i zadnje dvije godina izlova
+LOT broj mora pratiti proizvod kroz skladištenje, pakiranje, distribuciju
+isporuku kupcima te kroz svu prateću dokumentaciju (otpremnica, račun,
+deklaracija).
+Stavak 2. Serije/lotovi koji se stavljaju na raspolaganje na tržištu ili će vjerojatno
+biti stavljene na raspolaganje na tržištu moraju biti označene na
+odgovarajući način kako bi se osigurala sljedivost svake serije.
+Kako primjeniti u praksi:
+Proizvođač/uzgajivač mora proizvode razvrstane u serije s jedinstvenim
+LOT brojem fizički označiti na ambalaži u kojoj se nalaze, odnosno LOT broj
+mora biti vidljiv na ambalaži proizvoda.
+Proizvođač/ribar može na ambalažama dodati bar kod ili QR kod koji se
+može kreirati od informacija sadržanih u LOT broju i informacija koje su mu
+dostupne. Primjer kreiranja QR koda daje se u primjeru niže tekstu.
+Stavak 3. Države članice provjeravaju da su gospodarski subjekti uspostavili
+sustave i postupke za identifikaciju svakoga gospodarskog subjekta koji
+im je isporučio serije proizvoda ribarstva i akvakulture i kojem su ti
+proizvodi isporučeni. Ti se podaci moraju staviti na raspolaganje
+nadležnim tijelima na njihov zahtjev.
+Kako primijeniti u praksi:
+Nadležnom tijelu na zahtjev moraju biti dostupne informacije o kreiranim
+LOT brojevima sa svim potrebnim informacijama. Ako je gospodarski
+subjekt združio ili dijelio serije, moraju biti dostupne informacije o načinu
+kreiranja novih LOT brojeva kao i sljedivosti do početnog LOT broja.
+Stavak 4. Serije proizvoda akvakulture obuhvaćene poglavljem 3., tarifnim
+brojevima 1604 i 1605 poglavlja 16 i podbrojem 1212 21 poglavlja 12
+Kombinirane nomenklature i popraćene su minimalnim skupom
+informacija u skladu sa stavcima 5., 10. iI 11. članka 58.
+Kako primijeniti u praksi:
+Sljedivost za proizvode akvakulture od 10. siječnja 2026. godine
+3
+Pod poglavljem 3., tarifnim brojevima 1604 i 1605 te podbrojem 1212 21
+poglavlja 12 Kombinirane nomenklature nalaze se svježa, rashlađena i
+smrznuta riba, prerađeni proizvodi poput konzervirane ribe, dimljene i
+gotovih proizvoda, proizvodi od školjaka, rakova i glavonožaca te jestive
+morske alge. Sve ove proizvode mora pratiti minimalan skup informacija
+propisan uredbom, a to su točan naziv proizvoda, vrsta ribe/organizma,
+način proizvodnje (uzgojeno), država uzgoja, oblik proizvoda (svježe,
+smrznuto, filetirano i sl.) te podaci vezani za sljedivost (serija/lot i prateća
+dokumentacija).
+Stavak 5. Za serije proizvoda ribarstva ili akvakulture obuhvaćenih poglavljem 3.
+kombinirane nomenklature na raspolaganje se moraju staviti barem
+sljedeći podaci:
+c) identifikacijski broj serije;
+Kako primjeniti u praksi:
+Identifikacijski broj serije je LOT broj kreiran temeljem informacija iz PGRa ili LOT broj kojeg kreira proizvođač/uzgajivač odnosno prvi ili sljedeći
+kupac.
+c) u slučaju proizvoda koji se ne uvoze u Uniju:
+ii. za sve proizvode akvakulture uključene u seriju, naziv i
+registracijski broj proizvođača ili proizvodne jedinice u
+akvakulturi
+Kako primijeniti u praksi:
+Naziv i registracijski broj proizvođača i broj lokacije iz dozvole za
+akvakulturu.
+c) u slučaju uvezenih proizvoda:
+ii. za sve proizvode akvakulture uključene u seriju, naziv i prema
+potrebi, registracijski broj proizvodne jedinice u akvakulturi;
+d) FAO-ova troslovnu oznaku vrste i njezin znanstveni naziv
+Kako primijeniti u praksi:
+Npr. SBG - Sparus aurata – komarča
+e) relevantno zemljopisno područje/područja proizvodnje za
+proizvode akvakulture, kako je navedeno u članku 38. stavku 1.
+Uredbe (EU) br. 1379/2013
+Kako primijeniti u praksi:
+Potrebno je navesti referencu na državu članicu ili treću zemlju u kojoj je
+proizvod dostigao više od polovice svoje krajnje težine ili je ondje bio više
+od polovice razdoblja uzgoja ili, u slučaju školjkaša, da je ondje prošao
+zadnju fazu uzgoja ili rasta od barem šest mjeseci. U slučaju da su navedeni
+uvjeti ostvareni na teritoriju Republike Hrvatske, navodi se „Uzgojeno u
+RH“.
+Sljedivost za proizvode akvakulture od 10. siječnja 2026. godine
+4
+h) datum/datumi sakupljanja za proizvode akvakulture;
+Kako primijeniti u praksi:
+Potrebno je navesti datum ili datume izlova proizvoda akvakulture, može se
+navesti jedan datum, a može i više datuma ukoliko se primjerice radi o istoj
+vrsti, istoj lokaciji uzgoja ili kavezu i obliku proizvoda koji su razvrstani u
+istu seriju.
+h) količine u kilogramima izražene u neto težini ili, prema potrebi,
+broju jedinki;
+j) za proizvode akvakulture koji podliježu zajedničkim tržišnim
+standardima, informacije potrebne za usklađivanje s tim
+standardima.
+Kako primijeniti u praksi:
+Proizvodi akvakulture podliježu zajedničkim tržišnim standardima koji se
+odnose na kvalitetu, veličinu i prezentaciju proizvoda, obavezno označavanje
+i informiranje potrošača, usklađenost s propisima o sigurnosti hrane i
+higijeni te sljedivosti u cijelom lancu opskrbe. Svaki proizvod mora
+sadržavati trgovački i znanstveni naziv, metodu proizvodnje, područje
+uzgoja, prezentaciju, svježinu i kvalitetu odnosno da je zdravstveno ispravan
+te sljedivost (identifikaciju proizvođača, serije i datuma stavljanja na tržište).
+Stavak 6. Gospodarski subjekti u svim fazama proizvodnje, prerade i distribucije,
+od izlova ili sakupljanja do maloprodaje, moraju osigurati da se za
+svaku seriju proizvoda akvakulture obuhvaćenih Poglavljem 3
+Kombinirane nomenklature, informacije iz stavka 5:
+a) evidentiraju; i
+b) u digitalnom obliku stavljaju se na raspolaganje gospodarskom
+subjektu kojem se isporučuje proizvod ribarstva ili akvakulture te, na
+zahtjev, nadležnim tijelima.
+Kako primijeniti u praksi:
+Sve serije/LOT brojevi koje je proizvođač kreirao razvrstavanjem proizvoda
+moraju biti evidentirane u njegovom informacijskom sustavu ili bazi
+podataka, a svi kreirani LOT brojevi (kao i barkodovi ili QR kodovi, ako se
+kreiraju), moraju biti dostupni sljedećem kupcu i nadležnom tijelu s
+informacijama koje su gore navedene.
+Stavak 8. Države članice mogu izuzeti od tih zahtjeva za sljedivost male količine
+proizvoda ribarstva koje se prodaju izravno potrošačima, pod uvjetom
+da su ti proizvodi samo za privatnu potrošnju i da količine ne prelaze 10
+kg proizvoda ribarstva po potrošaču dnevno.
+Kako primijeniti u praksi:
+Ova iznimka još nije propisana u Republici Hrvatskoj, bit će propisana
+tijekom 2026. godine.
+Stavak 10. Komisija donosi delegirane akte u skladu s člankom 119.a kojima se
+dopunjuje ova Uredba u vezi sa zahtjevima u pogledu sljedivosti za
+serije proizvoda ribarstva ili akvakulture obuhvaćenih tarifnim
+brojevima 1604 i 1605 poglavlja 16. kombinirane nomenklature,
+uključujući upotrebu digitalnih sustava, na temelju rezultata studije
+Sljedivost za proizvode akvakulture od 10. siječnja 2026. godine
+5
+provedene u skladu sa stavkom 9. ovog članka. Ti zahtjevi primjenjuju
+se od 10. siječnja 2029.
+Kako primijeniti u praksi:
+Digitalna sljedivost za prerađene i konzervirane proizvode bit će obvezna od
+10. siječnja 2029. godine, do kada će Komisija donijeti delegirane akte.
+3. ŠTO MORA SVAKI PROIZVOĐAČ/ UZGAJIVAČ OSIGURATI?
+Zahtjev Opis
+Broj lokacije uzgajališta Ministarstvo poljoprivrede, šumarstva i ribarstva – Upravi
+ribarstva, uz izdavanje dozvole za akvakulturu, svakoj lokaciji
+uzgajališta dodjeljuje službeni evidencijski broj.
+Evidencija o LOT
+brojevima proizvoda
+Proizvođač mora razvrstati sve proizvode u serije i pohraniti
+sve propisane podatke o svakoj seriji (ID – identifikacijski
+broj/broj lota, vrsta, FAO kod vrste i njen znanstveni naziv,
+datum izlova, količine, podrijetlo, broj lokacije uzgajališta).
+Svaki proizvod koji ide na tržište mora biti dio
+prepoznatljivog LOT-a/serije – skup proizvoda iste vrste,
+proizveden u istom razdoblju na istoj lokaciji.
+Digitalna sljedivost Informacije o svakom LOT broju moraju biti digitalno
+pohranjene (nije dovoljno samo na papiru). To može biti
+interni softver, baza podataka ili slično. Podaci moraju biti
+dostupni nadležnim tijelima na zahtjev. Informacije moraju
+pratiti proizvod sve do maloprodaje ili krajnjeg korisnika.
+Svaki sljedeći subjekt u lancu mora dobiti te podatke (npr.
+putem računa, digitalne razmjene podataka poput elektroničke
+pošte, etiketa s QR kodom). Sljedivost je obvezna za sve
+proizvode akvakulture, no male količine (do 10 kg/dan
+krajnjem potrošaču) mogu biti izuzete ako država tako propiše.
+Minimalne informacije
+po lotu
+➢ Ime i broj lokacije uzgajališta (npr. Školjka d.o.o.,
+HRVAQU000123)
+➢ FAO-ova troslovna oznaka vrste i znanstveni naziv (npr.
+BFT, Thunnus thynnus)
+➢ Područje proizvodnje (uzgojeno u RH)
+➢ Datum izlova (DD/MM/GGGG)
+➢ Neto količina (kg ili broj komada)
+➢ Kupac/distributer (kome je prodano)
+Sljedivost za proizvode akvakulture od 10. siječnja 2026. godine
+6
+VAŽNO!
+Svaki uzgajivač mora osigurati razvrstavanje i označavanje svojih proizvoda u
+serije/LOT brojeve koji imaju jedinstveni identifikacijski broj kao i da uz informaciju o
+LOT broju, prvi kupac zaprimi minimalne informacije po seriji/LOT-u. Dio navedenih
+informacija može biti već sadržan u LOT broju (poput broja lokacije uzgajališta, FAO
+oznake vrste i datuma izlova) dok se ostale informacije moraju dostavljati kupcu uz LOT
+broj i pošiljku, sve u digitalnom obliku (npr. na računu/otpremnici ili uz
+račun/otpremnicu poslanu putem e-maila).
+4. PRIMJENA NA PROIZVODE
+Tip proizvoda Primjena
+Svježi proizvodi (riba, školjke) 10. siječnja 2026.
+Prerađeni proizvodi (fileti, dimljeni proizvodi) 10. siječnja 2029.
+Konzervirani, obrađeni proizvodi (npr. paštete, riblje
+konzerve) 10. siječnja 2029.
+Proizvodi od algi 10. siječnja 2029.
+5. ZAKONODAVNI OKVIR
+• Uredba (EU) 2023/2842 Europskog parlamenta i Vijeća od 22. studenoga 2023. o
+izmjeni Uredbe Vijeća (EZ) br. 1224/2009 i o izmjeni uredbi Vijeća (EZ) br. 1967/2006
+i (EZ) br. 1005/2008 te uredbi (EU) 2016/1139, (EU) 2017/2403 i (EU) 2019/473
+Europskog parlamenta i Vijeća u pogledu kontrole ribarstva
+• Provedbena uredba Komisije (EU) 2023/2364 оd 26. rujna 2023. o izmjeni Priloga I.
+Uredbi Vijeća (EEZ) br. 2658/87 o tarifnoj i statističkoj nomenklaturi i o Zajedničkoj
+carinskoj tarifi („Kombinirana nomenklatura“ ili „KN“)
+• Uredba (EU) br. 1379/2013 Europskog parlamenta i Vijeća od 11. prosinca 2013. o
+zajedničkom uređenju tržišta proizvodima ribarstva i akvakulture, izmjeni uredbi
+Vijeća (EZ) br. 1184/2006 i (EZ) br. 1224/2009 i stavljanju izvan snage Uredbe Vijeća
+(EZ) br. 104/2000
+Sljedivost za proizvode akvakulture od 10. siječnja 2026. godine
+7
+6. PRIMJER QR KODA ZA ŠKOLJKE IZ KLASE A
+Naziv proizvoda; ŠKOLJKE (Mytilus galloprovincialis)
+LOT broj/serija: HRVAQU000123-22122025,
+Lokacija uzgoja (podrijetlo): HRAQU00123, Malostonski zaljev, polje 99X
+Datum izlova: 22.12.2025.
+Oblik proizvoda: svježi, pakirani u mrežastu vreću
+Količina: 100 kom
+Naziv proizvođača/uzgajivača: Školjka d.o.o.
+Adresa: Stonska 1, 20000 Mali Ston, HR
+Podrijetlo: vlastiti uzgoj
+Temperatura skladištenja i prijevoza: 0-5ْC, u rashladnom sustavu s osiguranom
+cirkulacijom zraka
+Datum izdavanja: 22.12.2025.
+Sljedivost za proizvode akvakulture od 10. siječnja 2026. godine
+8
+7. POPIS FAO ALPHA KODOVA NAJVAŽNIJIH VRSTA U AKVAKULTURI1
+MORSKA AKVAKULTURA
+FAO_3Alpha Znanstveni naziv Hrvatski naziv
+BSS Dicentrarchus labrax lubin, brancin
+SBR Sparus aurata komarča, orada, podlanica
+MUR Argyrosomus regius hama
+DNT Dentex dentex zubatac
+RBT Oncorhynchus mykiss kalifornijska pastrva, dužičasta pastrva
+ATL Salmo salar atlantski losos
+TUR Psetta maxima romb
+RPG Pagrus pagrus pagar
+CVP Diplodus puntazzo pic
+AMD Seriola dumerili gof
+BFT Thunnus thynnus plavoperajna tuna
+MUS Mytilus galloprovincialis dagnja
+OYS Ostrea edulis kamenica
+SCE Pecten jacobaeus jakovljeva kapica
+SPG Spongia Officinalis spužva
+SLATKOVODNA AKVAKULTURA
+FAO_3Alpha Znanstveni naziv Hrvatski naziv
+CAP Cyprinus carpio šaran
+GRS Ctenopharyngodon idellus bijeli amur
+BGB Hypophthalmichthys nobilis sivi glavaš, sivi tolstolobik
+BSB Hypophthalmichthys molitrix bijeli glavaš, bijeli tolstolobik
+WEL Silurus glanis som
+PKE Sander lucioperca smuđ
+PIK Esox lucius štuka
+TNC Tinca tinca linjak
+CLG Clarias gariepinus afrički som
+RUF Acipenser ruthenus kečiga
+BES Acipenser baerii sibirska jesetra
+LMB Micropterus salmoides pastrvski grgeč
+BAS Abramis brama deverika
+RBT Oncorhynchus mykiss kalifornijska pastrva
+BNT Salmo trutta m.fario potočna pastrva, pastrva
+GYM Thymallus thymallus LIPLJEN
+EEL Anguilla anguilla jegulja
+1 Popis trgovačkih naziva proizvoda ribarstva i akvakulture dostupan je ovdje.
+Sljedivost za proizvode akvakulture od 10. siječnja 2026. godine
+9
+8. DALJNJI KORACI
+Korištenjem već uspostavljenog sustava kroz Portal gospodarskog ribarstva, uzgajivačima je
+omogućeno kreiranje LOT brojeva od već dostupnih informacija (broj lokacije uzgajališta,
+naziv vrste, datum izlova) i sukladno tome, razvrstavanje proizvoda u serije te omogućavanje
+sljedivosti proizvoda akvakulture sa svim potrebnim informacijama. Prilikom kreiranja LOT
+broja mora se voditi računa da to mora biti jedinstveni broj koji se mora voditi u posebnoj
+evidenciji i kojim razvrstani proizvodi moraju biti označeni na ambalaži. Na prvim i sljedećim
+kupcima je obveza osiguravanja daljnje sljedivosti za svježe, rashlađene i smrznute proizvode
+ribarstva od 10. siječnja 2026. godine. Ako kupci razvrstane serije ne združuju ili ne dijele već
+takve prodaju dalje, LOT broj i sve informacije su dostupne. Za subjekte (kupce) koji nisu
+digitalizirali svoje poslovanje, a pogotovo ako serije proizvoda združuju ili dijele, to će morati
+čim prije uspostaviti kako bi u svoje sustave mogli evidentirati zaprimljene serije/LOT brojeve
+proizvoda te iste slati dalje, združivati ili dijeliti, već ovisno o svojim potrebama.
+Planirano je tijekom 2026. godine donijeti podzakonski propis kojim će se provesti daljnje
+usklađivanje s izmjenama Kontrolne uredbe, poput propisivanja da je od zahtjeva sljedivosti
+moguće izuzeti količine od 10 kilograma dnevno po krajnjem potrošaču, a također će se
+nastaviti raditi na informatičkim zahvatima i prilagodbama u Informacijskom sustavu ribarstva
+i Portalu gospodarskog ribarstva kako bi iznašli najoptimalniji način da uzgajivač i sljedeći
+kupci na jednostavan način kreiraju LOT brojeve u koje će razvrstavati svoje proizvode te koje
+će moći dostavljati sljedećem kupcu i koje će on, prema potrebi, moći združivati i dijeliti, a pri
+tom imati evidenciju o navedenom. U izradu mogućeg rješenja i pripremu prijedloga propisa
+bit će uključeni predstavnici uzgajivača i kupaca. 

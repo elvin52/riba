@@ -1,0 +1,60 @@
+Nova pravila sljedivosti proizvoda ribarstva i akvakulture od 10. siječnja 2026.
+
+Od 10. siječnja 2026. godine počinju se primjenjivati nove odredbe o sljedivosti proizvoda ribarstva i akvakulture u okviru EU-ovog revidiranog sustava kontrole ribarstva, osobito prema Uredbi (EU) 2023/2842 koja je izmijenila odredbe Glave V. Uredbe (EZ) br. 1224/2009 („Kontrolna uredba“) i povezanim provedbenim aktima.
+
+Nove odredbe se odnose na zahtjeve u pogledu sljedivosti koji se tiču evidentiranja i digitalnog prijenosa podataka o serijama/LOT brojevima za proizvode ribarstva i akvakulture koji potpadaju pod Poglavlje 3. Kombinirane nomenklature (svježa, smrznuta riba, cijeli ili filetirani proizvodi te proizvodi bez dodanih sastojaka). Ove izmjene ne obuhvaćaju prerađene proizvode ribarstva i akvakulture, poput konzerviranih, dimljenih, mariniranih ili gotovih proizvoda, za koje je predviđeno postupno uvođenje najkasnije do 2029. godine.
+
+U nastavku se daju osnovne informacije o novim zahtjevima sljedivosti za navedene proizvode ribarstva i akvakulture, dok se detaljnije upute za sljedivost u dijelu ribolova i uzgoja nalaze u zasebnim dokumentima kojima se može pristupiti odabirom poveznica koje se nalaze na kraju ovih uputa.
+
+Obveze praćenja „svih serija proizvoda ribarstva i akvakulture […] u svim fazama proizvodnje, prerade i distribucije, od nasada, ulova ili izlova do faze maloprodaje“, osiguravanja da su takve serije popraćene minimalnim skupom propisanih informacija te zahtjev da subjekti (prodavatelji) održavaju „sustave i postupke za identifikaciju svakog subjekta od kojeg su zaprimili serije proizvoda ribarstva i akvakulture i kojem su te proizvode isporučili“, na snazi su u Uniji od 2011. godine.
+Revizija sustava kontrole ribarstva, koja je kulminirala donošenjem Uredbe (EU) 2023/2842, nadograđuje postojeću pravnu stečevinu te istodobno proširuje područje primjene ključnih obveza u pogledu sljedivosti na pripremljene, konzervirane i uvezene proizvode ribarstva i akvakulture (od 2029. godine) te donosi nova pravila o evidentiranju i prijenosu određenih podataka o sljedivosti. Ove promjene odražavaju tehnološki razvoj i potrebu za učinkovitijom kontrolom lanca opskrbe, u korist kupaca, potrošača i nacionalnih tijela.
+
+Članak 58. stavak 6. revidirane Kontrolne uredbe zahtijeva da subjekti koji rukuju proizvodima ribarstva i akvakulture iz Poglavlja 3. osiguraju da se minimalni popis podataka o seriji utvrđen u stavku 5.:
+evidentira i
+učini dostupnim „na digitalan način“ subjektu kojem se proizvodi ribarstva i akvakulture isporučuju te, na zahtjev, nadležnim tijelima dotične države članice.
+Ova  obveza se primjenjuje od trenutka kada se proizvodi ribarstva i akvakulture razvrstavaju u serije/LOT brojeve, što se sukladno članku 56.a stavku 1. mora obaviti prije stavljanja proizvoda na tržište i mora biti osigurano sve do faze maloprodaje.
+
+Obveza osiguravanja digitalne sljedivosti ne propisuje precizno način kako će proizvođač i kupac implementirati zahtjev, što omogućuje korištenje različitih dostupnih sredstava koja omogućuju digitalni prijenos podataka, bez zahtjeva za razvojem ili korištenjem posebnih digitalnih sustava ili alata u cijelom lancu opskrbe. Digitalni prijenos može se shvatiti kao prijenos informacija elektroničkim sredstvima koja omogućuju stvaranje, pohranu, slanje i zaprimanje podataka u digitalnom formatu, primjerice putem elektroničke pošte, elektroničkih datoteka (PDF, XML, CSV), internetskih platformi ili drugih elektroničkih sustava koji omogućuju prijenos informacija u nepapirnatom, digitalnom obliku.
+Usklađenost s člankom 58. revidirane Kontrolne uredbe, od 10. siječnja 2026., ne zahtijeva više od prijenosa relevantnih podataka o seriji /LOT broju neposrednom dobavljaču ili kupcu u digitalnom, a ne papirnatom obliku, s ciljem olakšavanja protoka, pohrane i provjerljivosti podataka. Ovaj zahtjev se odnosi na sve subjekte, uključujući male proizvođače i ribare i ne isključuje moguću primjenu naprednijih rješenja koje neki subjekti u poslovanju s hranom već koriste (npr. GS1/GDST/bar-kodovi i slično).
+
+Od obveze sljedivosti, pa i digitalne, države članice mogu izuzeti male količine proizvoda ribarstva i akvakulture (do 10 kg) prodane izravno potrošačima s ribarskih plovila ili proizvodnih jedinica u akvakulturi namijenjene za osobnu potrošnju, tj. za privatnu potrošnju, kako je predviđeno člankom 58. stavkom 8. Svaka država članica navedeno mora propisati u svojim nacionalnim propisima ako želi primjenjivati.
+
+Prema odredbama Uredbe (EU) 2023/2842 svaki proizvođač (ribar/uzgajivač) mora osigurati razvrstavanje svojih proizvoda u serije i dodjeljivanje jedinstvenih identifikacijskih LOT brojeva svakoj seriji. Sve razvrstane serije proizvoda proizvođač mora označiti fizički (kroz etikete na ambalažama proizvoda koje će sadržavati LOT brojeve (dodatno može uvesti označavanje s barkodovima ili QR kodovima i slično). Nadalje, proizvođač mora voditi evidencije o razvrstanim serijama sa svim propisanim podacima u digitalnom obliku te osigurati dostupnost digitalnih zapisa nadležnim tijelima i svim sljedećim subjektima u opskrbnom lancu što podrazumijeva korištenje fleksibilnih IT rješenja koja omogućuju digitalno vođenje i izvoz podataka. U slučaju združivanja/dijeljenja serija duž opskrbnog lanca subjekt u poslovanju s hranom mora osigurati da se za novonastalu seriju dostavljaju propisane informacije o sljedivosti, kao i o svakoj seriji koju novonastala serija sadržava i o količinama u svakoj od serija koje čine novu seriju ili nove serije. U praksi obveze proizvođača (ribara/uzgajivača) u pogledu osiguravanja podataka su sljedeće:
+ 
+Zahtjev	Opis
+Evidencija o LOT brojevima proizvoda	 Proizvođač mora razvrstati sve proizvode u serije i pohraniti sve propisane podatke o svakoj seriji (ID – identifikacijski broj/broj LOT-a, naziv vrste, FAO kod vrste, datum ulova/izlova, količine, podrijetlo – ulovljeno u FAO zoni 37.2 ili područje uzgoja: RH, CFR broj plovila i broj očevidnika/broj lokacije uzgajališta). Svaki proizvod koji se plasira na tržište mora biti dio prepoznatljivog LOT broja/serije – skup proizvoda iste vrste, proizveden u istom razdoblju s određenim plovilom ili na istoj lokaciji uzgajališta.
+Digitalna sljedivost	Informacije o svakom LOT broju moraju biti digitalno pohranjene (nije dovoljno samo na papiru). To može biti interni softver, baza podataka ili slično. Podaci moraju biti dostupni nadležnim tijelima na zahtjev. Informacije moraju pratiti proizvod sve do maloprodaje ili krajnjeg korisnika. Svaki sljedeći subjekt u distribucijskom lancu mora zaprimiti podatke (putem elektroničke pošte, elektroničkih datoteka (PDF, XML, CSV), internetskih platformi ili drugih elektroničkih sustava).
+Minimalne informacije po seriji/LOT-u
+ 
+ 
+ 	
+Jedinstveni identifikacijski broj - može biti broj očevidnika/izvješća  + FAO oznaka vrste  u slučaju ribarstva ili  broj lokacije uzgajališta + FAO oznaka vrste + datum izlova za proizvode akvakulture
+FAO-ova troslovna oznaka vrste i znanstveni naziv (npr. BFT, Thunnus thynnus)
+Područje proizvodnje (ulovljeno u FAO zoni 37.2.1, Jadransko more ili uzgojeno u RH)
+Datum ulova ili izlova (DD/MM/GGGG)
+Kategorija/grupa ribolovnog alata za proizvode ribarstva
+Neto količina (u kilogramima neto mase ili prema potrebi, broju jedinki)
+Zasebne informacije o količinama izraženima u kilogramima neto mase ili broju jedinki ispod minimalne referentne količine za očuvanje; ako su proizvodi ribarstva koji su ispod minimalne referentne veličine za očuvanje prisutni u seriji,
+Za proizvode ribarstva i akvakulture koji podliježu zajedničkim tržišnim standardima, informacije potrebne za usklađivanje s tim standardima.
+
+Izuzeća od zahtjeva sljedivosti prema novim odredbama:
+Za proizvode ribarstva i akvakulture:
+odredbe o digitalnoj sljedivosti koje se počinju primjenjivati od 10. siječnja 2026. ne obuhvaćaju prerađene proizvode ribarstva i akvakulture, poput konzerviranih, dimljenih, mariniranih ili gotovih proizvoda, za koje je predviđeno postupno uvođenje najkasnije do 2029. godine
+ 
+Za proizvode ribarstva:
+države članice od zahtjeva sljedivosti mogu izuzeti male količine proizvoda ribarstva koje se potrošačima izravno prodaju s ulovnih plovila, gospodarski subjekti koji obavljaju ribolov bez plovila ili gospodarski subjekti ribolova u slatkim vodama, pod uvjetom da se proizvodi upotrebljavaju isključivo za osobnu potrošnju i da te količine ne premašuju 10 kg proizvoda ribarstva dnevno po potrošaču
+u jednu seriju/LOT broj mogu se razvrstati proizvodi obuhvaćeni poglavljem 3. Kombinirane nomenklature (svježi, rashlađeni, smrznuti, dimljeni) čija je ukupna količina manja od 30 kg i sastoje se od nekoliko vrsta koje potječu s istog relevantnog zemljopisnog područja i prezentirane su na isti način, po ulovnom plovilu i po danu
+količine proizvoda ribarstva od nekoliko vrsta obuhvaćene poglavljem 3. Kombinirane nomenklature, koje se sastoje od jedinki ispod primjenjive minimalne referentne veličine za očuvanje i potječu s istog relevantnog zemljopisnog područja i s istog ulovnog plovila ili skupine ulovnih plovila, mogu se razvrstati u serije u svrhe koje nisu izravna ljudska potrošnja
+ 
+Za proizvode akvakulture:
+države članice mogu izuzeti od zahtjeva sljedivosti male količine proizvoda iz uzgoja koje se prodaju izravno potrošačima, pod uvjetom da su ti proizvodi namijenjeni samo za privatnu potrošnju i da količine ne prelaze 10 kg proizvoda akvakulture po potrošaču dnevno.  
+ VAŽNO!
+ 
+Do donošenja Pravilnika o sljedivosti proizvoda ribarstva i akvakulture (kojim će se, između ostalog, propisati način kreiranja LOT broja) moguće je:
+za proizvode ribarstva -  upotrebljavati LOT brojeve koji se generiraju u transportnom dokumentu sukladno Pravilniku o sadržaju, obliku i načinu dostave transportnog dokumenta ili koji se kreiraju u evidenciji vaganja te koristeći navedene LOT brojeve razvrstati proizvode ribarstva i označiti ih na ambalaži;
+za proizvode akvakulture - kroz Portal gospodarskog ribarstva kreirati LOT brojeve od dostupnih informacija (broj lokacije uzgajališta, FAO oznaka naziva vrste, datum izlova) te prema navedenom razvrstati proizvode akvakulture u serije i označiti ambalaže. 
+Donošenje navedenog pravilnika o sljedivosti planirano je tijekom 2026. godine.
+ 
+Više informacija o sljedivosti proizvoda ribarstva možete pročitati ovdje
+ 
+Više informacija o sljedivosti proizvoda akvakulture kao i primjere u praksi možete pročitati ovdje
