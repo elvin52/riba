@@ -54,9 +54,17 @@ class FishermanApp {
             await window.lotGenerator.startNewCatch();
             console.log('✅ Novi ulov automatski pokrenut');
             
-            // Navigate directly to species selection
-            this.goToScreen('screen-species');
-            console.log('📱 Navigiran na izbor vrsta');
+            // Check if vessel data exists, if not go to setup
+            const savedVesselData = window.lotGenerator.getSavedVesselData();
+            if (!savedVesselData.cfr_number || !savedVesselData.registration_number || !savedVesselData.logbook_number || savedVesselData.logbook_number === 'HRV LOGI') {
+                console.log('📋 No vessel data - going to setup screen');
+                this.goToScreen('screen-vessel-setup');
+                this.loadVesselSetupForm();
+            } else {
+                console.log('📱 Vessel data exists - going to fishing zone selection');
+                this.goToScreen('screen-fishing-zone');
+                this.renderFishingZones();
+            }
             
             // Start time updates
             setInterval(() => this.updateDateTime(), 1000);
@@ -82,6 +90,27 @@ class FishermanApp {
         const newCatchBtn = document.getElementById('new-catch-btn');
         if (newCatchBtn) {
             newCatchBtn.addEventListener('click', () => this.startNewCatch());
+        }
+
+        // Vessel setup form
+        const saveVesselBtn = document.getElementById('save-vessel-btn');
+        if (saveVesselBtn) {
+            saveVesselBtn.addEventListener('click', () => this.saveVesselData());
+        }
+
+        // Logbook input - only allow numbers
+        const logbookInput = document.getElementById('logbook-input');
+        if (logbookInput) {
+            logbookInput.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                this.validateLogbookInput();
+            });
+        }
+
+        // Fishing zone confirmation
+        const confirmZoneBtn = document.getElementById('confirm-zone-btn');
+        if (confirmZoneBtn) {
+            confirmZoneBtn.addEventListener('click', () => this.confirmFishingZone());
         }
 
         // Species search
@@ -152,6 +181,110 @@ class FishermanApp {
             this.showError('Greška pokretanja ulova: ' + errorMsg);
         } finally {
             this.hideLoading('new-catch-btn', '🎣 NOVI ULOV');
+        }
+    }
+
+    // VESSEL SETUP METHODS
+    loadVesselSetupForm() {
+        const savedData = window.lotGenerator.getSavedVesselData();
+        document.getElementById('cfr-input').value = savedData.cfr_number || '';
+        document.getElementById('registration-input').value = savedData.registration_number || '';
+        document.getElementById('logbook-input').value = savedData.logbook_number?.replace('HRV LOGI', '').trim() || '';
+    }
+
+    validateLogbookInput() {
+        const input = document.getElementById('logbook-input');
+        const value = input.value;
+        const errorDiv = document.getElementById('vessel-errors');
+        
+        if (value.length > 13) {
+            input.value = value.substring(0, 13);
+        }
+        
+        // Real-time validation feedback
+        if (value.length > 0 && value.length < 13) {
+            errorDiv.textContent = `Potrebno je ${13 - value.length} više brojki`;
+            errorDiv.style.display = 'block';
+        } else if (value.length === 13) {
+            errorDiv.style.display = 'none';
+        }
+    }
+
+    async saveVesselData() {
+        try {
+            const cfrNumber = document.getElementById('cfr-input').value.trim();
+            const registrationNumber = document.getElementById('registration-input').value.trim();
+            const logbookDigits = document.getElementById('logbook-input').value.trim();
+            const logbookNumber = 'HRV LOGI' + logbookDigits;
+            
+            // Clear previous errors
+            const errorDiv = document.getElementById('vessel-errors');
+            errorDiv.style.display = 'none';
+            
+            // Set vessel info (this will validate and throw errors if invalid)
+            await window.lotGenerator.setVesselInfo(cfrNumber, registrationNumber, logbookNumber);
+            
+            // If successful, proceed to fishing zone selection
+            console.log('✅ Vessel data saved, proceeding to zone selection');
+            this.goToScreen('screen-fishing-zone');
+            this.renderFishingZones();
+            
+        } catch (error) {
+            // Show validation errors
+            const errorDiv = document.getElementById('vessel-errors');
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = 'block';
+            console.error('❌ Vessel data validation failed:', error);
+        }
+    }
+
+    // FISHING ZONE METHODS
+    renderFishingZones() {
+        const zoneGrid = document.getElementById('zone-grid');
+        const zones = window.lotGenerator.getFishingZones();
+        
+        zoneGrid.innerHTML = '';
+        
+        zones.forEach(zone => {
+            const zoneBtn = document.createElement('button');
+            zoneBtn.className = 'zone-btn';
+            zoneBtn.innerHTML = `
+                <div class="zone-code">${zone.code}</div>
+                <div class="zone-desc">${zone.description}</div>
+            `;
+            
+            zoneBtn.addEventListener('click', () => this.selectFishingZone(zone.code, zone.description));
+            zoneGrid.appendChild(zoneBtn);
+        });
+    }
+
+    selectFishingZone(zoneCode, zoneDescription) {
+        // Update UI to show selection
+        document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('selected'));
+        event.target.closest('.zone-btn').classList.add('selected');
+        
+        // Show zone info and confirm button
+        document.getElementById('zone-description').textContent = zoneDescription;
+        document.getElementById('selected-zone-info').style.display = 'block';
+        document.getElementById('confirm-zone-btn').style.display = 'block';
+        
+        this.selectedZoneCode = zoneCode;
+    }
+
+    async confirmFishingZone() {
+        try {
+            if (!this.selectedZoneCode) {
+                throw new Error('Molimo odaberite ribolovnu zonu');
+            }
+            
+            // Set fishing zone in LOT generator
+            await window.lotGenerator.setFishingZone(this.selectedZoneCode);
+            
+            console.log('✅ Fishing zone confirmed, proceeding to species selection');
+            this.goToScreen('screen-species');
+            
+        } catch (error) {
+            this.showError('Greška pri odabiru zone: ' + error.message);
         }
     }
 

@@ -4,6 +4,14 @@ class LOTGenerator {
         this.currentCatch = null;
         this.selectedSpecies = null;
         this.vesselConfig = null;
+        this.fishingZones = [
+            { code: 'A1', description: 'Područje A1 - Sjeverni Jadran' },
+            { code: 'A2', description: 'Područje A2 - Srednji Jadran' },
+            { code: 'A3', description: 'Područje A3 - Južni Jadran' },
+            { code: 'F1', description: 'Područje F1 - Obalnoj pas do 6 NM' },
+            { code: 'F2', description: 'Područje F2 - Teritorijalno more 6-12 NM' },
+            { code: 'F3', description: 'Područje F3 - Ribolovni pojas 12-25 NM' }
+        ];
     }
 
     async initialize() {
@@ -61,6 +69,74 @@ class LOTGenerator {
         return counter;
     }
 
+    // MANDATORY FIELD VALIDATIONS
+    validateLogbookNumber(logbookNumber) {
+        if (!logbookNumber) {
+            return { valid: false, error: 'Broj očevidnika je obavezan' };
+        }
+        
+        if (!logbookNumber.startsWith('HRV LOGI')) {
+            return { valid: false, error: 'Broj očevidnika mora počinjati s "HRV LOGI"' };
+        }
+        
+        const numericPart = logbookNumber.replace('HRV LOGI', '').trim();
+        if (!/^\d{13}$/.test(numericPart)) {
+            return { valid: false, error: 'Mora sadržavati točno 13 brojki nakon "HRV LOGI"' };
+        }
+        
+        return { valid: true };
+    }
+
+    validateCFRNumber(cfrNumber) {
+        if (!cfrNumber) {
+            return { valid: false, error: 'CFR broj je obavezan' };
+        }
+        
+        if (!/^[A-Z]{3}\d{9,12}$/.test(cfrNumber)) {
+            return { valid: false, error: 'CFR format: 3 slova + 9-12 brojki (npr. HRV123456789)' };
+        }
+        
+        return { valid: true };
+    }
+
+    validateFishingZone(zoneCode) {
+        if (!zoneCode) {
+            return { valid: false, error: 'Odabir ribolovne zone je obavezan' };
+        }
+        
+        const zone = this.fishingZones.find(z => z.code === zoneCode);
+        if (!zone) {
+            return { valid: false, error: 'Neispravna ribolovna zona' };
+        }
+        
+        return { valid: true, zone: zone };
+    }
+
+    validateMandatoryFields() {
+        const errors = [];
+        
+        // Vessel data validation
+        const cfrValidation = this.validateCFRNumber(this.currentCatch?.vessel_info?.cfr_number);
+        if (!cfrValidation.valid) errors.push(cfrValidation.error);
+        
+        if (!this.currentCatch?.vessel_info?.registration_number) {
+            errors.push('Registarska oznaka plovila je obavezna');
+        }
+        
+        // Logbook validation
+        const logbookValidation = this.validateLogbookNumber(this.currentCatch?.vessel_info?.logbook_number);
+        if (!logbookValidation.valid) errors.push(logbookValidation.error);
+        
+        // Fishing zone validation
+        const zoneValidation = this.validateFishingZone(this.currentCatch?.catch_info?.fishing_zone);
+        if (!zoneValidation.valid) errors.push(zoneValidation.error);
+        
+        return {
+            valid: errors.length === 0,
+            errors: errors
+        };
+    }
+
     // Initialize new catch
     async startNewCatch() {
         console.log('🎣 Starting new catch...');
@@ -90,8 +166,9 @@ class LOTGenerator {
             catch_info: {
                 date: this.formatDateCompliant(new Date()), // DD/MM/YYYY format per regulation
                 time: new Date().toISOString(),
-                fao_zone: locationData.zone_code,
-                zone_description: locationData.description,
+                fishing_zone: null, // MANDATORY: Manual zone selection (A1, A2, F1, F2, etc.)
+                zone_description: null,
+                fao_zone: locationData.zone_code, // Keep for technical reference
                 gps_coordinates: {
                     latitude: locationData.coordinates.latitude,
                     longitude: locationData.coordinates.longitude,
@@ -99,11 +176,12 @@ class LOTGenerator {
                 }
             },
             vessel_info: {
-                cfr_number: this.vesselConfig.cfr_number,
+                cfr_number: null, // MANDATORY: From vessel setup screen
+                registration_number: null, // MANDATORY: From vessel setup screen  
+                logbook_number: null, // MANDATORY: HRV LOGI + 13 digits validation
                 name: this.vesselConfig.name,
                 license_number: this.vesselConfig.license_number,
-                logbook_number: this.vesselConfig.logbook_series, // MANDATORY per regulation line 25
-                registration_port: this.vesselConfig.registration_port || 'HR-SPLIT' // Required for Croatian vessels
+                registration_port: this.vesselConfig.registration_port || 'HR-SPLIT'
             },
             fishing_gear: await this.getDefaultGear(),
             metadata: {
@@ -116,6 +194,71 @@ class LOTGenerator {
         };
 
         return this.currentCatch;
+    }
+
+    // Set mandatory vessel information
+    setVesselInfo(cfrNumber, registrationNumber, logbookNumber) {
+        if (!this.currentCatch) {
+            throw new Error('No active catch to set vessel info');
+        }
+        
+        // Validate inputs
+        const cfrValidation = this.validateCFRNumber(cfrNumber);
+        if (!cfrValidation.valid) {
+            throw new Error(cfrValidation.error);
+        }
+        
+        const logbookValidation = this.validateLogbookNumber(logbookNumber);
+        if (!logbookValidation.valid) {
+            throw new Error(logbookValidation.error);
+        }
+        
+        if (!registrationNumber?.trim()) {
+            throw new Error('Registarska oznaka je obavezna');
+        }
+        
+        // Set validated data
+        this.currentCatch.vessel_info.cfr_number = cfrNumber.trim().toUpperCase();
+        this.currentCatch.vessel_info.registration_number = registrationNumber.trim().toUpperCase();
+        this.currentCatch.vessel_info.logbook_number = logbookNumber.trim();
+        
+        // Save to localStorage for future catches
+        localStorage.setItem('vessel_cfr', this.currentCatch.vessel_info.cfr_number);
+        localStorage.setItem('vessel_registration', this.currentCatch.vessel_info.registration_number);
+        localStorage.setItem('vessel_logbook', this.currentCatch.vessel_info.logbook_number);
+        
+        console.log('✅ Vessel info set and saved locally');
+    }
+
+    // Set fishing zone
+    setFishingZone(zoneCode) {
+        if (!this.currentCatch) {
+            throw new Error('No active catch to set fishing zone');
+        }
+        
+        const zoneValidation = this.validateFishingZone(zoneCode);
+        if (!zoneValidation.valid) {
+            throw new Error(zoneValidation.error);
+        }
+        
+        this.currentCatch.catch_info.fishing_zone = zoneCode;
+        this.currentCatch.catch_info.zone_description = zoneValidation.zone.description;
+        
+        console.log(`✅ Fishing zone set: ${zoneCode} - ${zoneValidation.zone.description}`);
+    }
+
+    // Get saved vessel data from localStorage
+    getSavedVesselData() {
+        return {
+            cfr_number: localStorage.getItem('vessel_cfr') || '',
+            registration_number: localStorage.getItem('vessel_registration') || '',
+            logbook_number: localStorage.getItem('vessel_logbook') || 'HRV LOGI'
+        };
+    }
+
+    // Get available fishing zones
+    getFishingZones() {
+        return this.fishingZones;
     }
 
     // Set species for current catch
@@ -161,30 +304,32 @@ class LOTGenerator {
         }
     }
 
-    // Validate and finalize LOT - SIMPLIFIED VERSION
+    // Validate and finalize LOT with MANDATORY field validation
     async finalizeLOT() {
-        console.log('🎯 SIMPLIFIED finalizeLOT called');
+        console.log('🎯 finalizeLOT called with mandatory validation');
         
-        // Simplified - just generate basic LOT without complex validation
         if (!this.currentCatch) {
-            this.currentCatch = {
-                species: { fao_code: 'BSS', scientific_name: 'Dicentrarchus labrax', local_name: 'Brancin' },
-                quantities: { net_weight_kg: 5.0 },
-                catch_info: { date: '06/01/2026', fao_zone: '37.2.1' },
-                vessel_info: { cfr_number: 'HRV000123456789' }
-            };
+            throw new Error('Nema aktivnog ulova za finalizaciju');
         }
-
-        // Simple LOT ID generation
-        const now = new Date();
-        const dateStr = now.getFullYear().toString() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0');
-        const lotId = `HR-LOG-2026-BSS-${dateStr}-001`;
         
+        // MANDATORY VALIDATION - prevent LOT generation if any required field is missing
+        const validation = this.validateMandatoryFields();
+        if (!validation.valid) {
+            const errorMsg = 'Nedostaju obavezni podaci:\n' + validation.errors.join('\n');
+            console.error('❌ LOT validation failed:', validation.errors);
+            throw new Error(errorMsg);
+        }
+        
+        // Generate LOT ID using validated logbook number
+        const lotId = this.generateLOTID();
         this.currentCatch.lot_id = lotId;
+        this.currentCatch.metadata.validation_status = 'validated';
         this.currentCatch.status = 'completed';
         
-        console.log('✅ SIMPLIFIED LOT generated:', lotId);
+        // Save to database
+        await window.fishermanDB.saveCatch(this.currentCatch);
         
+        console.log('✅ LOT finalized with all mandatory data:', lotId);
         return this.currentCatch;
     }
 
