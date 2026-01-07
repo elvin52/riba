@@ -1,10 +1,12 @@
 // Main Application Controller
 class FishermanApp {
     constructor() {
-        this.currentScreen = 'screen-home';
+        this.currentScreen = 'screen-vessel-setup'; // Start with mandatory vessel setup
         this.currentWeight = '0';
         this.isInitialized = false;
         this.allSpecies = [];
+        this.selectedSpecies = null;
+        this.selectedZoneCode = null;
         this.dailyStats = { count: 0, total_weight_kg: 0 };
     }
 
@@ -49,11 +51,28 @@ class FishermanApp {
             this.updateDailyCount();
             this.renderSpeciesGrid();
             
+            // Automatically start new catch and determine initial screen
+            console.log('🚀 Automatski pokretanje novog ulova...');
+            await window.lotGenerator.startNewCatch();
+            console.log('✅ Novi ulov automatski pokrenut');
+            
+            // Determine starting screen based on vessel data availability
+            const savedVesselData = window.lotGenerator.getSavedVesselData();
+            if (!savedVesselData.cfr_number || !savedVesselData.registration_number || !savedVesselData.logbook_number || savedVesselData.logbook_number === 'HRV LOGI') {
+                console.log('📋 No vessel data - starting with vessel setup');
+                this.goToScreen('screen-vessel-setup');
+                this.loadVesselSetupForm();
+            } else {
+                console.log('📱 Vessel data exists - starting with fishing zone selection');
+                this.goToScreen('screen-fishing-zone');
+                this.renderFishingZones();
+            }
+            
             // Start time updates
             setInterval(() => this.updateDateTime(), 1000);
             
             this.isInitialized = true;
-            console.log('🎣 Aplikacija spremna!');
+            console.log('🎣 Aplikacija spremna - preskače home screen!');
             
         } catch (error) {
             console.error('❌ Detaljne greške pri inicijalizaciji:');
@@ -73,6 +92,27 @@ class FishermanApp {
         const newCatchBtn = document.getElementById('new-catch-btn');
         if (newCatchBtn) {
             newCatchBtn.addEventListener('click', () => this.startNewCatch());
+        }
+
+        // Vessel setup form
+        const saveVesselBtn = document.getElementById('save-vessel-btn');
+        if (saveVesselBtn) {
+            saveVesselBtn.addEventListener('click', () => this.saveVesselData());
+        }
+
+        // Logbook input - only allow numbers
+        const logbookInput = document.getElementById('logbook-input');
+        if (logbookInput) {
+            logbookInput.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/[^0-9]/g, '');
+                this.validateLogbookInput();
+            });
+        }
+
+        // Fishing zone confirmation
+        const confirmZoneBtn = document.getElementById('confirm-zone-btn');
+        if (confirmZoneBtn) {
+            confirmZoneBtn.addEventListener('click', () => this.confirmFishingZone());
         }
 
         // Species search
@@ -685,6 +725,130 @@ function closeModal() {
 function newCatch() {
     window.fishermanApp.newCatch();
 }
+
+// VESSEL SETUP METHODS
+FishermanApp.prototype.loadVesselSetupForm = function() {
+    const savedData = window.lotGenerator.getSavedVesselData();
+    const cfrInput = document.getElementById('cfr-input');
+    const registrationInput = document.getElementById('registration-input');
+    const logbookInput = document.getElementById('logbook-input');
+    
+    if (cfrInput) cfrInput.value = savedData.cfr_number || '';
+    if (registrationInput) registrationInput.value = savedData.registration_number || '';
+    if (logbookInput) logbookInput.value = savedData.logbook_number?.replace('HRV LOGI', '').trim() || '';
+};
+
+FishermanApp.prototype.validateLogbookInput = function() {
+    const input = document.getElementById('logbook-input');
+    const errorDiv = document.getElementById('vessel-errors');
+    
+    if (!input || !errorDiv) return;
+    
+    const value = input.value;
+    
+    if (value.length > 13) {
+        input.value = value.substring(0, 13);
+    }
+    
+    // Real-time validation feedback
+    if (value.length > 0 && value.length < 13) {
+        errorDiv.textContent = `Potrebno je ${13 - value.length} više brojki`;
+        errorDiv.style.display = 'block';
+    } else if (value.length === 13) {
+        errorDiv.style.display = 'none';
+    }
+};
+
+FishermanApp.prototype.saveVesselData = async function() {
+    try {
+        const cfrInput = document.getElementById('cfr-input');
+        const registrationInput = document.getElementById('registration-input');
+        const logbookInput = document.getElementById('logbook-input');
+        const errorDiv = document.getElementById('vessel-errors');
+        
+        if (!cfrInput || !registrationInput || !logbookInput || !errorDiv) return;
+        
+        const cfrNumber = cfrInput.value.trim();
+        const registrationNumber = registrationInput.value.trim();
+        const logbookDigits = logbookInput.value.trim();
+        const logbookNumber = 'HRV LOGI' + logbookDigits;
+        
+        // Clear previous errors
+        errorDiv.style.display = 'none';
+        
+        // Set vessel info (this will validate and throw errors if invalid)
+        await window.lotGenerator.setVesselInfo(cfrNumber, registrationNumber, logbookNumber);
+        
+        // If successful, proceed to fishing zone selection
+        console.log('✅ Vessel data saved, proceeding to zone selection');
+        this.goToScreen('screen-fishing-zone');
+        this.renderFishingZones();
+        
+    } catch (error) {
+        // Show validation errors
+        const errorDiv = document.getElementById('vessel-errors');
+        if (errorDiv) {
+            errorDiv.textContent = error.message;
+            errorDiv.style.display = 'block';
+        }
+        console.error('❌ Vessel data validation failed:', error);
+    }
+};
+
+// FISHING ZONE METHODS
+FishermanApp.prototype.renderFishingZones = function() {
+    const zoneGrid = document.getElementById('zone-grid');
+    if (!zoneGrid) return;
+    
+    const zones = window.lotGenerator.getFishingZones();
+    zoneGrid.innerHTML = '';
+    
+    zones.forEach(zone => {
+        const zoneBtn = document.createElement('button');
+        zoneBtn.className = 'zone-btn';
+        zoneBtn.innerHTML = `
+            <div class="zone-code">${zone.code}</div>
+            <div class="zone-desc">${zone.description}</div>
+        `;
+        
+        zoneBtn.addEventListener('click', () => this.selectFishingZone(zone.code, zone.description));
+        zoneGrid.appendChild(zoneBtn);
+    });
+};
+
+FishermanApp.prototype.selectFishingZone = function(zoneCode, zoneDescription) {
+    // Update UI to show selection
+    document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('selected'));
+    event.target.closest('.zone-btn').classList.add('selected');
+    
+    // Show zone info and confirm button
+    const zoneDescElement = document.getElementById('zone-description');
+    const selectedZoneInfo = document.getElementById('selected-zone-info');
+    const confirmBtn = document.getElementById('confirm-zone-btn');
+    
+    if (zoneDescElement) zoneDescElement.textContent = zoneDescription;
+    if (selectedZoneInfo) selectedZoneInfo.style.display = 'block';
+    if (confirmBtn) confirmBtn.style.display = 'block';
+    
+    this.selectedZoneCode = zoneCode;
+};
+
+FishermanApp.prototype.confirmFishingZone = async function() {
+    try {
+        if (!this.selectedZoneCode) {
+            throw new Error('Molimo odaberite ribolovnu zonu');
+        }
+        
+        // Set fishing zone in LOT generator
+        await window.lotGenerator.setFishingZone(this.selectedZoneCode);
+        
+        console.log('✅ Fishing zone confirmed, proceeding to species selection');
+        this.goToScreen('screen-species');
+        
+    } catch (error) {
+        this.showError('Greška pri odabiru zone: ' + error.message);
+    }
+};
 
 // Initialize app when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {

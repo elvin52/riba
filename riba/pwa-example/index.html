@@ -20,7 +20,72 @@
 </head>
 <body>
     <div id="app">
-        <!-- Ekran 1: Novi ulov -->
+        <!-- Ekran 0: Vessel Setup (First Time) -->
+        <div id="screen-vessel-setup" class="screen">
+            <header class="header">
+                <h2>🚢 PODACI O PLOVILU</h2>
+                <p>Podaci se unose jednom i spremaju za sve buduće LOT-ove</p>
+            </header>
+            
+            <main class="main-content">
+                <div class="vessel-form">
+                    <div class="form-group">
+                        <label for="cfr-input">CFR broj plovila *</label>
+                        <input type="text" id="cfr-input" placeholder="HRV123456789" 
+                               maxlength="15" style="text-transform: uppercase;">
+                        <small>Format: 3 slova + 9-12 brojki (npr. HRV123456789)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registration-input">Registarska oznaka *</label>
+                        <input type="text" id="registration-input" placeholder="ST-123-AB" 
+                               maxlength="20" style="text-transform: uppercase;">
+                        <small>Registarska oznaka plovila</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="logbook-input">Broj očevidnika *</label>
+                        <div class="logbook-input-container">
+                            <span class="logbook-prefix">HRV LOGI</span>
+                            <input type="text" id="logbook-input" placeholder="1234567890123" 
+                                   maxlength="13" pattern="[0-9]{13}">
+                        </div>
+                        <small>Točno 13 brojki nakon "HRV LOGI"</small>
+                    </div>
+                    
+                    <div class="validation-errors" id="vessel-errors" style="display: none;"></div>
+                    
+                    <button id="save-vessel-btn" class="primary-btn">
+                        ✅ SPREMI PODATKE
+                    </button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Ekran 1: Fishing Zone Selection -->
+        <div id="screen-fishing-zone" class="screen">
+            <header class="header">
+                <h2>🎣 ODABIR RIBOLOVNE ZONE</h2>
+                <p>Odabir zone je obavezan prije generiranja LOT-a</p>
+            </header>
+            
+            <main class="main-content">
+                <div class="zone-grid" id="zone-grid">
+                    <!-- Dinamički generirane zone -->
+                </div>
+                
+                <div class="selected-zone-info" id="selected-zone-info" style="display: none;">
+                    <h3>Odabrana zona:</h3>
+                    <p id="zone-description"></p>
+                </div>
+                
+                <button id="confirm-zone-btn" class="primary-btn" style="display: none;">
+                    ✅ POTVRDI ZONU
+                </button>
+            </main>
+        </div>
+
+        <!-- Ekran 2: Novi ulov -->
         <div id="screen-home" class="screen active">
             <header class="header">
                 <h1>🐟 RIBAR LOT</h1>
@@ -42,7 +107,7 @@
             </main>
         </div>
 
-        <!-- Ekran 2: Odabir vrste -->
+        <!-- Ekran 3: Odabir vrste -->
         <div id="screen-species" class="screen">
             <header class="header">
                 <button class="back-btn" onclick="goToScreen('screen-home')">← NATRAG</button>
