@@ -349,30 +349,50 @@ class LOTGenerator {
 
     exportToCSV() {
         const lot = this.currentCatch;
-        // REGULATION COMPLIANT: All mandatory fields per lines 31-37
+        // REGULATION COMPLIANT: All mandatory fields including new requirements
         const rows = [
             ['Field', 'Value', 'Regulation_Reference'],
             ['LOT_ID', lot.lot_id, 'Article_58_Line_31'],
+            
+            // MANDATORY VESSEL DATA
+            ['Vessel_CFR_Number', lot.vessel_info.cfr_number || 'N/A', 'MANDATORY_CFR_Field'],
+            ['Vessel_Registration_Number', lot.vessel_info.registration_number || 'N/A', 'MANDATORY_Registration_Field'],
+            ['Logbook_Number_HRV_LOGI', lot.vessel_info.logbook_number || 'N/A', 'MANDATORY_HRV_LOGI_Field'],
+            ['Vessel_Name', lot.vessel_info.name, 'Vessel_Identification'],
+            ['Vessel_License', lot.vessel_info.license_number, 'License_Number'],
+            ['Registration_Port', lot.vessel_info.registration_port, 'Croatian_Requirement'],
+            
+            // MANDATORY FISHING ZONE DATA
+            ['Fishing_Zone_Code', lot.catch_info.fishing_zone || 'N/A', 'MANDATORY_Zone_Selection'],
+            ['Fishing_Zone_Description', lot.catch_info.zone_description || 'N/A', 'Zone_Description'],
+            ['FAO_Zone_Technical', lot.catch_info.fao_zone, 'Article_58_Line_33'],
+            
+            // SPECIES DATA
             ['Species_FAO', lot.species.fao_code, 'Article_58_Line_32'],
             ['Species_Scientific', lot.species.scientific_name, 'Article_58_Line_32'],
             ['Species_Local', lot.species.local_name, 'Article_58_Line_32'],
-            ['Production_Area', lot.catch_info.zone_description, 'Article_58_Line_33'],
-            ['FAO_Zone', lot.catch_info.fao_zone, 'Article_58_Line_33'],
+            
+            // CATCH DATA
             ['Catch_Date_DDMMYYYY', lot.catch_info.date, 'Article_58_Line_34'],
             ['Catch_Time_ISO', lot.catch_info.time, 'Additional_Timestamp'],
             ['Gear_Category', lot.fishing_gear.category, 'Article_58_Line_35'],
             ['Gear_Description', lot.fishing_gear.description, 'Article_58_Line_35'],
+            
+            // QUANTITY DATA
             ['Net_Weight_KG', lot.quantities.net_weight_kg, 'Article_58_Line_36'],
             ['Below_Min_Weight_KG', lot.quantities.below_min_size?.weight_kg || 0, 'Article_58_Line_37'],
             ['Below_Min_Count', lot.quantities.below_min_size?.piece_count || 0, 'Article_58_Line_37'],
             ['Min_Reference_Size_CM', lot.quantities.below_min_size?.min_reference_size_cm || 0, 'Article_58_Line_37'],
-            ['Vessel_CFR_14digit', lot.vessel_info.cfr_number, 'CFR_Requirement'],
-            ['Vessel_Name', lot.vessel_info.name, 'Vessel_Identification'],
-            ['Logbook_Number', lot.vessel_info.logbook_number, 'MANDATORY_Line_25'],
-            ['Registration_Port', lot.vessel_info.registration_port, 'Croatian_Requirement'],
+            
+            // LOCATION DATA
             ['GPS_Latitude', lot.catch_info.gps_coordinates.latitude, 'Location_Verification'],
             ['GPS_Longitude', lot.catch_info.gps_coordinates.longitude, 'Location_Verification'],
-            ['GPS_Accuracy_Meters', lot.catch_info.gps_coordinates.accuracy, 'Location_Quality']
+            ['GPS_Accuracy_Meters', lot.catch_info.gps_coordinates.accuracy, 'Location_Quality'],
+            
+            // METADATA
+            ['Generated_Timestamp', new Date().toISOString(), 'Export_Metadata'],
+            ['App_Version', lot.metadata.app_version, 'System_Version'],
+            ['Validation_Status', lot.metadata.validation_status, 'Compliance_Check']
         ];
 
         return rows.map(row => row.map(cell => `"${cell}"`).join(',')).join('\n');
