@@ -120,8 +120,8 @@ class FishermanDB {
             { fao_code: 'WHB', scientific_name: 'Micromesistius poutassou', local_name: 'Ugotica', emoji: '🐟', min_size_cm: 15, category: 'fish' },
             { fao_code: 'SBS', scientific_name: 'Oblada melanura', local_name: 'Ušata', emoji: '🐟', min_size_cm: 12, category: 'fish' },
             { fao_code: 'WRM', scientific_name: 'Labrus merula', local_name: 'Vrana', emoji: '🐟', min_size_cm: 12, category: 'fish' },
-            { fao_code: 'DEC', scientific_name: 'Dentex dentex', local_name: 'Zubatac', emoji: '🐟', min_size_cm: 15, category: 'fish' },
-            { fao_code: 'DEP', scientific_name: 'Dentex gibbosus', local_name: 'Zubatac krunaš', emoji: '🐟', min_size_cm: 15, category: 'fish' },
+            { fao_code: 'DNT', scientific_name: 'Dentex dentex', local_name: 'Zubatac', emoji: '🐟', min_size_cm: 15, category: 'fish' },
+            { fao_code: 'DGX', scientific_name: 'Dentex gibbosus', local_name: 'Zubatac krunaš', emoji: '🐟', min_size_cm: 15, category: 'fish' },
             
             // Cephalopods
             { fao_code: 'OCC', scientific_name: 'Octopus vulgaris', local_name: 'Hobotnica', emoji: '🐙', min_size_cm: 0, category: 'cephalopod' },

@@ -46,11 +46,38 @@
                     <div class="form-group">
                         <label for="logbook-input">Broj očevidnika *</label>
                         <div class="logbook-input-container">
-                            <span class="logbook-prefix">HRV LOGI</span>
+                            <span class="logbook-prefix">HRVLOG</span>
                             <input type="text" id="logbook-input" placeholder="1234567890123" 
                                    maxlength="13" pattern="[0-9]{13}">
                         </div>
-                        <small>Točno 13 brojki nakon "HRV LOGI"</small>
+                        <small>Točno 13 brojki nakon "HRVLOG" (novi format)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vessel-name-input">Ime plovila</label>
+                        <input type="text" id="vessel-name-input" placeholder="Npr. Jadran I" 
+                               maxlength="50">
+                        <small>Neobavezno - ime plovila</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gear-category-select">Kategorija ribolovnog alata *</label>
+                        <select id="gear-category-select" required>
+                            <option value="">-- Odaberi kategoriju --</option>
+                            <option value="GNS">GNS - Mreže pridnene - pojedinačne</option>
+                            <option value="GND">GND - Mreže plutajuće</option>
+                            <option value="GTR">GTR - Mreže trostruke</option>
+                            <option value="LLS">LLS - Palangre pridneni</option>
+                            <option value="LLD">LLD - Palangre plutajući</option>
+                            <option value="LHP">LHP - Udice ručne</option>
+                            <option value="LHM">LHM - Udice mašinske</option>
+                            <option value="FPO">FPO - Klopke/košare</option>
+                            <option value="PS1">PS1 - Mreže optkolne</option>
+                            <option value="OTB">OTB - Koćarske mreže pridnene</option>
+                            <option value="PTB">PTB - Koćarske mreže parne</option>
+                            <option value="TBN">TBN - Koćarske mreže ostale</option>
+                        </select>
+                        <small>FAO/EU standardne kategorije ribolovnog alata</small>
                     </div>
                     
                     <div class="validation-errors" id="vessel-errors" style="display: none;"></div>
@@ -159,14 +186,24 @@
                     <button class="key-btn clear" onclick="clearWeight()">C</button>
                 </div>
                 
-                <div class="min-size-section">
-                    <label>
-                        <input type="checkbox" id="below-min-size"> 
-                        ⚠️ Ima li ribe ispod minimalne veličine?
-                    </label>
-                    <div id="min-size-inputs" class="hidden">
-                        <input type="number" id="min-size-count" placeholder="Broj komada">
-                        <input type="number" id="min-size-weight" placeholder="Težina (kg)">
+                <div class="undersized-catch-section">
+                    <h4>⚠️ Riba ispod minimalne veličine</h4>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="undersized" value="false" id="undersized-no" checked>
+                            <span class="radio-text">Ne - nema ribe ispod minimalne veličine</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="undersized" value="true" id="undersized-yes">
+                            <span class="radio-text">Da - ima ribe ispod minimalne veličine</span>
+                        </label>
+                    </div>
+                    
+                    <div id="undersized-quantity-input" class="hidden">
+                        <label for="undersized-weight">Količina ribe ispod min. veličine (kg) *</label>
+                        <input type="number" id="undersized-weight" step="0.1" min="0.1" 
+                               placeholder="0.0" class="quantity-input-small">
+                        <small>Obavezno ako postoji riba ispod minimalne veličine</small>
                     </div>
                 </div>
                 
@@ -249,9 +286,11 @@
     <!-- Scripts with NEW timestamp - CATEGORIZED SPECIES INTERFACE -->
     <script src="js/db.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
     <script src="js/gps.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
+    <script src="js/vessel-config.js?v=4.0&t=20260107180000&bust=${Math.random()}"></script>
+    <script src="js/lot-manager.js?v=4.0&t=20260107180000&bust=${Math.random()}"></script>
     <script src="js/lot-generator.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
     <script src="js/export.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
-    <script src="js/app.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
+    <script src="js/professional-app.js?v=4.0&t=20260107190000&bust=${Math.random()}"></script>
     
     <!-- SERVICE WORKER DISABLED - NO CACHING DURING DEVELOPMENT -->
     <script>

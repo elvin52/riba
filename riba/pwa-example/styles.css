@@ -644,6 +644,246 @@ body {
     font-size: 0.9rem;
 }
 
+/* PROFESSIONAL FISHERMEN STYLING */
+
+/* Gear Category Dropdown */
+.form-group select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.form-group select:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.form-group select:invalid {
+    border-color: #dc2626;
+}
+
+/* Undersized Catch Section */
+.undersized-catch-section {
+    width: 100%;
+    max-width: 400px;
+    padding: 1rem;
+    background: #fefce8;
+    border: 1px solid #fde047;
+    border-radius: 8px;
+    margin-top: 1rem;
+}
+
+.undersized-catch-section h4 {
+    color: #92400e;
+    margin: 0 0 1rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+/* Radio Button Group */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.radio-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s;
+}
+
+.radio-label:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.radio-label input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.radio-text {
+    font-size: 0.9rem;
+    color: #374151;
+    line-height: 1.4;
+}
+
+/* Quantity Input Small */
+.quantity-input-small {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.quantity-input-small:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+/* Enhanced Form Group Styling */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    color: #1e293b;
+    font-size: 1rem;
+    display: block;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"] {
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+/* Validation States */
+.form-group input.valid {
+    border-color: #10b981;
+}
+
+.form-group input.invalid {
+    border-color: #dc2626;
+}
+
+.form-group select.valid {
+    border-color: #10b981;
+}
+
+.form-group select.invalid {
+    border-color: #dc2626;
+}
+
+/* Professional Status Indicators */
+.professional-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #059669;
+    margin-top: 0.5rem;
+}
+
+.professional-status.error {
+    color: #dc2626;
+}
+
+/* Export Button Group */
+.export-button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+}
+
+.export-button-group .export-btn {
+    min-width: 120px;
+    padding: 0.75rem 1.5rem;
+}
+
+/* Professional Header Styling */
+.professional-header {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+}
+
+.professional-header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+}
+
+.professional-header p {
+    opacity: 0.9;
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+/* Compliance Badge */
+.compliance-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: #065f46;
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+/* Responsive adjustments for professional components */
+@media (max-width: 480px) {
+    .radio-group {
+        gap: 0.5rem;
+    }
+    
+    .export-button-group {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    .undersized-catch-section {
+        padding: 0.75rem;
+    }
+}
+
+/* Professional Success States */
+.success-message {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #065f46;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.warning-message {
+    background: #fefce8;
+    border: 1px solid #fde047;
+    color: #92400e;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    margin: 1rem 0;
+}
+
 /* Utility Classes */
 .hidden {
     display: none !important;
@@ -651,6 +891,10 @@ body {
 
 .text-center {
     text-align: center;
+}
+
+.professional-mode {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 .mt-1 { margin-top: 1rem; }
