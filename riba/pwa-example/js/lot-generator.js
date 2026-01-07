@@ -52,9 +52,9 @@ class LOTGenerator {
         return match ? match[1] : '12345';
     }
 
-    getDailyCounter(dateStr) {
-        // Get from localStorage for persistence across sessions
-        const counterKey = `lot_counter_${dateStr}`;
+    getDailyCounter(dateStr, speciesCode) {
+        // Species-scoped counter to prevent cross-species bleed
+        const counterKey = `lot_counter_${dateStr}_${speciesCode}`;
         let counter = parseInt(localStorage.getItem(counterKey) || '0');
         counter++;
         localStorage.setItem(counterKey, counter.toString());
@@ -73,18 +73,16 @@ class LOTGenerator {
             throw new Error('Greška inicijalizacije: ' + error.message);
         }
         
+        // CRITICAL: Reset state to prevent carryover from previous catch
+        this.selectedSpecies = null;
+        
         // Use default Croatian Adriatic location (GPS bypassed)
-        console.log('📍 Using default Croatian Adriatic location (GPS bypassed)');
         const locationData = {
+            coordinates: { latitude: 44.0, longitude: 15.0 },
             zone_code: '37.2.1',
-            description: 'Jadransko more - Hrvatska obala',
-            coordinates: {
-                latitude: 44.0,
-                longitude: 15.0
-            }
+            zone_name: 'Croatian Adriatic Sea'
         };
-        console.log('✅ Default location data set:', locationData);
-
+        
         // Load saved vessel data
         const savedVesselData = this.getSavedVesselData();
 
@@ -196,11 +194,15 @@ class LOTGenerator {
                        (now.getMonth()+1).toString().padStart(2,'0') + 
                        now.getDate().toString().padStart(2,'0');
         
-        // Get daily counter for this species
-        const counter = this.getDailyCounter(dateStr + '_' + this.selectedSpecies.fao_code);
+        // CRITICAL: Use single source of truth - currentCatch.species, not selectedSpecies
+        const faoCode = this.currentCatch.species.fao_code;
+        const logbookSeries = this.vesselConfig?.logbook_series || 'HR-LOG-2026';
         
-        // LOT ID format: logbook_number + species_code + date + counter
-        const lotId = `HR-LOG-2026-${this.selectedSpecies.fao_code}-${dateStr}-${counter.toString().padStart(3, '0')}`;
+        // Get daily counter for this species (species-scoped)
+        const counter = this.getDailyCounter(dateStr, faoCode);
+        
+        // LOT ID format: logbook_series + species_code + date + counter
+        const lotId = `${logbookSeries}-${faoCode}-${dateStr}-${counter.toString().padStart(3, '0')}`;
         
         this.currentCatch.lot_id = lotId;
         this.currentCatch.status = 'completed';
