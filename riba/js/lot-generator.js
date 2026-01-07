@@ -161,29 +161,47 @@ class LOTGenerator {
         }
     }
 
-    // Validate and finalize LOT - SIMPLIFIED VERSION
+    // Validate and finalize LOT
     async finalizeLOT() {
-        console.log('🎯 SIMPLIFIED finalizeLOT called');
+        console.log('🎯 finalizeLOT called');
         
-        // Simplified - just generate basic LOT without complex validation
         if (!this.currentCatch) {
-            this.currentCatch = {
-                species: { fao_code: 'BSS', scientific_name: 'Dicentrarchus labrax', local_name: 'Brancin' },
-                quantities: { net_weight_kg: 5.0 },
-                catch_info: { date: '06/01/2026', fao_zone: '37.2.1' },
-                vessel_info: { cfr_number: 'HRV000123456789' }
-            };
+            throw new Error('No active catch found');
         }
-
-        // Simple LOT ID generation
+        
+        if (!this.selectedSpecies) {
+            throw new Error('No species selected');
+        }
+        
+        // Validate mandatory fields before finalizing
+        this.validateMandatoryFields();
+        
+        // Set species data from actual selection
+        this.currentCatch.species = {
+            fao_code: this.selectedSpecies.fao_code,
+            scientific_name: this.selectedSpecies.scientific_name,
+            local_name: this.selectedSpecies.local_name,
+            min_size_cm: this.selectedSpecies.min_size_cm || null
+        };
+        
+        // Generate proper LOT ID using actual species
         const now = new Date();
-        const dateStr = now.getFullYear().toString() + (now.getMonth()+1).toString().padStart(2,'0') + now.getDate().toString().padStart(2,'0');
-        const lotId = `HR-LOG-2026-BSS-${dateStr}-001`;
+        const dateStr = now.getFullYear().toString() + 
+                       (now.getMonth()+1).toString().padStart(2,'0') + 
+                       now.getDate().toString().padStart(2,'0');
+        
+        // Get daily counter for this species
+        const counter = this.getDailyCounter(dateStr + '_' + this.selectedSpecies.fao_code);
+        
+        // LOT ID format: logbook_number + species_code + date + counter
+        const lotId = `HR-LOG-2026-${this.selectedSpecies.fao_code}-${dateStr}-${counter.toString().padStart(3, '0')}`;
         
         this.currentCatch.lot_id = lotId;
         this.currentCatch.status = 'completed';
+        this.currentCatch.finalized_timestamp = new Date().toISOString();
         
-        console.log('✅ SIMPLIFIED LOT generated:', lotId);
+        console.log('✅ LOT generated:', lotId);
+        console.log('✅ Species:', this.selectedSpecies.local_name, '(' + this.selectedSpecies.fao_code + ')');
         
         return this.currentCatch;
     }
