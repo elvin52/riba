@@ -49,7 +49,7 @@ class ExportManager {
         }
     }
 
-    // Generate and display QR code - UPDATED with mandatory fields
+    // Generate and display QR code
     generateQRCode(lotData) {
         try {
             const qrData = {
@@ -57,11 +57,8 @@ class ExportManager {
                 species: lotData.species.fao_code,
                 weight: lotData.quantities.net_weight_kg,
                 date: lotData.catch_info.date,
-                cfr_number: lotData.vessel_info.cfr_number,
-                registration: lotData.vessel_info.registration_number,
-                logbook: lotData.vessel_info.logbook_number,
-                fishing_zone: lotData.catch_info.fishing_zone,
-                zone_description: lotData.catch_info.zone_description
+                vessel: lotData.vessel_info.license_number,
+                zone: lotData.catch_info.fao_zone
             };
             
             const qrString = JSON.stringify(qrData);
@@ -249,11 +246,7 @@ class ExportManager {
                     <span class="field-value">${summary.date_display}</span>
                 </div>
                 <div class="field">
-                    <span class="field-label">Ribolovna zona:</span>
-                    <span class="field-value">${lotData.catch_info.fishing_zone} - ${lotData.catch_info.zone_description || 'N/A'}</span>
-                </div>
-                <div class="field">
-                    <span class="field-label">FAO zona (tehničko):</span>
+                    <span class="field-label">FAO zona:</span>
                     <span class="field-value">${summary.zone_display}</span>
                 </div>
                 <div class="field">
@@ -265,20 +258,12 @@ class ExportManager {
             <div class="section">
                 <div class="section-title">🚢 Informacije o plovilu</div>
                 <div class="field">
-                    <span class="field-label">CFR broj plovila:</span>
-                    <span class="field-value">${lotData.vessel_info.cfr_number || 'N/A'}</span>
-                </div>
-                <div class="field">
-                    <span class="field-label">Registarska oznaka:</span>
-                    <span class="field-value">${lotData.vessel_info.registration_number || 'N/A'}</span>
-                </div>
-                <div class="field">
-                    <span class="field-label">Broj očevidnika:</span>
-                    <span class="field-value">${lotData.vessel_info.logbook_number || 'N/A'}</span>
-                </div>
-                <div class="field">
                     <span class="field-label">Naziv plovila:</span>
                     <span class="field-value">${lotData.vessel_info.name}</span>
+                </div>
+                <div class="field">
+                    <span class="field-label">CFR broj:</span>
+                    <span class="field-value">${lotData.vessel_info.cfr_number}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Licenca:</span>
