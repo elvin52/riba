@@ -108,7 +108,7 @@ class ProfessionalFishermanApp {
         // Vessel setup form
         const saveVesselBtn = document.getElementById('save-vessel-btn');
         if (saveVesselBtn) {
-            saveVesselBtn.addEventListener('click', () => this.saveVesselConfiguration());
+            saveVesselBtn.addEventListener('click', () => this.saveVesselData());
         }
 
         // Gear category validation
@@ -194,39 +194,66 @@ class ProfessionalFishermanApp {
         if (gearSelect) gearSelect.value = savedConfig.fishing_gear_category || '';
     }
 
-    async saveVesselConfiguration() {
+    async saveVesselData() {
         try {
-            const cfrInput = document.getElementById('cfr-input');
-            const registrationInput = document.getElementById('registration-input');
-            const logbookInput = document.getElementById('logbook-input');
-            const vesselNameInput = document.getElementById('vessel-name-input');
-            const gearSelect = document.getElementById('gear-category-select');
-            const errorDiv = document.getElementById('vessel-errors');
-
-            const configData = {
-                cfr_number: cfrInput.value.trim().toUpperCase(),
-                registration_mark: registrationInput.value.trim().toUpperCase(),
-                logbook_number: `HRVLOG${logbookInput.value.trim()}`,
-                vessel_name: vesselNameInput.value.trim(),
-                fishing_gear_category: gearSelect.value
-            };
-
-            // Validate and save configuration
-            this.vesselConfig = await window.vesselConfigManager.saveConfig(configData);
+            console.log(' Saving vessel configuration...');
             
-            console.log('✅ Vessel configuration saved:', this.vesselConfig);
+            const vesselData = this.getVesselFormData();
+            if (!this.validateVesselData(vesselData)) {
+                return; // Validation failed, errors already shown
+            }
             
-            // Clear any errors
-            errorDiv.style.display = 'none';
+            // Save to vessel config manager
+            await window.vesselConfigManager.saveConfig(vesselData);
+            this.vesselConfig = vesselData;
+            
+            console.log(' Vessel configuration saved');
             
             // Proceed to fishing zone selection
             this.goToScreen('screen-fishing-zone');
             this.renderFishingZones();
             
         } catch (error) {
-            console.error('❌ Vessel configuration save failed:', error);
-            this.showVesselError(error.message);
+            console.error(' Error saving vessel data:', error);
+            this.showError('Greška pri spremanju podataka o plovilu: ' + error.message);
         }
+    }
+    
+    // Real-time vessel input validation (less strict)
+    validateVesselInputs(showErrors = true) {
+        const vesselData = this.getVesselFormData();
+        const errorDiv = document.getElementById('vessel-errors');
+        const saveBtn = document.getElementById('save-vessel-btn');
+        
+        if (!errorDiv || !saveBtn) return true;
+        
+        const errors = [];
+        
+        // Relaxed validation - only check if fields are not empty
+        if (!vesselData.cfr_number || vesselData.cfr_number.length < 3) {
+            errors.push('CFR broj mora imati najmanje 3 znaka');
+        }
+        
+        if (!vesselData.registration_mark || vesselData.registration_mark.length < 2) {
+            errors.push('Registarska oznaka mora imati najmanje 2 znaka');
+        }
+        
+        if (!vesselData.logbook_number || vesselData.logbook_number.length < 10) {
+            errors.push('Broj očevidnika mora imati najmanje 10 brojki');
+        }
+        
+        if (showErrors && errors.length > 0) {
+            errorDiv.innerHTML = errors.map(err => `<div>${err}</div>`).join('');
+            errorDiv.style.display = 'block';
+        } else {
+            errorDiv.style.display = 'none';
+        }
+        
+        // Enable save button if no critical errors
+        saveBtn.disabled = errors.length > 0;
+        saveBtn.style.opacity = errors.length > 0 ? '0.5' : '1';
+        
+        return errors.length === 0;
     }
 
     validateLogbookInput() {
@@ -342,8 +369,9 @@ class ProfessionalFishermanApp {
             // Store for later use in LOT generation
             this.currentFAOZone = this.selectedFAOZone;
             
-            console.log('✅ FAO zone confirmed:', this.selectedFAOZone);
+            console.log(' FAO zone confirmed:', this.selectedFAOZone);
             this.goToScreen('screen-species');
+            this.renderSpeciesGrid();
         } catch (error) {
             this.showError('Greška pri odabiru FAO zone: ' + error.message);
         }
@@ -702,10 +730,90 @@ class ProfessionalFishermanApp {
         }
     }
 
-    // Legacy method compatibility
+    // Render species grid for selection
+    renderSpeciesGrid() {
+        const speciesGrid = document.getElementById('species-grid');
+        if (!speciesGrid || !this.allSpecies || this.allSpecies.length === 0) {
+            console.warn('⚠️ Species grid not found or no species data');
+            return;
+        }
+        
+        console.log(`🐟 Rendering ${this.allSpecies.length} species`);
+        
+        // Group species by categories for better UX
+        const categories = {
+            'Bijela riba': ['BSS', 'SBG', 'DNT', 'DEC', 'CBM', 'SOL'],
+            'Plava riba': ['PIL', 'MAC', 'HER', 'ANE'],
+            'Ostalo': [] // Will contain remaining species
+        };
+        
+        let gridHTML = '';
+        
+        // Add categorized species
+        Object.entries(categories).forEach(([categoryName, faoCodes]) => {
+            const categorySpecies = this.allSpecies.filter(species => 
+                faoCodes.includes(species.fao_code)
+            );
+            
+            if (categorySpecies.length > 0) {
+                gridHTML += `<div class="species-category"><h4>${categoryName}</h4></div>`;
+                
+                categorySpecies.forEach(species => {
+                    gridHTML += `
+                        <div class="species-card" onclick="window.professionalApp.selectSpecies('${species.fao_code}')">
+                            <div class="species-name">${species.local_name}</div>
+                            <div class="species-fao">${species.fao_code}</div>
+                        </div>`;
+                });
+            }
+        });
+        
+        // Add remaining species in "Ostalo"
+        const usedCodes = Object.values(categories).flat();
+        const remainingSpecies = this.allSpecies.filter(species => 
+            !usedCodes.includes(species.fao_code)
+        );
+        
+        if (remainingSpecies.length > 0) {
+            gridHTML += `<div class="species-category"><h4>Ostalo</h4></div>`;
+            remainingSpecies.forEach(species => {
+                gridHTML += `
+                    <div class="species-card" onclick="window.professionalApp.selectSpecies('${species.fao_code}')">
+                        <div class="species-name">${species.local_name}</div>
+                        <div class="species-fao">${species.fao_code}</div>
+                    </div>`;
+            });
+        }
+        
+        speciesGrid.innerHTML = gridHTML;
+    }
+    
+    // Filter species based on search query
     filterSpecies(query) {
-        // Implement species filtering logic
-        console.log('Filtering species:', query);
+        if (!query || query.length < 2) {
+            this.renderSpeciesGrid();
+            return;
+        }
+        
+        const filtered = this.allSpecies.filter(species => 
+            species.local_name.toLowerCase().includes(query.toLowerCase()) ||
+            species.fao_code.toLowerCase().includes(query.toLowerCase())
+        );
+        
+        const speciesGrid = document.getElementById('species-grid');
+        if (!speciesGrid) return;
+        
+        let gridHTML = '';
+        filtered.forEach(species => {
+            gridHTML += `
+                <div class="species-card" onclick="window.professionalApp.selectSpecies('${species.fao_code}')">
+                    <div class="species-name">${species.local_name}</div>
+                    <div class="species-fao">${species.fao_code}</div>
+                </div>`;
+        });
+        
+        speciesGrid.innerHTML = gridHTML;
+        console.log(`🔍 Filtered to ${filtered.length} species for "${query}"`);
     }
 
     async downloadPDF() {
