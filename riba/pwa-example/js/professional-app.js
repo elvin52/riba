@@ -3,13 +3,23 @@ class ProfessionalFishermanApp {
     constructor() {
         this.currentScreen = 'screen-vessel-setup';
         this.currentWeight = '0';
+        this.currentQuantityType = 'WEIGHT'; // 'WEIGHT' | 'UNITS'
         this.isInitialized = false;
         this.allSpecies = [];
         this.selectedSpecies = null;
-        this.selectedZoneCode = null;
+        this.selectedZoneCode = null; // Legacy - keeping for compatibility
+        this.selectedFAOZone = null; // EU compliant FAO zone selection
+        this.currentFAOZone = null;  // Currently active FAO zone
         this.vesselConfig = null;
         this.currentCatch = null;
         this.dailyStats = { count: 0, total_weight_kg: 0 };
+        
+        // Traceability data
+        this.traceabilityData = {
+            product_form: null,
+            purpose_phase: null,
+            destination: null
+        };
     }
 
     async init() {
@@ -49,6 +59,48 @@ class ProfessionalFishermanApp {
         } catch (error) {
             console.error('❌ Initialization failed:', error);
             this.showError('Greška inicijalizacije: ' + error.message);
+        }
+    }
+    
+    setupTraceabilityListeners() {
+        // Product form change
+        const productFormSelect = document.getElementById('product-form-select');
+        if (productFormSelect) {
+            productFormSelect.addEventListener('change', () => this.updateTraceabilityPreview());
+        }
+        
+        // Purpose phase change
+        const purposePhaseSelect = document.getElementById('purpose-phase-select');
+        if (purposePhaseSelect) {
+            purposePhaseSelect.addEventListener('change', () => this.updateTraceabilityPreview());
+        }
+        
+        // Destination input change
+        const destinationInput = document.getElementById('destination-input');
+        if (destinationInput) {
+            destinationInput.addEventListener('input', () => this.updateTraceabilityPreview());
+        }
+        
+        // Quick destination buttons
+        const destinationBtns = document.querySelectorAll('.destination-btn');
+        destinationBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const destination = e.target.getAttribute('data-destination');
+                destinationInput.value = destination;
+                this.updateTraceabilityPreview();
+            });
+        });
+        
+        // Back to quantity button
+        const backToQuantityBtn = document.getElementById('back-to-quantity-btn');
+        if (backToQuantityBtn) {
+            backToQuantityBtn.addEventListener('click', () => this.goToScreen('screen-quantity'));
+        }
+        
+        // Generate LOT button (final)
+        const generateLotBtn = document.getElementById('generate-lot-btn');
+        if (generateLotBtn) {
+            generateLotBtn.addEventListener('click', () => this.generateProfessionalLOTWithTraceability());
         }
     }
 
@@ -92,6 +144,12 @@ class ProfessionalFishermanApp {
             speciesSearch.addEventListener('input', (e) => this.filterSpecies(e.target.value));
         }
 
+        // Quantity type selection buttons
+        const quantityTypeBtns = document.querySelectorAll('.quantity-type-btn');
+        quantityTypeBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => this.switchQuantityType(e.target.dataset.type));
+        });
+        
         // Undersized catch radio buttons
         const undersizedRadios = document.querySelectorAll('input[name="undersized"]');
         undersizedRadios.forEach(radio => {
@@ -101,8 +159,11 @@ class ProfessionalFishermanApp {
         // Continue button (quantity screen)
         const continueBtn = document.getElementById('continue-btn');
         if (continueBtn) {
-            continueBtn.addEventListener('click', () => this.generateProfessionalLOT());
+            continueBtn.addEventListener('click', () => this.goToTraceability());
         }
+
+        // Traceability screen listeners
+        this.setupTraceabilityListeners();
 
         // Export buttons
         const exportPDFBtn = document.getElementById('export-pdf');
@@ -205,57 +266,86 @@ class ProfessionalFishermanApp {
         }
     }
 
-    // FISHING ZONE METHODS
+    // FISHING ZONE METHODS (EU 2023/2842 COMPLIANT)
 
     renderFishingZones() {
         const zoneGrid = document.getElementById('zone-grid');
         if (!zoneGrid) return;
         
-        const zones = window.lotGenerator.getFishingZones();
+        // EU compliant Croatian FAO zones
+        const croatianFAOZones = [
+            { code: "37.2.1", name: "Jadransko more - srednji dio", description: "Srednji Jadran (Split, Šibenik, Zadar)" },
+            { code: "37.2.2", name: "Jadransko more - južni dio", description: "Južni Jadran (Dubrovnik, Korčula)" },
+            { code: "37.1.1", name: "Jadransko more - sjeverni dio", description: "Sjeverni Jadran (Istra, Rijeka)" },
+            { code: "37.1.2", name: "Jadransko more - obalni dio", description: "Obalni dio (do 12 NM)" },
+            { code: "37.1.3", name: "Kvarnerski zaljev", description: "Kvarner i otoci" },
+            { code: "37.3.1", name: "Jonsko more - sjeverni dio", description: "Južni Jadran - dublje" },
+            { code: "37.3.2", name: "Jonsko more - srednji dio", description: "Otvoreno more" }
+        ];
+        
         zoneGrid.innerHTML = '';
         
-        zones.forEach(zone => {
+        croatianFAOZones.forEach(zone => {
             const zoneBtn = document.createElement('button');
-            zoneBtn.className = 'zone-btn';
+            zoneBtn.className = 'zone-btn fao-zone-btn';
             zoneBtn.innerHTML = `
-                <div class="zone-code">${zone.code}</div>
+                <div class="zone-code">FAO ${zone.code}</div>
+                <div class="zone-name">${zone.name}</div>
                 <div class="zone-desc">${zone.description}</div>
             `;
             
-            zoneBtn.addEventListener('click', () => this.selectFishingZone(zone.code, zone.description));
+            zoneBtn.addEventListener('click', () => this.selectFAOZone(zone.code, zone.name, zone.description));
             zoneGrid.appendChild(zoneBtn);
         });
     }
 
-    selectFishingZone(zoneCode, zoneDescription) {
+    selectFAOZone(faoCode, zoneName, zoneDescription) {
         // Update UI selection
         document.querySelectorAll('.zone-btn').forEach(btn => btn.classList.remove('selected'));
         event.target.closest('.zone-btn').classList.add('selected');
         
-        this.selectedZoneCode = zoneCode;
+        // Store EU compliant zone data
+        this.selectedFAOZone = {
+            code: faoCode,
+            name: zoneName, 
+            description: zoneDescription
+        };
         
         // Show confirmation
         const zoneDescElement = document.getElementById('zone-description');
         const selectedZoneInfo = document.getElementById('selected-zone-info');
         const confirmBtn = document.getElementById('confirm-zone-btn');
         
-        if (zoneDescElement) zoneDescElement.textContent = zoneDescription;
+        if (zoneDescElement) {
+            zoneDescElement.innerHTML = `
+                <strong>FAO ${faoCode}</strong><br>
+                ${zoneName}<br>
+                <small>${zoneDescription}</small>
+            `;
+        }
         if (selectedZoneInfo) selectedZoneInfo.style.display = 'block';
         if (confirmBtn) confirmBtn.style.display = 'block';
     }
 
     async confirmFishingZone() {
-        if (!this.selectedZoneCode) {
-            this.showError('Molimo odaberite ribolovnu zonu');
+        if (!this.selectedFAOZone) {
+            this.showError('Molimo odaberite FAO ribolovnu zonu');
             return;
         }
         
         try {
-            await window.lotGenerator.setFishingZone(this.selectedZoneCode);
-            console.log('✅ Fishing zone confirmed:', this.selectedZoneCode);
+            // Validate FAO zone using LOT manager
+            if (!window.lotManager.validateFAOZone(this.selectedFAOZone.code)) {
+                throw new Error(`Nevažeća FAO zona: ${this.selectedFAOZone.code}`);
+            }
+            
+            // Store for later use in LOT generation
+            this.currentFAOZone = this.selectedFAOZone;
+            
+            console.log('✅ FAO zone confirmed:', this.selectedFAOZone);
             this.goToScreen('screen-species');
         } catch (error) {
-            this.showError('Greška pri odabiru zone: ' + error.message);
+            this.showError('Greška pri odabiru FAO zone: ' + error.message);
         }
     }
 
@@ -283,7 +373,41 @@ class ProfessionalFishermanApp {
         }
     }
 
-    // QUANTITY AND UNDERSIZED CATCH METHODS
+    // QUANTITY AND UNDERSIZED CATCH METHODS (EU 2023/2842 DUAL SYSTEM)
+    
+    switchQuantityType(type) {
+        this.currentQuantityType = type;
+        
+        // Update UI buttons
+        document.querySelectorAll('.quantity-type-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-type="${type}"]`).classList.add('active');
+        
+        // Update labels and placeholders
+        const quantityLabel = document.getElementById('quantity-label');
+        const weightDisplay = document.getElementById('weight-display');
+        const undersizedLabel = document.getElementById('undersized-quantity-label');
+        const undersizedNote = document.getElementById('undersized-quantity-note');
+        
+        if (type === 'WEIGHT') {
+            quantityLabel.textContent = 'UKUPNO KILOGRAM:';
+            weightDisplay.placeholder = '0.0 kg';
+            undersizedLabel.textContent = 'Količina ribe ispod min. veličine (kg) *';
+            undersizedNote.textContent = 'Obavezno ako postoji riba ispod minimalne veličine (kg)';
+        } else if (type === 'UNITS') {
+            quantityLabel.textContent = 'UKUPNO KOMADA:';
+            weightDisplay.placeholder = '0 kom';
+            undersizedLabel.textContent = 'Broj jedinki ispod min. veličine (kom) *';
+            undersizedNote.textContent = 'Obavezno ako postoji riba ispod minimalne veličine (komada)';
+        }
+        
+        // Reset current weight display
+        this.currentWeight = '0';
+        weightDisplay.value = this.currentWeight;
+        
+        console.log(`✅ Quantity type switched to: ${type}`);
+    }
 
     toggleUndersizedInput() {
         const undersizedYes = document.getElementById('undersized-yes');
@@ -293,18 +417,91 @@ class ProfessionalFishermanApp {
             quantityInput.classList.remove('hidden');
         } else {
             quantityInput.classList.add('hidden');
-            document.getElementById('undersized-weight').value = '';
+            document.getElementById('undersized-quantity').value = '';
         }
     }
 
     // PROFESSIONAL LOT GENERATION
 
-    async generateProfessionalLOT() {
+    goToTraceability() {
+        // Validate quantity first (dual system)
+        const quantityValue = parseFloat(this.currentWeight);
+        if (!quantityValue || quantityValue <= 0) {
+            const quantityName = this.currentQuantityType === 'WEIGHT' ? 'težina' : 'broj komada';
+            this.showError(`${quantityName.charAt(0).toUpperCase() + quantityName.slice(1)} mora biti veća od 0`);
+            return;
+        }
+        
+        // Reset traceability data
+        this.traceabilityData = {
+            product_form: null,
+            purpose_phase: null,
+            destination: null
+        };
+        
+        // Clear form
+        const productFormSelect = document.getElementById('product-form-select');
+        const purposePhaseSelect = document.getElementById('purpose-phase-select');
+        const destinationInput = document.getElementById('destination-input');
+        
+        if (productFormSelect) productFormSelect.value = '';
+        if (purposePhaseSelect) purposePhaseSelect.value = '';
+        if (destinationInput) destinationInput.value = '';
+        
+        this.updateTraceabilityPreview();
+        this.goToScreen('screen-traceability');
+    }
+    
+    updateTraceabilityPreview() {
+        const productForm = document.getElementById('product-form-select')?.value;
+        const purposePhase = document.getElementById('purpose-phase-select')?.value;
+        const destination = document.getElementById('destination-input')?.value;
+        
+        // Update internal state
+        this.traceabilityData.product_form = productForm || null;
+        this.traceabilityData.purpose_phase = purposePhase || null;
+        this.traceabilityData.destination = destination || null;
+        
+        // Check if all required fields are filled
+        const isComplete = productForm && purposePhase && destination;
+        const generateBtn = document.getElementById('generate-lot-btn');
+        if (generateBtn) {
+            generateBtn.disabled = !isComplete;
+            generateBtn.style.opacity = isComplete ? '1' : '0.5';
+        }
+        
+        // Update preview
+        const previewDiv = document.getElementById('traceability-preview');
+        if (previewDiv) {
+            if (isComplete) {
+                previewDiv.innerHTML = `
+                    <div class="traceability-complete">
+                        <h4>✅ Sljedivost kompletna</h4>
+                        <p><strong>Oblik:</strong> ${productForm}</p>
+                        <p><strong>Namjena:</strong> ${purposePhase}</p>
+                        <p><strong>Odredište:</strong> ${destination}</p>
+                    </div>
+                `;
+            } else {
+                const missing = [];
+                if (!productForm) missing.push('Oblik proizvoda');
+                if (!purposePhase) missing.push('Namjena/faza');
+                if (!destination) missing.push('Odredište');
+                
+                previewDiv.innerHTML = `
+                    <p class="preview-note">⚠️ Nedostaju podaci: ${missing.join(', ')}</p>
+                `;
+            }
+        }
+    }
+    
+    async generateProfessionalLOTWithTraceability() {
         try {
-            // Validate inputs
-            const weight = parseFloat(this.currentWeight);
-            if (!weight || weight <= 0) {
-                throw new Error('Težina mora biti veća od 0 kg');
+            // Validate dual quantity inputs
+            const quantityValue = parseFloat(this.currentWeight);
+            if (!quantityValue || quantityValue <= 0) {
+                const quantityName = this.currentQuantityType === 'WEIGHT' ? 'težina' : 'broj komada';
+                throw new Error(`${quantityName.charAt(0).toUpperCase() + quantityName.slice(1)} mora biti veća od 0`);
             }
 
             if (!this.selectedSpecies) {
@@ -315,18 +512,25 @@ class ProfessionalFishermanApp {
                 throw new Error('Konfiguracija plovila je obavezna');
             }
 
-            // Get undersized catch data
+            // Get undersized catch data (dual quantity system)
             const undersizedPresent = document.getElementById('undersized-yes').checked;
-            let undersizedWeight = 0;
+            let undersizedQuantity = 0;
             
             if (undersizedPresent) {
-                undersizedWeight = parseFloat(document.getElementById('undersized-weight').value);
-                if (!undersizedWeight || undersizedWeight <= 0) {
-                    throw new Error('Količina ribe ispod minimalne veličine je obavezna');
+                undersizedQuantity = parseFloat(document.getElementById('undersized-quantity').value);
+                if (!undersizedQuantity || undersizedQuantity <= 0) {
+                    const quantityName = this.currentQuantityType === 'WEIGHT' ? 'količina' : 'broj jedinki';
+                    throw new Error(`${quantityName.charAt(0).toUpperCase() + quantityName.slice(1)} ribe ispod minimalne veličine je obavezna`);
                 }
-                if (undersizedWeight > weight) {
-                    throw new Error('Količina ribe ispod minimalne veličine ne može biti veća od ukupne težine');
+                if (undersizedQuantity > quantityValue) {
+                    const quantityName = this.currentQuantityType === 'WEIGHT' ? 'težine' : 'broja komada';
+                    throw new Error(`Ispod minimalne veličine ne može biti veće od ukupne ${quantityName}`);
                 }
+            }
+            
+            // Validate traceability data
+            if (!this.traceabilityData.product_form || !this.traceabilityData.purpose_phase || !this.traceabilityData.destination) {
+                throw new Error('Svi podaci o sljedivosti su obavezni');
             }
 
             // Generate LOT using new architecture
@@ -336,13 +540,24 @@ class ProfessionalFishermanApp {
                 { pattern: window.lotManager.lotPatterns.WITH_DATE }
             );
 
-            // Create comprehensive traceability record
+            // Create comprehensive traceability record with Ministry data and EU-compliant dual quantity
             const catchData = {
-                fao_zone: '37.2.1', // Croatian Adriatic
+                // EU 2023/2842 compliant production area
+                production_area_type: "FAO_ZONE",
+                fao_zone: this.currentFAOZone?.code || '37.2.1', // Use selected FAO zone
+                area_description: this.currentFAOZone?.name || 'Jadransko more - srednji dio',
                 catch_date: new Date(),
-                net_weight_kg: weight,
+                // EU 2023/2842 dual quantity system
+                quantity_type: this.currentQuantityType,
+                net_weight_kg: this.currentQuantityType === 'WEIGHT' ? quantityValue : null,
+                unit_count: this.currentQuantityType === 'UNITS' ? quantityValue : null,
                 undersized_catch_present: undersizedPresent,
-                undersized_quantity_kg: undersizedPresent ? undersizedWeight : null
+                undersized_quantity_kg: (undersizedPresent && this.currentQuantityType === 'WEIGHT') ? undersizedQuantity : null,
+                undersized_unit_count: (undersizedPresent && this.currentQuantityType === 'UNITS') ? undersizedQuantity : null,
+                // Ministry-required traceability fields
+                product_form: this.traceabilityData.product_form,
+                purpose_phase: this.traceabilityData.purpose_phase,
+                destination: this.traceabilityData.destination
             };
 
             const traceabilityRecord = window.lotManager.createTraceabilityRecord(
@@ -364,6 +579,12 @@ class ProfessionalFishermanApp {
             console.error('❌ LOT generation failed:', error);
             this.showError(error.message);
         }
+    }
+    
+    // Legacy method - redirects to traceability
+    async generateProfessionalLOT() {
+        console.log('Legacy LOT generation called - redirecting to traceability');
+        this.goToTraceability();
     }
 
     displayProfessionalLOTResult(record) {
