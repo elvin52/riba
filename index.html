@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ribar LOT - Sljedivost ribe</title>
+    <title>🐟 Ribar LOT - EU 2023/2842 Compliant v2.1</title>
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json">
@@ -20,8 +20,100 @@
 </head>
 <body>
     <div id="app">
-        <!-- Ekran 1: Novi ulov -->
-        <div id="screen-home" class="screen active">
+        <!-- Ekran 0: Vessel Setup (First Time) -->
+        <div id="screen-vessel-setup" class="screen">
+            <header class="header">
+                <h2>🚢 PODACI O PLOVILU</h2>
+                <p>Podaci se unose jednom i spremaju za sve buduće LOT-ove</p>
+            </header>
+            
+            <main class="main-content">
+                <div class="vessel-form">
+                    <div class="form-group">
+                        <label for="cfr-input">CFR broj plovila *</label>
+                        <input type="text" id="cfr-input" placeholder="HRV123456789" 
+                               maxlength="15" style="text-transform: uppercase;">
+                        <small>Format: 3 slova + 9-12 brojki (npr. HRV123456789)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="registration-input">Registarska oznaka *</label>
+                        <input type="text" id="registration-input" placeholder="ST-123-AB" 
+                               maxlength="20" style="text-transform: uppercase;">
+                        <small>Registarska oznaka plovila</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="logbook-input">Broj očevidnika *</label>
+                        <div class="logbook-input-container">
+                            <span class="logbook-prefix">HRVLOG</span>
+                            <input type="text" id="logbook-input" placeholder="1234567890123" 
+                                   maxlength="13" pattern="[0-9]{13}">
+                        </div>
+                        <small>Točno 13 brojki nakon "HRVLOG" (novi format)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="vessel-name-input">Ime plovila</label>
+                        <input type="text" id="vessel-name-input" placeholder="Npr. Jadran I" 
+                               maxlength="50">
+                        <small>Neobavezno - ime plovila</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="gear-category-select">Kategorija ribolovnog alata *</label>
+                        <select id="gear-category-select" required>
+                            <option value="">-- Odaberi kategoriju --</option>
+                            <option value="GNS">GNS - Mreže pridnene - pojedinačne</option>
+                            <option value="GND">GND - Mreže plutajuće</option>
+                            <option value="GTR">GTR - Mreže trostruke</option>
+                            <option value="LLS">LLS - Palangre pridneni</option>
+                            <option value="LLD">LLD - Palangre plutajući</option>
+                            <option value="LHP">LHP - Udice ručne</option>
+                            <option value="LHM">LHM - Udice mašinske</option>
+                            <option value="FPO">FPO - Klopke/košare</option>
+                            <option value="PS1">PS1 - Mreže optkolne</option>
+                            <option value="OTB">OTB - Koćarske mreže pridnene</option>
+                            <option value="PTB">PTB - Koćarske mreže parne</option>
+                            <option value="TBN">TBN - Koćarske mreže ostale</option>
+                        </select>
+                        <small>FAO/EU standardne kategorije ribolovnog alata</small>
+                    </div>
+                    
+                    <div class="validation-errors" id="vessel-errors" style="display: none;"></div>
+                    
+                    <button id="save-vessel-btn" class="primary-btn">
+                        ✅ SPREMI PODATKE
+                    </button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Ekran 1: Fishing Zone Selection -->
+        <div id="screen-fishing-zone" class="screen">
+            <header class="header">
+                <h2>🎣 ODABIR RIBOLOVNE ZONE</h2>
+                <p>Odabir zone je obavezan prije generiranja LOT-a</p>
+            </header>
+            
+            <main class="main-content">
+                <div class="zone-grid" id="zone-grid">
+                    <!-- Dinamički generirane zone -->
+                </div>
+                
+                <div class="selected-zone-info" id="selected-zone-info" style="display: none;">
+                    <h3>Odabrana zona:</h3>
+                    <p id="zone-description"></p>
+                </div>
+                
+                <button id="confirm-zone-btn" class="primary-btn" style="display: none;">
+                    ✅ POTVRDI ZONU
+                </button>
+            </main>
+        </div>
+
+        <!-- Ekran 2: Novi ulov -->
+        <div id="screen-home" class="screen">
             <header class="header">
                 <h1>🐟 RIBAR LOT</h1>
                 <div class="status-bar">
@@ -42,7 +134,7 @@
             </main>
         </div>
 
-        <!-- Ekran 2: Odabir vrste -->
+        <!-- Ekran 3: Odabir vrste -->
         <div id="screen-species" class="screen">
             <header class="header">
                 <button class="back-btn" onclick="goToScreen('screen-home')">← NATRAG</button>
@@ -73,8 +165,21 @@
                     <p>Znanstveno: <span id="species-scientific">---</span></p>
                 </div>
                 
+                <!-- EU 2023/2842 Dual Quantity System -->
+                <div class="quantity-type-selection">
+                    <h3>🔢 Tip mjerenja</h3>
+                    <div class="quantity-type-buttons">
+                        <button type="button" id="quantity-type-weight" class="quantity-type-btn active" data-type="WEIGHT">
+                            ⚖️ Kilograma (kg)
+                        </button>
+                        <button type="button" id="quantity-type-units" class="quantity-type-btn" data-type="UNITS">
+                            🐟 Broj jedinki (kom)
+                        </button>
+                    </div>
+                </div>
+                
                 <div class="quantity-input">
-                    <label>UKUPNO KILOGRAM:</label>
+                    <label id="quantity-label">UKUPNO KILOGRAM:</label>
                     <input type="text" id="weight-display" readonly value="0">
                 </div>
                 
@@ -94,24 +199,101 @@
                     <button class="key-btn clear" onclick="clearWeight()">C</button>
                 </div>
                 
-                <div class="min-size-section">
-                    <label>
-                        <input type="checkbox" id="below-min-size"> 
-                        ⚠️ Ima li ribe ispod minimalne veličine?
-                    </label>
-                    <div id="min-size-inputs" class="hidden">
-                        <input type="number" id="min-size-count" placeholder="Broj komada">
-                        <input type="number" id="min-size-weight" placeholder="Težina (kg)">
+                <div class="undersized-catch-section">
+                    <h4>⚠️ Riba ispod minimalne veličine</h4>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="undersized" value="false" id="undersized-no" checked>
+                            <span class="radio-text">Ne - nema ribe ispod minimalne veličine</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="undersized" value="true" id="undersized-yes">
+                            <span class="radio-text">Da - ima ribe ispod minimalne veličine</span>
+                        </label>
+                    </div>
+                    
+                    <div id="undersized-quantity-input" class="hidden">
+                        <label for="undersized-quantity" id="undersized-quantity-label">Količina ribe ispod min. veličine (kg) *</label>
+                        <input type="number" id="undersized-quantity" step="0.1" min="0.1" 
+                               placeholder="0.0" class="quantity-input-small">
+                        <small id="undersized-quantity-note">Obavezno ako postoji riba ispod minimalne veličine</small>
                     </div>
                 </div>
                 
-                <button id="continue-btn" class="primary-btn" onclick="generateLOT()">
-                    DALJE
-                </button>
+                <button id="continue-btn" class="btn btn-primary">Nastavi → Sljedivost 🎯</button>
             </main>
         </div>
 
-        <!-- Ekran 5: LOT rezultat -->
+        <!-- Traceability Screen -->
+        <div id="screen-traceability" class="screen">
+            <div class="main-content">
+                <div class="screen-header">
+                    <h2>📦 Sljedivost proizvoda</h2>
+                    <p>Ministarstvo traži dodatne podatke o obliku, namjeni i odredištu</p>
+                </div>
+                
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="product-form-select">Oblik proizvoda *</label>
+                        <select id="product-form-select" required>
+                            <option value="">-- Odaberi oblik --</option>
+                            <option value="SVJEŽ">SVJEŽ - svježa riba</option>
+                            <option value="SMRZNUT">SMRZNUT - smrznuta riba</option>
+                            <option value="FILETI">FILETI - fileti ribe</option>
+                            <option value="CIJELI">CIJELI - cijela riba</option>
+                            <option value="POLU-PRERAĐEN">POLU-PRERAĐEN - poluprerađeni proizvod</option>
+                            <option value="KONZERVIRAN">KONZERVIRAN - konzervirani proizvod</option>
+                        </select>
+                        <small>Oblik u kojem se proizvod stavlja u promet</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="purpose-phase-select">Namjena / faza *</label>
+                        <select id="purpose-phase-select" required>
+                            <option value="">-- Odaberi namjenu --</option>
+                            <option value="PRODAJA">PRODAJA - direktna prodaja potrošačima</option>
+                            <option value="PRERADA">PRERADA - daljnja prerada</option>
+                            <option value="KONZUM">KONZUM - vlastiti konzum</option>
+                            <option value="TRGOVINA">TRGOVINA - trgovina na veliko</option>
+                            <option value="RESTORAN">RESTORAN - ugostiteljstvo</option>
+                            <option value="IZVOZ">IZVOZ - izvoz u inozemstvo</option>
+                        </select>
+                        <small>Namjena ili faza u lancu opskrbe</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="destination-input">Odredište *</label>
+                        <input type="text" id="destination-input" placeholder="Npr. Tržnica Split, Na plovilu, Hladnjača Zagreb..." 
+                               maxlength="100" required>
+                        <small>Specifično mjesto ili subjekt koji prima proizvod</small>
+                        
+                        <div class="quick-destinations">
+                            <h4>Brzi odabir:</h4>
+                            <div class="destination-buttons">
+                                <button type="button" class="destination-btn" data-destination="NA PLOVILU">🚢 Na plovilu</button>
+                                <button type="button" class="destination-btn" data-destination="TRŽNICA SPLIT">🏪 Tržnica Split</button>
+                                <button type="button" class="destination-btn" data-destination="TRŽNICA RIJEKA">🏪 Tržnica Rijeka</button>
+                                <button type="button" class="destination-btn" data-destination="HLADNJAČA">❄️ Hladnjača</button>
+                                <button type="button" class="destination-btn" data-destination="RESTORAN">🍽️ Restoran</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="traceability-summary">
+                        <div id="traceability-preview">
+                            <p class="preview-note">Pregled sljedivosti će se prikazati nakon odabira svih polja</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-container">
+                    <button id="back-to-quantity-btn" class="btn btn-secondary">← Natrag na količinu</button>
+                    <button id="generate-lot-btn" class="btn btn-primary" disabled>Generiraj LOT 🎯</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ekran 4: LOT rezultat -->
         <div id="screen-result" class="screen">
             <header class="header">
                 <h2>✅ LOT KREIRAN</h2>
@@ -181,12 +363,14 @@
         console.log('🔄 All caches cleared - loading fresh files');
     </script>
     
-    <!-- Scripts for Vercel deployment -->
-    <script src="js/db.js"></script>
-    <script src="js/gps.js"></script>
-    <script src="js/lot-generator.js"></script>
-    <script src="js/export.js"></script>
-    <script src="js/app.js"></script>
+    <!-- Scripts with NEW timestamp - CATEGORIZED SPECIES INTERFACE -->
+    <script src="js/db.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
+    <script src="js/gps.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
+    <script src="js/vessel-config.js?v=4.0&t=20260107180000&bust=${Math.random()}"></script>
+    <script src="js/lot-manager.js?v=4.0&t=20260107180000&bust=${Math.random()}"></script>
+    <script src="js/lot-generator.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
+    <script src="js/export.js?v=3.0&t=20260106215000&bust=${Math.random()}"></script>
+    <script src="js/professional-app.js?v=4.0&t=20260107190000&bust=${Math.random()}"></script>
     
     <!-- SERVICE WORKER DISABLED - NO CACHING DURING DEVELOPMENT -->
     <script>
