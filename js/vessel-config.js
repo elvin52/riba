@@ -45,11 +45,11 @@ class VesselConfigManager {
     validateConfig(config) {
         const errors = [];
 
-        // CFR Number validation (14 characters, 3 letters + 11 digits)
+        // CFR Number validation (15 characters, 3 letters + 12 digits)
         if (!config.cfr_number) {
             errors.push('CFR number is mandatory');
-        } else if (!/^[A-Z]{3}\d{11}$/.test(config.cfr_number)) {
-            errors.push('CFR number must be 3 letters + 11 digits (e.g., HRV123456789012)');
+        } else if (!/^[A-Z]{3}\d{12}$/.test(config.cfr_number)) {
+            errors.push('CFR number must be 3 letters + 12 digits (e.g., HRV123456789012)');
         }
 
         // Registration Mark validation
