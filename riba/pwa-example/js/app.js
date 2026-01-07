@@ -12,7 +12,7 @@ class FishermanApp {
 
     async init() {
         try {
-            console.log('🐟 Inicijaliziranje Ribar LOT aplikacije...');
+            console.log('🐟 Inicijaliziranje Ribar LOT aplikacije v2.1 - EU 2023/2842...');
             
             // Check if global objects exist
             if (!window.fishermanDB) {
