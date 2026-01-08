@@ -229,11 +229,8 @@ class ProfessionalFishermanApp {
             console.log(' Saving vessel configuration...');
             
             const vesselData = this.getVesselFormData();
-            if (!this.validateVesselData(vesselData)) {
-                return; // Validation failed, errors already shown
-            }
             
-            // Save to vessel config manager
+            // Save to vessel config manager (validation is handled internally)
             await window.vesselConfigManager.saveConfig(vesselData);
             this.vesselConfig = vesselData;
             
