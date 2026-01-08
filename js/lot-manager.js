@@ -118,7 +118,25 @@ class LOTManager {
             traceability: {
                 product_form: catchData.product_form,        // e.g., "SVJEŽ", "SMRZNUT", "FILETI"
                 purpose_phase: catchData.purpose_phase,      // e.g., "PRODAJA", "PRERADA", "KONZUM"
-                destination: catchData.destination           // e.g., "TRŽNICA SPLIT", "NA PLOVILU", "HLADNJAČA"
+                destination: catchData.destination,          // e.g., "TRŽNICA SPLIT", "NA PLOVILU", "HLADNJAČA"
+                presentation_format: catchData.presentation_format || "WHL",  // "WHL" (whole), "FIL" (fillet), etc.
+                preservation_method: catchData.preservation_method || "FRE"   // "FRE" (fresh), "FRZ" (frozen), etc.
+            },
+            
+            // Producer information (mandatory for Croatian regulation - lines 283-284, 299-300)
+            producer: {
+                business_name: vesselConfig.fisherman_name || vesselConfig.vessel_name,
+                business_address: catchData.producer_address || "Croatia", // Required for QR codes
+                registration_number: vesselConfig.cfr_number, // CFR serves as business registration
+                contact_info: catchData.producer_contact || null
+            },
+            
+            // Buyer/distributor information (mandatory per lines 95-98, 239)
+            buyer: {
+                buyer_name: catchData.buyer_name || null,           // Who is receiving the catch
+                buyer_address: catchData.buyer_address || null,     // Buyer's address
+                buyer_registration: catchData.buyer_registration || null, // Buyer's business number
+                sale_date: catchData.sale_date || new Date().toISOString() // When sold/transferred
             },
             
             // Metadata
