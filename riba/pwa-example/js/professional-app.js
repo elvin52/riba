@@ -111,11 +111,6 @@ class ProfessionalFishermanApp {
             saveVesselBtn.addEventListener('click', () => this.saveVesselData());
         }
 
-        // Gear category validation
-        const gearSelect = document.getElementById('gear-category-select');
-        if (gearSelect) {
-            gearSelect.addEventListener('change', () => this.validateGearCategory());
-        }
 
         // Logbook input validation (HRVLOG format)
         const logbookInput = document.getElementById('logbook-input');
@@ -292,7 +287,8 @@ class ProfessionalFishermanApp {
         const input = document.getElementById('cfr-input');
         const value = input.value.trim().toUpperCase();
         
-        if (!/^[A-Z]{3}\d{11}$/.test(value)) {
+        // Croatian CFR format: 3 letters + 9-12 digits
+        if (!/^[A-Z]{3}\d{9,12}$/.test(value)) {
             input.style.borderColor = '#dc2626';
             return false;
         } else {
@@ -301,16 +297,6 @@ class ProfessionalFishermanApp {
         }
     }
 
-    validateGearCategory() {
-        const select = document.getElementById('gear-category-select');
-        if (select.value) {
-            select.style.borderColor = '#10b981';
-            return true;
-        } else {
-            select.style.borderColor = '#dc2626';
-            return false;
-        }
-    }
 
     // FISHING ZONE METHODS (EU 2023/2842 COMPLIANT)
 
@@ -836,8 +822,181 @@ class ProfessionalFishermanApp {
     }
 
     async downloadPDF() {
-        // Use existing PDF export functionality
-        console.log('PDF export not implemented in professional version yet');
+        if (!this.currentLOTRecord) {
+            this.showError('Nema LOT podataka za PDF izvoz');
+            return;
+        }
+
+        try {
+            // Generate PDF content using human-readable format
+            const pdfContent = this.generatePDFContent(this.currentLOTRecord);
+            
+            // Create new window for printing
+            const pdfWindow = window.open('', '_blank');
+            pdfWindow.document.write(pdfContent);
+            pdfWindow.document.close();
+            
+            // Auto-print when loaded
+            pdfWindow.onload = () => {
+                pdfWindow.print();
+            };
+            
+            console.log('✅ PDF generated for LOT:', this.currentLOTRecord.lot_id);
+            
+        } catch (error) {
+            console.error('❌ PDF generation failed:', error);
+            this.showError('Greška pri generiranju PDF-a: ' + error.message);
+        }
+    }
+
+    generatePDFContent(record) {
+        const quantityDisplay = record.quantity.quantity_type === 'WEIGHT' 
+            ? `${record.quantity.net_weight_kg} kg`
+            : `${record.quantity.unit_count} kom`;
+            
+        const undersizedDisplay = record.quantity.undersized_catch_present
+            ? (record.quantity.quantity_type === 'WEIGHT'
+                ? `Da (${record.quantity.undersized_weight_kg || 0} kg)`
+                : `Da (${record.quantity.undersized_unit_count || 0} kom)`)
+            : 'Ne';
+
+        return `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>LOT ${record.lot_id} - Ribaška deklaracija</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .lot-info { border: 2px solid #333; padding: 15px; margin-bottom: 20px; }
+        .section { margin-bottom: 15px; }
+        .label { font-weight: bold; }
+        .footer { margin-top: 30px; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🐟 RIBAŠKA LOT DEKLARACIJA</h1>
+        <h2>LOT ${record.lot_id}</h2>
+    </div>
+    
+    <div class="lot-info">
+        <div class="section">
+            <span class="label">Datum ulova:</span> ${record.fishing.catch_date}${record.fishing.catch_time ? ` ${record.fishing.catch_time}` : ''}
+        </div>
+        <div class="section">
+            <span class="label">Vrsta:</span> ${record.species.local_name} (${record.species.fao_code})
+        </div>
+        <div class="section">
+            <span class="label">Znanstveni naziv:</span> ${record.species.scientific_name}
+        </div>
+        <div class="section">
+            <span class="label">Područje proizvodnje:</span> ${record.production_area.description} (${record.production_area.fao_zone})
+        </div>
+        <div class="section">
+            <span class="label">Količina:</span> ${quantityDisplay}
+        </div>
+        <div class="section">
+            <span class="label">Ribaski alat:</span> ${record.fishing.fishing_gear_category}
+        </div>
+        <div class="section">
+            <span class="label">Riba ispod minimalne veličine:</span> ${undersizedDisplay}
+        </div>
+    </div>
+    
+    <div class="lot-info">
+        <h3>Podaci o plovilu</h3>
+        <div class="section">
+            <span class="label">CFR broj:</span> ${record.vessel.cfr_number}
+        </div>
+        <div class="section">
+            <span class="label">Registarska oznaka:</span> ${record.vessel.registration_mark}
+        </div>
+        <div class="section">
+            <span class="label">Broj očevidnika:</span> ${record.vessel.logbook_number}
+        </div>
+        ${record.vessel.vessel_name ? `<div class="section"><span class="label">Ime plovila:</span> ${record.vessel.vessel_name}</div>` : ''}
+    </div>
+    
+    <div class="lot-info">
+        <h3>Sljedivost</h3>
+        <div class="section">
+            <span class="label">Oblik proizvoda:</span> ${record.traceability.product_form}
+        </div>
+        <div class="section">
+            <span class="label">Namjena/faza:</span> ${record.traceability.purpose_phase}
+        </div>
+        <div class="section">
+            <span class="label">Odredište:</span> ${record.traceability.destination}
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Generirano: ${new Date().toLocaleString('hr-HR')}</p>
+        <p>EU Uredba 2023/2842 - Sljedivost ribljih proizvoda</p>
+    </div>
+</body>
+</html>`;
+    }
+
+    generateLabelContent(record) {
+        const quantityDisplay = record.quantity.quantity_type === 'WEIGHT' 
+            ? `${record.quantity.net_weight_kg} kg`
+            : `${record.quantity.unit_count} kom`;
+
+        return `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Nalijepnica LOT ${record.lot_id}</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 5px; 
+            font-size: 14px;
+            width: 350px;
+        }
+        .label-container { 
+            border: 3px solid #000; 
+            padding: 10px; 
+            text-align: center;
+        }
+        .lot-number { 
+            font-size: 24px; 
+            font-weight: bold; 
+            margin-bottom: 10px;
+            border-bottom: 2px solid #000;
+            padding-bottom: 5px;
+        }
+        .species { 
+            font-size: 18px; 
+            margin-bottom: 8px;
+        }
+        .details { 
+            font-size: 12px; 
+            margin: 5px 0;
+        }
+        .footer { 
+            font-size: 10px; 
+            margin-top: 10px;
+            border-top: 1px solid #000;
+            padding-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="label-container">
+        <div class="lot-number">LOT ${record.lot_id}</div>
+        <div class="species">${record.species.local_name}</div>
+        <div class="species">(${record.species.fao_code})</div>
+        <div class="details">Količina: ${quantityDisplay}</div>
+        <div class="details">Datum: ${record.fishing.catch_date}</div>
+        <div class="details">FAO zona: ${record.production_area.fao_zone}</div>
+        <div class="details">CFR: ${record.vessel.cfr_number}</div>
+        <div class="footer">EU 2023/2842 | ${new Date().toLocaleDateString('hr-HR')}</div>
+    </div>
+</body>
+</html>`;
     }
 }
 
@@ -877,4 +1036,33 @@ window.generateLOT = function() {
 
 window.goToScreen = function(screenId) {
     window.professionalFishermanApp.goToScreen(screenId);
+};
+
+window.generateLabel = function() {
+    const app = window.professionalFishermanApp;
+    if (!app.currentLOTRecord) {
+        app.showError('Nema LOT podataka za generiranje nalijepnice');
+        return;
+    }
+
+    try {
+        // Generate printable label content
+        const labelContent = app.generateLabelContent(app.currentLOTRecord);
+        
+        // Create new window for printing label
+        const labelWindow = window.open('', '_blank', 'width=400,height=300');
+        labelWindow.document.write(labelContent);
+        labelWindow.document.close();
+        
+        // Auto-print when loaded
+        labelWindow.onload = () => {
+            labelWindow.print();
+        };
+        
+        console.log('✅ Label generated for LOT:', app.currentLOTRecord.lot_id);
+        
+    } catch (error) {
+        console.error('❌ Label generation failed:', error);
+        app.showError('Greška pri generiranju nalijepnice: ' + error.message);
+    }
 };

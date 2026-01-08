@@ -28,14 +28,12 @@ class VesselConfigManager {
         }
 
         this.config = {
-            cfr_number: configData.cfr_number.trim().toUpperCase(),
-            registration_mark: configData.registration_mark.trim().toUpperCase(),
-            logbook_number: configData.logbook_number.trim().toUpperCase(),
+            cfr_number: (configData.cfr_number || '').trim().toUpperCase(),
+            registration_mark: (configData.registration_mark || '').trim().toUpperCase(),
+            logbook_number: (configData.logbook_number || '').trim().toUpperCase(),
             fishing_gear_category: configData.fishing_gear_category || 'MIXED',
             vessel_name: configData.vessel_name?.trim() || '',
-            fisherman_name: configData.fisherman_name.trim(),
-            company_name: configData.company_name?.trim() || '',
-            oib: configData.oib.trim(),
+            fisherman_name: (configData.fisherman_name || '').trim(),
             created_timestamp: new Date().toISOString(),
             updated_timestamp: new Date().toISOString()
         };
@@ -52,7 +50,7 @@ class VesselConfigManager {
         if (!config.cfr_number) {
             errors.push('CFR number is mandatory');
         } else if (!/^[A-Z]{3}\d{9,12}$/.test(config.cfr_number)) {
-            errors.push('CFR number must be 3 letters + 9-12 digits (e.g., HRV000002476)');
+            errors.push('CFR number must be 3 letters + 9-12 digits (e.g., HRV000000000)');
         }
 
         // Registration Mark validation
@@ -104,23 +102,6 @@ class VesselConfigManager {
         ];
     }
 
-    // Get gear category descriptions for UI
-    getGearCategoryDescriptions() {
-        return {
-            'GNS': 'Mreže pridnene - pojedinačne',
-            'GND': 'Mreže plutajuće',
-            'GTR': 'Mreže trostruke',
-            'LLS': 'Palangre pridneni',
-            'LLD': 'Palangre plutajući',
-            'LHP': 'Udice ručne',
-            'LHM': 'Udice mašinske',
-            'FPO': 'Klopke/košare',
-            'PS1': 'Mreže optkolne',
-            'OTB': 'Koćarske mreže pridnene',
-            'PTB': 'Koćarske mreže parne',
-            'TBN': 'Koćarske mreže ostale'
-        };
-    }
 
     // Check if vessel is configured
     isConfigured() {
@@ -144,35 +125,6 @@ class VesselConfigManager {
         return await this.saveConfig(updatedConfig);
     }
 
-    // Generate example logbook number
-    generateExampleLogbook() {
-        const randomDigits = Math.random().toString().substr(2, 13);
-        return `HRVLOG${randomDigits}`;
-    }
-
-    // Generate example CFR number
-    generateExampleCFR() {
-        const randomDigits = Math.random().toString().substr(2, 11);
-        return `HRV${randomDigits}`;
-    }
-
-    // Validate Croatian OIB (tax identification number)
-    validateOIB(oib) {
-        if (!/^\d{11}$/.test(oib)) {
-            return false;
-        }
-
-        // OIB checksum algorithm
-        let sum = 0;
-        for (let i = 0; i < 10; i++) {
-            sum += parseInt(oib[i]) * (10 - i);
-        }
-        
-        let remainder = sum % 11;
-        let checkDigit = remainder < 2 ? remainder : 11 - remainder;
-        
-        return checkDigit === parseInt(oib[10]);
-    }
 }
 
 // Initialize global vessel config manager

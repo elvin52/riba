@@ -165,8 +165,9 @@ class LOTManager {
         record.fishing_gear_category = record.fishing.fishing_gear_category;
         record.net_quantity = record.quantity.net_weight_kg || record.quantity.unit_count;
 
-        // Store record
+        // Store record in both localStorage and Map for export functionality
         localStorage.setItem(`lot_${lotId}`, JSON.stringify(record));
+        this.traceabilityRecords.set(lotId, record);
         
         return record;
     }
@@ -237,24 +238,20 @@ class LOTManager {
             errors.push('Fishing gear category is required');
         }
 
-        // Quantity validation
-        if (!record.quantity?.net_weight_kg || record.quantity.net_weight_kg <= 0) {
-            errors.push('Net weight must be greater than 0 kg');
+        // Quantity validation - check based on quantity type
+        if (record.quantity?.quantity_type === 'WEIGHT') {
+            if (!record.quantity.net_weight_kg || record.quantity.net_weight_kg <= 0) {
+                errors.push('Net weight must be greater than 0 kg when quantity type is WEIGHT');
+            }
+        } else if (record.quantity?.quantity_type === 'UNITS') {
+            if (!record.quantity.unit_count || record.quantity.unit_count <= 0) {
+                errors.push('Unit count must be greater than 0 when quantity type is UNITS');
+            }
         }
 
         // EU 2023/2842 dual quantity validation
         if (!record.quantity?.quantity_type || !['WEIGHT', 'UNITS'].includes(record.quantity.quantity_type)) {
             errors.push('Quantity type must be either WEIGHT or UNITS');
-        }
-        
-        if (record.quantity?.quantity_type === 'WEIGHT') {
-            if (!record.quantity.net_weight_kg || record.quantity.net_weight_kg <= 0) {
-                errors.push('Net weight in kg is required when quantity type is WEIGHT');
-            }
-        } else if (record.quantity?.quantity_type === 'UNITS') {
-            if (!record.quantity.unit_count || record.quantity.unit_count <= 0) {
-                errors.push('Unit count is required when quantity type is UNITS');
-            }
         }
         
         // Undersized catch validation based on quantity type

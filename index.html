@@ -31,9 +31,9 @@
                 <div class="vessel-form">
                     <div class="form-group">
                         <label for="cfr-input">CFR broj plovila *</label>
-                        <input type="text" id="cfr-input" placeholder="HRV000002476" 
+                        <input type="text" id="cfr-input" placeholder="HRV000000000" 
                                maxlength="15" style="text-transform: uppercase;">
-                        <small>Format: 3 slova + 9-12 brojki (npr. HRV000002476)</small>
+                        <small>Format: 3 slova + 9-12 brojki (npr. HRV000000000)</small>
                     </div>
                     
                     <div class="form-group">
@@ -139,7 +139,7 @@
             </main>
         </div>
 
-        <!-- Ekran 3: Unos količine -->
+        <!-- Ekran 4: Unos količine -->
         <div id="screen-quantity" class="screen">
             <header class="header">
                 <button class="back-btn" onclick="goToScreen('screen-species')">← NATRAG</button>
@@ -326,28 +326,26 @@
         </div>
     </div>
 
-    <!-- AGGRESSIVE CACHE CLEAR - FORCE RELOAD ALL FILES -->
+    <!-- Development cache management - preserves Croatian vessel configuration -->
     <script>
-        console.log('🗑️ AGGRESSIVE CACHE CLEAR - FORCING FRESH LOAD');
+        console.log('🔧 Development mode - selective cache management');
         
-        // Clear IndexedDB
-        indexedDB.deleteDatabase('FishermanLOT');
-        
-        // Clear all caches
+        // Only clear application caches, preserve vessel configuration
         if ('caches' in window) {
             caches.keys().then(names => {
                 names.forEach(name => {
-                    console.log('🗑️ Deleting cache:', name);
-                    caches.delete(name);
+                    if (name.includes('fisherman') || name.includes('lot')) {
+                        console.log('🗑️ Clearing app cache:', name);
+                        caches.delete(name);
+                    }
                 });
             });
         }
         
-        // Clear localStorage and sessionStorage
-        localStorage.clear();
-        sessionStorage.clear();
+        // Preserve vessel configuration in localStorage
+        const preservedVesselConfig = localStorage.getItem('fishermen_vessel_config');
         
-        console.log('🔄 All caches cleared - loading fresh files');
+        console.log('✅ Vessel configuration preserved for Croatian fishermen');
     </script>
     
     <!-- Scripts with NEW timestamp - CATEGORIZED SPECIES INTERFACE -->
