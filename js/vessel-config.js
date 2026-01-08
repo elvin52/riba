@@ -22,18 +22,23 @@ class VesselConfigManager {
 
     // Save vessel configuration (one-time setup)
     async saveConfig(configData) {
-        const validation = this.validateConfig(configData);
-        if (!validation.valid) {
-            throw new Error(validation.errors.join('; '));
-        }
-
-        this.config = {
+        // Clean and normalize input BEFORE validation
+        const cleanedConfig = {
             cfr_number: (configData.cfr_number || '').trim().toUpperCase(),
             registration_mark: (configData.registration_mark || '').trim().toUpperCase(),
             logbook_number: (configData.logbook_number || '').trim().toUpperCase(),
             fishing_gear_category: configData.fishing_gear_category || 'MIXED',
             vessel_name: configData.vessel_name?.trim() || '',
-            fisherman_name: (configData.fisherman_name || '').trim(),
+            fisherman_name: (configData.fisherman_name || '').trim()
+        };
+
+        const validation = this.validateConfig(cleanedConfig);
+        if (!validation.valid) {
+            throw new Error(validation.errors.join('; '));
+        }
+
+        this.config = {
+            ...cleanedConfig,
             created_timestamp: new Date().toISOString(),
             updated_timestamp: new Date().toISOString()
         };
