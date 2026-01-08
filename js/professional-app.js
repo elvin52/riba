@@ -194,6 +194,26 @@ class ProfessionalFishermanApp {
         if (gearSelect) gearSelect.value = savedConfig.fishing_gear_category || '';
     }
 
+    // Get vessel form data from DOM elements
+    getVesselFormData() {
+        const cfrInput = document.getElementById('cfr-input');
+        const registrationInput = document.getElementById('registration-input');
+        const logbookInput = document.getElementById('logbook-input');
+        const vesselNameInput = document.getElementById('vessel-name-input');
+        const gearSelect = document.getElementById('gear-category-select');
+
+        const logbookDigits = logbookInput ? logbookInput.value.trim() : '';
+        const logbookNumber = logbookDigits ? 'HRVLOG' + logbookDigits : '';
+
+        return {
+            cfr_number: cfrInput ? cfrInput.value.trim() : '',
+            registration_mark: registrationInput ? registrationInput.value.trim() : '',
+            logbook_number: logbookNumber,
+            vessel_name: vesselNameInput ? vesselNameInput.value.trim() : '',
+            fishing_gear_category: gearSelect ? gearSelect.value : ''
+        };
+    }
+
     async saveVesselData() {
         try {
             console.log(' Saving vessel configuration...');
