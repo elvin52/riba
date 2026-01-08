@@ -40,14 +40,25 @@ class ProfessionalFishermanApp {
             
             // Determine starting screen based on vessel configuration
             this.vesselConfig = window.vesselConfigManager.getConfig();
-            if (!this.vesselConfig) {
-                console.log('🚢 No vessel configuration - starting with setup');
+            
+            // Check if vessel is PROPERLY configured (all required fields present)
+            const isProperlyConfigured = this.vesselConfig && 
+                this.vesselConfig.cfr_number && 
+                this.vesselConfig.cfr_number.length >= 3 &&
+                this.vesselConfig.registration_mark && 
+                this.vesselConfig.logbook_number &&
+                this.vesselConfig.fisherman_name &&
+                this.vesselConfig.fishing_gear_category;
+                
+            if (!isProperlyConfigured) {
+                console.log('🚢 Vessel not properly configured - starting with setup');
+                console.log('Config status:', this.vesselConfig ? 'Incomplete' : 'Missing');
                 this.goToScreen('screen-vessel-setup');
                 this.loadVesselSetupForm();
             } else {
-                console.log('✅ Vessel configured - starting with fishing zone selection');
-                this.goToScreen('screen-fishing-zone');
-                this.renderFishingZones();
+                console.log('✅ Vessel properly configured - starting with home screen');
+                this.goToScreen('screen-home');
+                this.updateDashboard();
             }
             
             // Start time updates
