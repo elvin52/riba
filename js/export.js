@@ -29,7 +29,7 @@ class ExportManager {
     // Download LOT as CSV
     downloadCSV(lotData) {
         try {
-            const csvContent = window.lotGenerator.exportLOTData('csv');
+            const csvContent = this.generateLOTCSV(lotData);
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             
             const link = document.createElement('a');
@@ -49,16 +49,52 @@ class ExportManager {
         }
     }
 
+    // Generate CSV content for single LOT
+    generateLOTCSV(lotData) {
+        const headers = [
+            'LOT_ID', 'Species_FAO', 'Species_Scientific', 'Species_Local',
+            'Catch_Date', 'FAO_Zone', 'Zone_Description',
+            'Vessel_CFR', 'Vessel_Name', 'Logbook_Number',
+            'Gear_Category', 'Quantity_Type', 'Net_Weight_KG', 'Unit_Count',
+            'Undersized_Present', 'Undersized_Weight_KG', 'Undersized_Units'
+        ];
+        
+        const row = [
+            lotData.lot_id,
+            lotData.species.fao_code,
+            lotData.species.scientific_name,
+            lotData.species.local_name,
+            lotData.fishing.catch_date,
+            lotData.production_area.fao_zone,
+            lotData.production_area.description,
+            lotData.vessel.cfr_number,
+            lotData.vessel.vessel_name || '',
+            lotData.vessel.logbook_number,
+            lotData.fishing.fishing_gear_category,
+            lotData.quantity.quantity_type,
+            lotData.quantity.net_weight_kg || '',
+            lotData.quantity.unit_count || '',
+            lotData.quantity.undersized_catch_present ? 'Da' : 'Ne',
+            lotData.quantity.undersized_weight_kg || '',
+            lotData.quantity.undersized_unit_count || ''
+        ];
+        
+        const rows = [headers, row];
+        return rows.map(r => 
+            r.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+        ).join('\n');
+    }
+
     // Generate and display QR code
     generateQRCode(lotData) {
         try {
             const qrData = {
                 lot_id: lotData.lot_id,
                 species: lotData.species.fao_code,
-                weight: lotData.quantities.net_weight_kg,
-                date: lotData.catch_info.date,
-                vessel: lotData.vessel_info.license_number,
-                zone: lotData.catch_info.fao_zone
+                weight: lotData.quantity.net_weight_kg || lotData.quantity.unit_count,
+                date: lotData.fishing.catch_date,
+                vessel: lotData.vessel.cfr_number,
+                zone: lotData.production_area.fao_zone
             };
             
             const qrString = JSON.stringify(qrData);
@@ -136,9 +172,33 @@ class ExportManager {
         return Math.abs(hash);
     }
 
+    // Create LOT summary for display
+    createLOTSummary(lotData) {
+        const quantityDisplay = lotData.quantity.quantity_type === 'WEIGHT' 
+            ? `${lotData.quantity.net_weight_kg} kg`
+            : `${lotData.quantity.unit_count} kom`;
+
+        const undersizedDisplay = lotData.quantity.undersized_catch_present
+            ? (lotData.quantity.quantity_type === 'WEIGHT'
+                ? `Da (${lotData.quantity.undersized_weight_kg || 0} kg)`
+                : `Da (${lotData.quantity.undersized_unit_count || 0} kom)`)
+            : 'Ne';
+
+        return {
+            date_display: lotData.fishing.catch_date + (lotData.fishing.catch_time ? ` ${lotData.fishing.catch_time}` : ''),
+            zone_display: `${lotData.production_area.fao_zone} - ${lotData.production_area.description}`,
+            coordinates_display: lotData.fishing.gps_coordinates 
+                ? `${lotData.fishing.gps_coordinates.latitude.toFixed(6)}, ${lotData.fishing.gps_coordinates.longitude.toFixed(6)}`
+                : 'N/A',
+            weight_display: quantityDisplay,
+            below_min_display: undersizedDisplay,
+            gear_display: lotData.fishing.fishing_gear_category
+        };
+    }
+
     // Generate PDF content as HTML
     generatePDFContent(lotData) {
-        const summary = window.lotGenerator.getCatchSummary();
+        const summary = this.createLOTSummary(lotData);
         
         return `
         <!DOCTYPE html>
@@ -259,15 +319,19 @@ class ExportManager {
                 <div class="section-title">🚢 Informacije o plovilu</div>
                 <div class="field">
                     <span class="field-label">Naziv plovila:</span>
-                    <span class="field-value">${lotData.vessel_info.name}</span>
+                    <span class="field-value">${lotData.vessel.vessel_name || 'N/A'}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">CFR broj:</span>
-                    <span class="field-value">${lotData.vessel_info.cfr_number}</span>
+                    <span class="field-value">${lotData.vessel.cfr_number}</span>
                 </div>
                 <div class="field">
-                    <span class="field-label">Licenca:</span>
-                    <span class="field-value">${lotData.vessel_info.license_number}</span>
+                    <span class="field-label">Registarska oznaka:</span>
+                    <span class="field-value">${lotData.vessel.registration_mark}</span>
+                </div>
+                <div class="field">
+                    <span class="field-label">Broj očevidnika:</span>
+                    <span class="field-value">${lotData.vessel.logbook_number}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Ribolovni alat:</span>
@@ -288,7 +352,7 @@ class ExportManager {
             </div>
 
             <div class="footer">
-                Dokument generiran aplikacijom "Ribar LOT" v${lotData.metadata.app_version}<br>
+                Dokument generiran aplikacijom "Ribar LOT" v1.0.0<br>
                 Za potrebe digitalne sljedivosti prema hrvatskom i EU zakonodavstvu
             </div>
         </body>
@@ -298,8 +362,12 @@ class ExportManager {
     // Email export functionality
     async sendByEmail(lotData, recipientEmail) {
         try {
-            const csvContent = window.lotGenerator.exportLOTData('csv');
+            const csvContent = this.generateLOTCSV(lotData);
             const pdfContent = this.generatePDFContent(lotData);
+            
+            const quantityDisplay = lotData.quantity.quantity_type === 'WEIGHT' 
+                ? `${lotData.quantity.net_weight_kg} kg`
+                : `${lotData.quantity.unit_count} kom`;
             
             // Create mailto link with attachments (limited browser support)
             const subject = encodeURIComponent(`LOT ${lotData.lot_id} - Sljedivost ribe`);
@@ -309,9 +377,9 @@ Poštovani,
 U prilogu se nalaze podaci o sljedivosti za LOT ${lotData.lot_id}:
 
 - Vrsta: ${lotData.species.local_name} (${lotData.species.fao_code})
-- Količina: ${lotData.quantities.net_weight_kg} kg
-- Datum ulova: ${lotData.catch_info.date}
-- Zona ulova: ${lotData.catch_info.zone_description}
+- Količina: ${quantityDisplay}
+- Datum ulova: ${lotData.fishing.catch_date}
+- Zona ulova: ${lotData.production_area.description}
 
 Podaci su generirani u skladu s Uredbom (EU) 2023/2842.
 
