@@ -1,0 +1,66 @@
+# Personal and System Directories
+.cache/
+.codeium/
+.cursor/
+.dbus-keyrings/
+.expo/
+.vscode/
+.windsurf/
+.wp-cli/
+.ollama/
+.m2/
+.jdks/
+AppData/
+Contacts/
+Desktop/
+Documents/
+Downloads/
+Favorites/
+Links/
+Music/
+Pictures/
+Videos/
+Searches/
+OneDrive/
+IdeaProjects/
+Local Sites/
+Saved Games/
+
+# Windows System Files
+NTUSER.DAT*
+ntuser.dat*
+ntuser.ini
+
+# Development Files
+node_modules/
+.yarnrc
+yarn.lock
+get-pip.py
+mvnd
+
+# Temporary and Build Files
+.lesshst
+.node_repl_history
+.gitconfig
+
+# Project-specific ignores
+app.js
+app/
+deepapp/
+docs
+dxf/
+hire.svg
+jqurantree-new/
+jqurantree/
+spirale/
+webscraper/
+
+# Generated Files
+*.svg
+test-eu-compliance.html
+js/test-runner.js
+
+# Personal Documents
+Novi dokument*
+*.LOG1
+*.LOG2
