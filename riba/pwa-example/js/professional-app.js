@@ -179,6 +179,7 @@ class ProfessionalFishermanApp {
         const logbookInput = document.getElementById('logbook-input');
         const vesselNameInput = document.getElementById('vessel-name-input');
         const fishermanNameInput = document.getElementById('fisherman-name-input');
+        const gearSelect = document.getElementById('fishing-gear-select');
 
         if (cfrInput) cfrInput.value = savedConfig.cfr_number || '';
         if (registrationInput) registrationInput.value = savedConfig.registration_mark || '';
@@ -187,6 +188,7 @@ class ProfessionalFishermanApp {
         }
         if (vesselNameInput) vesselNameInput.value = savedConfig.vessel_name || '';
         if (fishermanNameInput) fishermanNameInput.value = savedConfig.fisherman_name || '';
+        if (gearSelect) gearSelect.value = savedConfig.fishing_gear_category || '';
     }
 
     // Get vessel form data from DOM elements
@@ -200,14 +202,15 @@ class ProfessionalFishermanApp {
         const logbookDigits = logbookInput ? logbookInput.value.trim() : '';
         const logbookNumber = logbookDigits ? 'HRVLOG' + logbookDigits : '';
 
+        const gearSelect = document.getElementById('fishing-gear-select');
+        
         return {
             cfr_number: cfrInput ? cfrInput.value.trim() : '',
             registration_mark: registrationInput ? registrationInput.value.trim() : '',
             logbook_number: logbookNumber,
             vessel_name: vesselNameInput ? vesselNameInput.value.trim() : '',
             fisherman_name: fishermanNameInput ? fishermanNameInput.value.trim() : '',
-            // Default gear for EU compliance (not user-visible)
-            fishing_gear_category: 'MIXED'
+            fishing_gear_category: gearSelect ? gearSelect.value : 'MIXED'
         };
     }
 
@@ -254,6 +257,14 @@ class ProfessionalFishermanApp {
         
         if (!vesselData.logbook_number || vesselData.logbook_number.length < 10) {
             errors.push('Broj očevidnika mora imati najmanje 10 brojki');
+        }
+        
+        if (!vesselData.fisherman_name || vesselData.fisherman_name.length < 2) {
+            errors.push('Ime ribara mora imati najmanje 2 znaka');
+        }
+        
+        if (!vesselData.fishing_gear_category) {
+            errors.push('Ribolovni alat je obavezan (EU 2023/2842)');
         }
         
         if (showErrors && errors.length > 0) {
@@ -782,15 +793,23 @@ class ProfessionalFishermanApp {
                 color: 'bg-gray-50 border-gray-200'
             },
             '🌊 Ostala morska riba': {
-                description: 'Sve ostale vrste',
-                species: [], // Will be populated with remaining
+                description: 'Dodatne uobičajene vrste (20 najčešćih)',
+                species: ['VEV', 'CTG', 'RKQ', 'KLK', 'AMB', 'TTO', 'MYL', 'JAI', 'UGR', 'CRA', 'FLE', 'TUR', 'RSK', 'GUG', 'GFB', 'WHB', 'BLU', 'ALB', 'BOG', 'MUL'], // Limited to 20 most common additional species
                 color: 'bg-teal-50 border-teal-200'
             }
         };
 
-        // Create modern tabbed interface
+        // Create modern tabbed interface with search
         let html = `
             <div class="species-interface">
+                <!-- Search Bar for All Species -->
+                <div class="species-search-container">
+                    <div class="search-bar">
+                        <input type="text" id="species-search" placeholder="🔍 Pretraži sve vrste..." onkeyup="window.professionalFishermanApp.filterSpecies(this.value)">
+                    </div>
+                    <div id="search-results" class="search-results hidden"></div>
+                </div>
+
                 <!-- Category Tabs -->
                 <div class="category-tabs-container">
                     <div class="category-tabs" id="category-tabs">
@@ -817,21 +836,10 @@ class ProfessionalFishermanApp {
 
         // Create content for each category
         Object.entries(categories).forEach(([categoryName, categoryData], index) => {
-            let categorySpecies;
-            
-            if (categoryData.species.length === 0) {
-                // "Ostalo" category - get remaining species
-                const usedCodes = Object.values(categories)
-                    .filter((_, i) => i !== Object.keys(categories).length - 1) // Exclude "Ostalo" itself
-                    .flatMap(cat => cat.species);
-                categorySpecies = this.allSpecies.filter(species => 
-                    !usedCodes.includes(species.fao_code)
-                );
-            } else {
-                categorySpecies = this.allSpecies.filter(species => 
-                    categoryData.species.includes(species.fao_code)
-                );
-            }
+            // Only show species that are explicitly listed in categories
+            const categorySpecies = this.allSpecies.filter(species => 
+                categoryData.species.includes(species.fao_code)
+            );
 
             const isActive = index === 0 ? 'active' : 'hidden';
             
@@ -1119,6 +1127,61 @@ class ProfessionalFishermanApp {
         const month = (date.getMonth() + 1).toString().padStart(2, '0');
         const year = date.getFullYear();
         return `${day}/${month}/${year}`;
+    }
+
+    // Filter species by search term (shows all species when searching)
+    filterSpecies(searchTerm) {
+        const searchResults = document.getElementById('search-results');
+        const categoryTabs = document.getElementById('category-tabs').parentElement;
+        const speciesContent = document.getElementById('species-content');
+        
+        if (!searchTerm || searchTerm.length < 2) {
+            // Hide search results, show categories
+            searchResults.classList.add('hidden');
+            categoryTabs.style.display = 'block';
+            speciesContent.style.display = 'block';
+            return;
+        }
+        
+        // Show search results, hide categories
+        searchResults.classList.remove('hidden');
+        categoryTabs.style.display = 'none';
+        speciesContent.style.display = 'none';
+        
+        // Filter all species by search term
+        const filteredSpecies = this.allSpecies.filter(species => 
+            species.local_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            species.scientific_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            species.fao_code.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        
+        // Display search results
+        let html = `
+            <div class="search-results-header">
+                <h3>Rezultati pretrage: "${searchTerm}" (${filteredSpecies.length} vrsta)</h3>
+            </div>
+            <div class="species-grid-modern">
+        `;
+        
+        filteredSpecies.forEach(species => {
+            const emoji = species.emoji || '🐟';
+            html += `
+                <div class="modern-species-card" onclick="window.professionalFishermanApp.selectSpecies('${species.fao_code}')">
+                    <div class="species-emoji">${emoji}</div>
+                    <div class="species-info">
+                        <div class="species-name-modern">${species.local_name}</div>
+                        <div class="species-scientific-small">${species.scientific_name || ''}</div>
+                        <div class="species-fao-badge">${species.fao_code}</div>
+                    </div>
+                    <div class="select-indicator">
+                        <span class="select-arrow">→</span>
+                    </div>
+                </div>
+            `;
+        });
+        
+        html += `</div>`;
+        searchResults.innerHTML = html;
     }
 }
 

@@ -77,9 +77,9 @@ class VesselConfigManager {
             errors.push('Fisherman name is mandatory (minimum 2 characters)');
         }
 
-        // Fishing Gear Category - optional for Croatian fishermen, auto-set to default
+        // Fishing Gear Category - mandatory for Croatian regulation compliance
         if (!config.fishing_gear_category) {
-            config.fishing_gear_category = 'MIXED'; // Auto-set default for Croatian compliance
+            errors.push('Fishing gear category is mandatory (EU 2023/2842 requirement)');
         }
 
         return {

@@ -67,6 +67,56 @@
                         <small>Ime i prezime ribara koji će biti na papirnatoj deklaraciji</small>
                     </div>
                     
+                    <div class="form-group">
+                        <label for="fishing-gear-select">Glavni ribolovni alat *</label>
+                        <select id="fishing-gear-select" required>
+                            <option value="">-- Odaberi ribolovni alat --</option>
+                            <optgroup label="🌊 Plivarice">
+                                <option value="PS">PS - Plivarica za malu plavu ribu (srdelara)</option>
+                                <option value="PS">PS - Plivarica za veliku plavu ribu (tunolovka)</option>
+                                <option value="PS">PS - Plivarica ciplarica</option>
+                                <option value="PS">PS - Plivarica igličara</option>
+                                <option value="PS">PS - Plivarica oližnica</option>
+                                <option value="PS">PS - Plivarica palamidara</option>
+                                <option value="PS">PS - Plivarica lokardara</option>
+                            </optgroup>
+                            <optgroup label="🎣 Pasivni alati">
+                                <option value="GNS">GNS - Jednostruke mreže stajaćice</option>
+                                <option value="GTN">GTN - Trostruke dvopodne mreže stajaćice</option>
+                                <option value="GTR">GTR - Trostruke jednopodne mreže stajaćice</option>
+                                <option value="GTR">GTR - Mreža listarica</option>
+                                <option value="LLS">LLS - Stajaći parangal</option>
+                                <option value="LLD">LLD - Plutajući parangal</option>
+                                <option value="FPO">FPO - Vrše za lov ribe</option>
+                                <option value="FPO">FPO - Vrše za lov krupnih rakova</option>
+                                <option value="FPO">FPO - Vrše za lov škampa</option>
+                                <option value="FIX">FIX - Stajaći kogol (trata za jegulje)</option>
+                                <option value="FIX">FIX - Stajaći jednokrilni kogol za gavun</option>
+                                <option value="OTH">OTH - Trapula za lov velikog morskog crva</option>
+                            </optgroup>
+                            <optgroup label="🚤 Povlačni alati">
+                                <option value="OTB">OTB - Pridnena povlačna mreža (koća)</option>
+                                <option value="SV">SV - Potegača girarica</option>
+                                <option value="SV">SV - Potegača migavica</option>
+                                <option value="SV">SV - Potegača šabakun</option>
+                                <option value="SV">SV - Potegača oližnica</option>
+                                <option value="DRB">DRB - Dredža kunjkara</option>
+                                <option value="DRB">DRB - Dredža rampon</option>
+                                <option value="HMD">HMD - Hidraulična dredža (vongolara)</option>
+                            </optgroup>
+                            <optgroup label="🎯 Ostali alati">
+                                <option value="LHP">LHP - Povrazi (odmet, kančenica, povraz s kukom)</option>
+                                <option value="LTL">LTL - Povlačni povraz (panula)</option>
+                                <option value="HAR">HAR - Osti</option>
+                                <option value="OTH">OTH - Priručna oprema za sakupljanje</option>
+                                <option value="OTH">OTH - Tramata</option>
+                                <option value="OTH">OTH - Račnjak za lov rakovice</option>
+                                <option value="OTH">OTH - Sjekirica za rezanje koralja</option>
+                            </optgroup>
+                        </select>
+                        <small>Glavni alat koji koristite - obavezno za hrvatski pravilnik EU 2023/2842</small>
+                    </div>
+                    
                     <div class="validation-errors" id="vessel-errors" style="display: none;"></div>
                     
                     <button id="save-vessel-btn" class="primary-btn">
