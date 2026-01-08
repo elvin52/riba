@@ -1513,3 +1513,177 @@ body {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+/* COMPREHENSIVE SENIOR-FRIENDLY UX IMPROVEMENTS */
+
+/* Senior-Friendly Headers */
+.header-senior {
+    background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+    color: white;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(30, 64, 175, 0.3);
+}
+
+.header-senior h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
+}
+
+.header-subtitle-senior {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin: 0;
+    font-weight: 400;
+}
+
+/* Senior-Friendly Main Content */
+.main-content-senior {
+    padding: 2rem 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Progress Indicator for Seniors */
+.progress-indicator-senior {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f0f9ff;
+    border-radius: 12px;
+    border: 2px solid #3b82f6;
+}
+
+.progress-step {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #64748b;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-right: 1rem;
+}
+
+.progress-step.active {
+    background: #16a34a;
+    color: white;
+    box-shadow: 0 0 0 4px rgba(22, 163, 74, 0.2);
+}
+
+.progress-label {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* Senior-Friendly Form Groups */
+.vessel-form-senior {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-group-senior {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.label-senior {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.input-senior {
+    width: 100%;
+    padding: 1.2rem;
+    font-size: 1.2rem;
+    border: 3px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    transition: all 0.3s ease;
+}
+
+.input-senior:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.select-senior {
+    width: 100%;
+    padding: 1.2rem;
+    font-size: 1.1rem;
+    border: 3px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    cursor: pointer;
+}
+
+.select-senior:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.help-text-senior {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #475569;
+    line-height: 1.4;
+}
+
+.help-icon {
+    flex-shrink: 0;
+    font-size: 1.1rem;
+}
+
+/* Senior-Friendly Buttons */
+.btn-senior-primary {
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
+    text-transform: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 64px;
+    margin-top: 1rem;
+}
+
+.btn-senior-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(22, 163, 74, 0.4);
+    background: linear-gradient(135deg, #15803d 0%, #16a34a 100%);
+}
+
+.btn-senior-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
