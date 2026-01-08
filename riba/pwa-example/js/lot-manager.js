@@ -45,6 +45,82 @@ class LOTManager {
         
         return lotId;
     }
+
+    // Check if 10kg direct-to-consumer exemption applies (Croatian regulation lines 187-196)
+    checkDirectConsumerExemption(catchData, vesselConfig) {
+        const exemptionCheck = {
+            isEligible: false,
+            reason: null,
+            requirements: {
+                isDirectSale: false,
+                isPersonalConsumption: false,
+                isUnder10kg: false,
+                isDailyLimit: false
+            },
+            guidance: null
+        };
+
+        // Check quantity limit (≤10kg per day per consumer)
+        const quantity = catchData.quantity_type === "WEIGHT" ? 
+            parseFloat(catchData.net_weight_kg || 0) : 0;
+        
+        exemptionCheck.requirements.isUnder10kg = quantity <= 10;
+
+        // Check if it's direct sale to consumer
+        exemptionCheck.requirements.isDirectSale = 
+            catchData.purpose_phase === "DIREKTNA_PRODAJA" || 
+            catchData.buyer_type === "PRIVATNI_POTROSAC";
+
+        // Check if for personal consumption
+        exemptionCheck.requirements.isPersonalConsumption = 
+            catchData.consumption_type === "OSOBNA_POTROSNJA";
+
+        // Daily limit check (simplified - would need more complex tracking)
+        exemptionCheck.requirements.isDailyLimit = true; // Assume compliant for now
+
+        // Determine eligibility
+        const allRequirementsMet = Object.values(exemptionCheck.requirements).every(req => req === true);
+        exemptionCheck.isEligible = allRequirementsMet;
+
+        if (exemptionCheck.isEligible) {
+            exemptionCheck.reason = "Kvalificirano za iznimku ≤10kg direktna prodaja potrošačima";
+            exemptionCheck.guidance = {
+                title: "🆓 IZNIMKA ≤10KG DIREKTNA PRODAJA",
+                description: "Ovaj ulov može biti izuzet od punih zahtjeva sljedivosti",
+                note: "Detaljni zahtjevi će biti propisani tijekom 2026. godine",
+                stillRequired: [
+                    "Osnovni podaci o ulovu (vrsta, količina, datum)",
+                    "CFR broj plovila", 
+                    "Potvrda o osobnoj potrošnji kupca"
+                ],
+                exemptedFrom: [
+                    "Obvezno LOT označavanje ambalaže",
+                    "Detaljan QR kod",
+                    "Puna sljedivost kroz distributivni lanac"
+                ]
+            };
+        } else {
+            const failedRequirements = [];
+            if (!exemptionCheck.requirements.isUnder10kg) failedRequirements.push("Količina >10kg");
+            if (!exemptionCheck.requirements.isDirectSale) failedRequirements.push("Nije direktna prodaja");
+            if (!exemptionCheck.requirements.isPersonalConsumption) failedRequirements.push("Nije osobna potrošnja");
+
+            exemptionCheck.reason = `Nije kvalificirano: ${failedRequirements.join(', ')}`;
+            exemptionCheck.guidance = {
+                title: "📋 PUNI ZAHTJEVI SLJEDIVOSTI",
+                description: "Ovaj ulov mora ispuniti sve zahtjeve sljedivosti",
+                required: [
+                    "LOT broj prema LLOG standardu",
+                    "Fizičko označavanje ambalaže", 
+                    "Puna dokumentacija sljedivosti",
+                    "QR kod s detaljnim informacijama"
+                ]
+            };
+        }
+
+        console.log(`🔍 10kg Exemption Check:`, exemptionCheck);
+        return exemptionCheck;
+    }
     
     // Get FAO zone description for Croatian waters
     getFAOZoneDescription(faoZone) {

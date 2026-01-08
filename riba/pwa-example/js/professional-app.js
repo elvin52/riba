@@ -1107,10 +1107,18 @@ class ProfessionalFishermanApp {
         <div class="details">Datum: ${record.fishing.catch_date}</div>
         <div class="details">FAO zona: ${record.production_area.fao_zone}</div>
         <div class="details">CFR: ${record.vessel.cfr_number}</div>
-        <div class="footer">EU 2023/2842 | ${new Date().toLocaleDateString('hr-HR')}</div>
+        <div class="footer">EU 2023/2842 | ${this.formatDateDDMMYYYY(new Date())}</div>
     </div>
 </body>
 </html>`;
+    }
+
+    // Format date for Croatian compliance (DD/MM/YYYY)
+    formatDateDDMMYYYY(date) {
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
     }
 }
 

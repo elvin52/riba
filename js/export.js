@@ -147,6 +147,44 @@ class ExportManager {
         return qrLines.join('\n');
     }
 
+    // Generate physical LOT marking guidance per Croatian regulation lines 84-85
+    generatePhysicalMarkingGuidance(lotData) {
+        const guidance = {
+            title: "🏷️ OBVEZNO FIZIČKO OZNAČAVANJE AMBALAŽE",
+            subtitle: "Prema hrvatskom propisu EU 2023/2842, članak 58., stavci 84-85",
+            requirements: [
+                {
+                    icon: "📦",
+                    title: "Obvezno označavanje LOT broja",
+                    description: "LOT broj mora biti fizički označen i vidljiv na ambalaži proizvoda",
+                    lotNumber: lotData.lot_id,
+                    example: `Primjer: Nalijepite/označite "${lotData.lot_id}" na ambalažu`
+                },
+                {
+                    icon: "📱", 
+                    title: "Preporučeno: QR kod",
+                    description: "Možete dodati QR kod s dodatnim informacijama o proizvodu",
+                    note: "QR kod možete ispisati putem ove aplikacije i zalijepiti na ambalažu"
+                },
+                {
+                    icon: "⚖️",
+                    title: "Zakonska obveza",
+                    description: "Neoznačavanje LOT broja može rezultirati kaznom od strane nadležnih tijela",
+                    deadline: "Obvezno od 10. siječnja 2026. godine"
+                }
+            ],
+            markingMethods: [
+                "• Naljepnica s LOT brojem",
+                "• Direktno pisanje/štampanje na ambalažu", 
+                "• Etiketiranje s LOT brojem i QR kodom",
+                "• Utiskivanje LOT broja na plastičnu ambalažu"
+            ],
+            compliance: `Croatian EU 2023/2842 - Sljedivost proizvoda ribarstva`
+        };
+
+        return guidance;
+    }
+
     // Display QR code in modal
     displayQRCode(qrString, lotId) {
         const modal = document.getElementById('qr-modal');
