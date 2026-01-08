@@ -744,7 +744,7 @@ class ProfessionalFishermanApp {
         }
     }
 
-    // Render species grid for selection
+    // Render species grid for selection with improved UX
     renderSpeciesGrid() {
         const speciesGrid = document.getElementById('species-grid');
         if (!speciesGrid || !this.allSpecies || this.allSpecies.length === 0) {
@@ -752,54 +752,159 @@ class ProfessionalFishermanApp {
             return;
         }
         
-        console.log(`🐟 Rendering ${this.allSpecies.length} species`);
+        console.log(`🐟 Rendering ${this.allSpecies.length} species with improved UX`);
         
-        // Group species by categories for better UX
+        // Croatian fisherman-friendly categories with emojis and descriptions
         const categories = {
-            'Bijela riba': ['BSS', 'SBG', 'DNT', 'DEC', 'CBM', 'SOL'],
-            'Plava riba': ['PIL', 'MAC', 'HER', 'ANE'],
-            'Ostalo': [] // Will contain remaining species
+            '🐟 Bijela riba': {
+                description: 'Najčešće ulovljene bijele ribe',
+                species: ['BSS', 'SBG', 'RPG', 'DNT', 'CBM', 'SOL', 'SSB', 'BRB', 'PAC'],
+                color: 'bg-blue-50 border-blue-200'
+            },
+            '🔵 Plava riba': {
+                description: 'Sitna plava riba za tržište',
+                species: ['PIL', 'ANE', 'MAC', 'VMA', 'HOM', 'HMM', 'SPR'],
+                color: 'bg-indigo-50 border-indigo-200'
+            },
+            '🐙 Glavonošci': {
+                description: 'Hobotnice, lignje i sipice',
+                species: ['OCC', 'SQR', 'CTC', 'OCM', 'EDT', 'EOI'],
+                color: 'bg-purple-50 border-purple-200'
+            },
+            '🦞 Školjke i rakovi': {
+                description: 'Školjkaši i rakovi',
+                species: ['LBE', 'SLO', 'NEP', 'DPS', 'MSM', 'OYF', 'SVE', 'SCR'],
+                color: 'bg-orange-50 border-orange-200'
+            },
+            '🦈 Hrskavičnjače': {
+                description: 'Morski psi i raže',
+                species: ['DGS', 'SDS', 'SMD', 'RJC', 'SYC', 'SYT'],
+                color: 'bg-gray-50 border-gray-200'
+            },
+            '🌊 Ostala morska riba': {
+                description: 'Sve ostale vrste',
+                species: [], // Will be populated with remaining
+                color: 'bg-teal-50 border-teal-200'
+            }
         };
-        
-        let gridHTML = '';
-        
-        // Add categorized species
-        Object.entries(categories).forEach(([categoryName, faoCodes]) => {
-            const categorySpecies = this.allSpecies.filter(species => 
-                faoCodes.includes(species.fao_code)
-            );
+
+        // Create modern tabbed interface
+        let html = `
+            <div class="species-interface">
+                <!-- Category Tabs -->
+                <div class="category-tabs-container">
+                    <div class="category-tabs" id="category-tabs">
+        `;
+
+        // Create tabs
+        Object.keys(categories).forEach((categoryName, index) => {
+            const isActive = index === 0 ? 'active' : '';
+            const tabId = `tab-${index}`;
+            html += `
+                <button class="category-tab ${isActive}" data-category="${index}" onclick="window.professionalFishermanApp.showSpeciesCategory(${index})">
+                    ${categoryName}
+                </button>
+            `;
+        });
+
+        html += `
+                    </div>
+                </div>
+
+                <!-- Species Content Area -->
+                <div class="species-content-area" id="species-content">
+        `;
+
+        // Create content for each category
+        Object.entries(categories).forEach(([categoryName, categoryData], index) => {
+            let categorySpecies;
             
-            if (categorySpecies.length > 0) {
-                gridHTML += `<div class="species-category"><h4>${categoryName}</h4></div>`;
-                
-                categorySpecies.forEach(species => {
-                    gridHTML += `
-                        <div class="species-card" onclick="window.professionalFishermanApp.selectSpecies('${species.fao_code}')">
-                            <div class="species-name">${species.local_name}</div>
-                            <div class="species-fao">${species.fao_code}</div>
-                        </div>`;
-                });
+            if (categoryData.species.length === 0) {
+                // "Ostalo" category - get remaining species
+                const usedCodes = Object.values(categories)
+                    .filter((_, i) => i !== Object.keys(categories).length - 1) // Exclude "Ostalo" itself
+                    .flatMap(cat => cat.species);
+                categorySpecies = this.allSpecies.filter(species => 
+                    !usedCodes.includes(species.fao_code)
+                );
+            } else {
+                categorySpecies = this.allSpecies.filter(species => 
+                    categoryData.species.includes(species.fao_code)
+                );
+            }
+
+            const isActive = index === 0 ? 'active' : 'hidden';
+            
+            html += `
+                <div class="species-category-content ${isActive}" data-category="${index}">
+                    <div class="category-header ${categoryData.color}">
+                        <h3 class="category-title">${categoryName}</h3>
+                        <p class="category-description">${categoryData.description}</p>
+                        <div class="species-count">${categorySpecies.length} vrsta</div>
+                    </div>
+                    
+                    <div class="species-grid-modern">
+            `;
+
+            // Add species cards with better design
+            categorySpecies.forEach(species => {
+                const emoji = species.emoji || '🐟';
+                html += `
+                    <div class="modern-species-card" onclick="window.professionalFishermanApp.selectSpecies('${species.fao_code}')">
+                        <div class="species-emoji">${emoji}</div>
+                        <div class="species-info">
+                            <div class="species-name-modern">${species.local_name}</div>
+                            <div class="species-scientific-small">${species.scientific_name || ''}</div>
+                            <div class="species-fao-badge">${species.fao_code}</div>
+                        </div>
+                        <div class="select-indicator">
+                            <span class="select-arrow">→</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+            </div>
+        `;
+
+        speciesGrid.innerHTML = html;
+        
+        // Initialize first category as active
+        this.activeSpeciesCategory = 0;
+    }
+
+    // Show specific species category
+    showSpeciesCategory(categoryIndex) {
+        // Update active tab
+        document.querySelectorAll('.category-tab').forEach((tab, index) => {
+            if (index === categoryIndex) {
+                tab.classList.add('active');
+            } else {
+                tab.classList.remove('active');
             }
         });
-        
-        // Add remaining species in "Ostalo"
-        const usedCodes = Object.values(categories).flat();
-        const remainingSpecies = this.allSpecies.filter(species => 
-            !usedCodes.includes(species.fao_code)
-        );
-        
-        if (remainingSpecies.length > 0) {
-            gridHTML += `<div class="species-category"><h4>Ostalo</h4></div>`;
-            remainingSpecies.forEach(species => {
-                gridHTML += `
-                    <div class="species-card" onclick="window.professionalFishermanApp.selectSpecies('${species.fao_code}')">
-                        <div class="species-name">${species.local_name}</div>
-                        <div class="species-fao">${species.fao_code}</div>
-                    </div>`;
-            });
-        }
-        
-        speciesGrid.innerHTML = gridHTML;
+
+        // Update active content
+        document.querySelectorAll('.species-category-content').forEach((content, index) => {
+            if (index === categoryIndex) {
+                content.classList.remove('hidden');
+                content.classList.add('active');
+            } else {
+                content.classList.add('hidden');
+                content.classList.remove('active');
+            }
+        });
+
+        this.activeSpeciesCategory = categoryIndex;
+        console.log(`📂 Switched to category ${categoryIndex}`);
     }
     
     // Filter species based on search query
