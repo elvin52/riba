@@ -176,7 +176,6 @@ class ProfessionalFishermanApp {
         const cfrInput = document.getElementById('cfr-input');
         const registrationInput = document.getElementById('registration-input');
         const logbookInput = document.getElementById('logbook-input');
-        const vesselNameInput = document.getElementById('vessel-name-input');
         const fishermanNameInput = document.getElementById('fisherman-name-input');
         const gearSelect = document.getElementById('fishing-gear-select');
 
@@ -185,7 +184,6 @@ class ProfessionalFishermanApp {
         if (logbookInput && savedConfig.logbook_number) {
             logbookInput.value = savedConfig.logbook_number.replace('HRVLOG', '').trim();
         }
-        if (vesselNameInput) vesselNameInput.value = savedConfig.vessel_name || '';
         if (fishermanNameInput) fishermanNameInput.value = savedConfig.fisherman_name || '';
         if (gearSelect) gearSelect.value = savedConfig.fishing_gear_category || '';
     }
@@ -195,7 +193,6 @@ class ProfessionalFishermanApp {
         const cfrInput = document.getElementById('cfr-input');
         const registrationInput = document.getElementById('registration-input');
         const logbookInput = document.getElementById('logbook-input');
-        const vesselNameInput = document.getElementById('vessel-name-input');
         const fishermanNameInput = document.getElementById('fisherman-name-input');
 
         const logbookDigits = logbookInput ? logbookInput.value.trim() : '';
@@ -207,7 +204,6 @@ class ProfessionalFishermanApp {
             cfr_number: cfrInput ? cfrInput.value.trim() : '',
             registration_mark: registrationInput ? registrationInput.value.trim() : '',
             logbook_number: logbookNumber,
-            vessel_name: vesselNameInput ? vesselNameInput.value.trim() : '',
             fisherman_name: fishermanNameInput ? fishermanNameInput.value.trim() : '',
             fishing_gear_category: gearSelect ? gearSelect.value : 'MIXED'
         };

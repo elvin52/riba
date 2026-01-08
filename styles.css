@@ -1172,6 +1172,74 @@ body {
     margin: 0;
 }
 
+/* Elderly-Friendly Mobile Optimization */
+@media (max-width: 768px) {
+    /* Vessel Setup Screen - Single Screen for Elderly */
+    #screen-vessel-setup .main-content {
+        padding: 1rem 0.75rem;
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+    
+    #screen-vessel-setup h1 {
+        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+        line-height: 1.3;
+    }
+    
+    #screen-vessel-setup p {
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Compact Form Groups for Mobile */
+    #screen-vessel-setup .form-group {
+        margin-bottom: 1rem;
+    }
+    
+    #screen-vessel-setup label {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+    
+    #screen-vessel-setup input,
+    #screen-vessel-setup select {
+        padding: 12px;
+        font-size: 1rem;
+        margin-bottom: 4px;
+    }
+    
+    #screen-vessel-setup small {
+        font-size: 0.8rem;
+        line-height: 1.2;
+    }
+    
+    /* Logbook Input - More Compact */
+    .logbook-input-container {
+        margin-bottom: 4px;
+    }
+    
+    .logbook-prefix {
+        padding: 12px 10px;
+        font-size: 1rem;
+    }
+    
+    /* Save Button - Elderly Friendly */
+    #screen-vessel-setup .btn {
+        padding: 16px 20px;
+        font-size: 1.1rem;
+        margin-top: 0.75rem;
+        min-height: 50px;
+    }
+    
+    /* Error Messages - Compact */
+    #vessel-errors {
+        font-size: 0.85rem;
+        padding: 8px 12px;
+        margin: 8px 0;
+    }
+}
+
 /* Hide unnecessary complexity for elderly users */
 .hidden {
     display: none;
