@@ -75,21 +75,20 @@ class ProfessionalFishermanApp {
             purposePhaseSelect.addEventListener('change', () => this.updateTraceabilityPreview());
         }
         
-        // Destination input change
-        const destinationInput = document.getElementById('destination-input');
-        if (destinationInput) {
-            destinationInput.addEventListener('input', () => this.updateTraceabilityPreview());
-        }
-        
-        // Quick destination buttons
-        const destinationBtns = document.querySelectorAll('.destination-btn');
-        destinationBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const destination = e.target.getAttribute('data-destination');
-                destinationInput.value = destination;
+        // Simplified destination selection
+        const destinationSelect = document.getElementById('destination-select');
+        if (destinationSelect) {
+            destinationSelect.addEventListener('change', () => {
+                this.handleDestinationChange();
                 this.updateTraceabilityPreview();
             });
-        });
+        }
+        
+        // Custom destination input
+        const destinationCustom = document.getElementById('destination-custom');
+        if (destinationCustom) {
+            destinationCustom.addEventListener('input', () => this.updateTraceabilityPreview());
+        }
         
         // Back to quantity button
         const backToQuantityBtn = document.getElementById('back-to-quantity-btn');
@@ -486,20 +485,45 @@ class ProfessionalFishermanApp {
         // Clear form
         const productFormSelect = document.getElementById('product-form-select');
         const purposePhaseSelect = document.getElementById('purpose-phase-select');
-        const destinationInput = document.getElementById('destination-input');
+        const destinationSelect = document.getElementById('destination-select');
+        const destinationCustom = document.getElementById('destination-custom');
         
         if (productFormSelect) productFormSelect.value = '';
         if (purposePhaseSelect) purposePhaseSelect.value = '';
-        if (destinationInput) destinationInput.value = '';
+        if (destinationSelect) destinationSelect.value = '';
+        if (destinationCustom) {
+            destinationCustom.value = '';
+            destinationCustom.classList.add('hidden');
+        }
         
         this.updateTraceabilityPreview();
         this.goToScreen('screen-traceability');
     }
     
+    // Handle destination selection changes (simplified for elderly users)
+    handleDestinationChange() {
+        const destinationSelect = document.getElementById('destination-select');
+        const destinationCustom = document.getElementById('destination-custom');
+        
+        if (destinationSelect?.value === 'DRUGO') {
+            // Show custom input for "other" option
+            destinationCustom.classList.remove('hidden');
+            destinationCustom.focus();
+        } else {
+            // Hide custom input for standard options
+            destinationCustom.classList.add('hidden');
+            destinationCustom.value = '';
+        }
+    }
+
     updateTraceabilityPreview() {
         const productForm = document.getElementById('product-form-select')?.value;
         const purposePhase = document.getElementById('purpose-phase-select')?.value;
-        const destination = document.getElementById('destination-input')?.value;
+        
+        // Get destination from either dropdown or custom input
+        const destinationSelect = document.getElementById('destination-select')?.value;
+        const destinationCustom = document.getElementById('destination-custom')?.value;
+        const destination = destinationSelect === 'DRUGO' ? destinationCustom : destinationSelect;
         
         // Update internal state
         this.traceabilityData.product_form = productForm || null;

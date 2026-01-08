@@ -22,106 +22,105 @@
     <div id="app">
         <!-- Ekran 0: Vessel Setup (First Time) -->
         <div id="screen-vessel-setup" class="screen">
-            <header class="header-senior">
-                <h1>🚢 PODEŠAVANJE BRODA</h1>
-                <p class="header-subtitle-senior">Unesite podatke o vašem brodu (samo jednom)</p>
+            <header class="header">
+                <h2>🚢 PODACI O PLOVILU</h2>
+                <p>Podaci se unose jednom i spremaju za sve buduće LOT-ove</p>
             </header>
             
-            <main class="main-content-senior">
-                <div class="vessel-form-senior">
-                    <div class="progress-indicator-senior">
-                        <div class="progress-step active">1</div>
-                        <div class="progress-label">Podaci o brodu</div>
-                    </div>
-                    
-                    <div class="form-group-senior">
-                        <label for="cfr-input" class="label-senior">🏷️ Broj broda (CFR) *</label>
-                        <input type="text" id="cfr-input" class="input-senior" placeholder="HRV000000000" 
+            <main class="main-content">
+                <div class="vessel-form">
+                    <div class="form-group">
+                        <label for="cfr-input">CFR broj plovila *</label>
+                        <input type="text" id="cfr-input" placeholder="HRV000000000" 
                                maxlength="15" style="text-transform: uppercase;">
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            Unesite broj broda - počinje s HRV i ima brojke
-                        </div>
+                        <small>Format: 3 slova + 9-12 brojki (npr. HRV000000000)</small>
                     </div>
                     
-                    <div class="form-group-senior">
-                        <label for="registration-input" class="label-senior">📋 Oznaka broda *</label>
-                        <input type="text" id="registration-input" class="input-senior" placeholder="ST-123-AB" 
+                    <div class="form-group">
+                        <label for="registration-input">Registarska oznaka *</label>
+                        <input type="text" id="registration-input" placeholder="ST-123-AB" 
                                maxlength="20" style="text-transform: uppercase;">
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            Oznaka koja je napisana na brodu
-                        </div>
+                        <small>Registarska oznaka plovila</small>
                     </div>
                     
-                    <div class="form-group-senior">
-                        <label for="logbook-input" class="label-senior">📖 Broj dnevnika *</label>
-                        <div class="logbook-input-container-senior">
-                            <span class="logbook-prefix-senior">HRVLOG</span>
-                            <input type="text" id="logbook-input" class="input-senior logbook-input" 
-                                   placeholder="1234567890123" maxlength="13" pattern="[0-9]{13}">
+                    <div class="form-group">
+                        <label for="logbook-input">Broj očevidnika *</label>
+                        <div class="logbook-input-container">
+                            <span class="logbook-prefix">HRVLOG</span>
+                            <input type="text" id="logbook-input" placeholder="1234567890123" 
+                                   maxlength="13" pattern="[0-9]{13}">
                         </div>
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            13 brojki iz ribolovnog dnevnika
-                        </div>
+                        <small>Točno 13 brojki nakon "HRVLOG" (novi format)</small>
                     </div>
                     
-                    <div class="form-group-senior">
-                        <label for="vessel-name-input" class="label-senior">⚓ Ime broda (neobavezno)</label>
-                        <input type="text" id="vessel-name-input" class="input-senior" placeholder="Moj brod" 
+                    <div class="form-group">
+                        <label for="vessel-name-input">Ime plovila</label>
+                        <input type="text" id="vessel-name-input" placeholder="Npr. Jadran I" 
                                maxlength="50">
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            Kako se zove vaš brod
-                        </div>
+                        <small>Neobavezno - ime plovila</small>
                     </div>
                     
-                    <div class="form-group-senior">
-                        <label for="fisherman-name-input" class="label-senior">👤 Vaše ime i prezime *</label>
-                        <input type="text" id="fisherman-name-input" class="input-senior" placeholder="Ivo Marić" 
+                    <div class="form-group">
+                        <label for="fisherman-name-input">Ime i prezime ribara *</label>
+                        <input type="text" id="fisherman-name-input" placeholder="Ivo Marić" 
                                maxlength="100" required>
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            Unesite svoje ime kao vlasnik broda
-                        </div>
+                        <small>Ime i prezime ribara koji će biti na papirnatoj deklaraciji</small>
                     </div>
                     
-                    <div class="form-group-senior">
-                        <label for="fishing-gear-select" class="label-senior">🎣 Čime lovite ribu? *</label>
-                        <select id="fishing-gear-select" class="select-senior" required>
-                            <option value="">Odaberite vaš alat za ribolov...</option>
-                            <optgroup label="🌊 Mreže koje plutaju">
-                                <option value="PS">Plivarica (za srdele, tune)</option>
+                    <div class="form-group">
+                        <label for="fishing-gear-select">Glavni ribolovni alat *</label>
+                        <select id="fishing-gear-select" required>
+                            <option value="">-- Odaberi ribolovni alat --</option>
+                            <optgroup label="🌊 Plivarice">
+                                <option value="PS">PS - Plivarica za malu plavu ribu (srdelara)</option>
+                                <option value="PS">PS - Plivarica za veliku plavu ribu (tunolovka)</option>
+                                <option value="PS">PS - Plivarica ciplarica</option>
+                                <option value="PS">PS - Plivarica igličara</option>
+                                <option value="PS">PS - Plivarica oližnica</option>
+                                <option value="PS">PS - Plivarica palamidara</option>
+                                <option value="PS">PS - Plivarica lokardara</option>
                             </optgroup>
-                            <optgroup label="🎣 Mreže koje stoje">
-                                <option value="GNS">Mreže stajaćice</option>
-                                <option value="GTR">Trostruke mreže</option>
-                                <option value="LLS">Parangal (stoji)</option>
-                                <option value="LLD">Parangal (pluta)</option>
+                            <optgroup label="🎣 Pasivni alati">
+                                <option value="GNS">GNS - Jednostruke mreže stajaćice</option>
+                                <option value="GTN">GTN - Trostruke dvopodne mreže stajaćice</option>
+                                <option value="GTR">GTR - Trostruke jednopodne mreže stajaćice</option>
+                                <option value="GTR">GTR - Mreža listarica</option>
+                                <option value="LLS">LLS - Stajaći parangal</option>
+                                <option value="LLD">LLD - Plutajući parangal</option>
+                                <option value="FPO">FPO - Vrše za lov ribe</option>
+                                <option value="FPO">FPO - Vrše za lov krupnih rakova</option>
+                                <option value="FPO">FPO - Vrše za lov škampa</option>
+                                <option value="FIX">FIX - Stajaći kogol (trata za jegulje)</option>
+                                <option value="FIX">FIX - Stajaći jednokrilni kogol za gavun</option>
+                                <option value="OTH">OTH - Trapula za lov velikog morskog crva</option>
                             </optgroup>
-                            <optgroup label="🚤 Mreže koje se vuku">
-                                <option value="OTB">Koća (velika mreža)</option>
-                                <option value="SV">Potegača (mala mreža)</option>
-                                <option value="DRB">Dredža (za školjke)</option>
+                            <optgroup label="🚤 Povlačni alati">
+                                <option value="OTB">OTB - Pridnena povlačna mreža (koća)</option>
+                                <option value="SV">SV - Potegača girarica</option>
+                                <option value="SV">SV - Potegača migavica</option>
+                                <option value="SV">SV - Potegača šabakun</option>
+                                <option value="SV">SV - Potegača oližnica</option>
+                                <option value="DRB">DRB - Dredža kunjkara</option>
+                                <option value="DRB">DRB - Dredža rampon</option>
+                                <option value="HMD">HMD - Hidraulična dredža (vongolara)</option>
                             </optgroup>
-                            <optgroup label="🎯 Ostali načini">
-                                <option value="FPO">Vrše (koševi za ribu)</option>
-                                <option value="LHP">Povraz s udica</option>
-                                <option value="HAR">Osti</option>
-                                <option value="OTH">Ostalo</option>
+                            <optgroup label="🎯 Ostali alati">
+                                <option value="LHP">LHP - Povrazi (odmet, kančenica, povraz s kukom)</option>
+                                <option value="LTL">LTL - Povlačni povraz (panula)</option>
+                                <option value="HAR">HAR - Osti</option>
+                                <option value="OTH">OTH - Priručna oprema za sakupljanje</option>
+                                <option value="OTH">OTH - Tramata</option>
+                                <option value="OTH">OTH - Račnjak za lov rakovice</option>
+                                <option value="OTH">OTH - Sjekirica za rezanje koralja</option>
                             </optgroup>
                         </select>
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            Odaberite kako najčešće lovite ribu
-                        </div>
+                        <small>Glavni alat koji koristite - obavezno za hrvatski pravilnik EU 2023/2842</small>
                     </div>
                     
-                    <div class="validation-errors-senior" id="vessel-errors" style="display: none;"></div>
+                    <div class="validation-errors" id="vessel-errors" style="display: none;"></div>
                     
-                    <button id="save-vessel-btn" class="btn-senior-primary">
-                        ✅ SPREMI I NASTAVI
+                    <button id="save-vessel-btn" class="primary-btn">
+                        ✅ SPREMI PODATKE
                     </button>
                 </div>
             </main>
@@ -129,30 +128,23 @@
 
         <!-- Ekran 1: Fishing Zone Selection -->
         <div id="screen-fishing-zone" class="screen">
-            <header class="header-senior">
-                <h1>🌊 GDJE LOVITE RIBU?</h1>
-                <p class="header-subtitle-senior">Odaberite područje u kojem ste lovili ribu</p>
+            <header class="header">
+                <h2>🎣 ODABIR RIBOLOVNE ZONE</h2>
+                <p>Odabir zone je obavezan prije generiranja LOT-a</p>
             </header>
             
-            <main class="main-content-senior">
-                <div class="progress-indicator-senior">
-                    <div class="progress-step active">2</div>
-                    <div class="progress-label">Ribolovno područje</div>
-                </div>
-                
-                <div class="zone-grid-senior" id="zone-grid">
+            <main class="main-content">
+                <div class="zone-grid" id="zone-grid">
                     <!-- Dinamički generirane zone -->
                 </div>
                 
-                <div class="selected-zone-info-senior" id="selected-zone-info" style="display: none;">
-                    <div class="zone-confirmation-card">
-                        <h3>✅ Odabrali ste:</h3>
-                        <div id="zone-description" class="zone-description-senior"></div>
-                    </div>
+                <div class="selected-zone-info" id="selected-zone-info" style="display: none;">
+                    <h3>Odabrana zona:</h3>
+                    <p id="zone-description"></p>
                 </div>
                 
-                <button id="confirm-zone-btn" class="btn-senior-primary" style="display: none;">
-                    ✅ POTVRDI I NASTAVI
+                <button id="confirm-zone-btn" class="primary-btn" style="display: none;">
+                    ✅ POTVRDI ZONU
                 </button>
             </main>
         </div>
@@ -197,247 +189,143 @@
             </main>
         </div>
 
-        <!-- Ekran 4: Količina -->
+        <!-- Ekran 4: Unos količine -->
         <div id="screen-quantity" class="screen">
-            <header class="header-senior">
-                <h1>⚖️ KOLIKO IMATE RIBE?</h1>
-                <p class="header-subtitle-senior">Unesite težinu ili broj komada ulovljene ribe</p>
+            <header class="header">
+                <button class="back-btn" onclick="goToScreen('screen-species')">← NATRAG</button>
+                <h2 id="selected-species-name">VRSTA</h2>
             </header>
             
-            <main class="main-content-senior">
-                <div class="progress-indicator-senior">
-                    <div class="progress-step active">3</div>
-                    <div class="progress-label">Količina ribe</div>
+            <main class="main-content">
+                <div class="species-info">
+                    <p>FAO: <span id="species-fao">---</span></p>
+                    <p>Znanstveno: <span id="species-scientific">---</span></p>
                 </div>
                 
-                <div class="species-info-senior">
-                    <h3>🐟 <span id="selected-species-name">Odabrana riba</span></h3>
-                    <div class="species-details-senior">
-                        <span class="species-fao-senior" id="species-fao">---</span>
-                    </div>
-                </div>
-                
-                <!-- Senior-friendly quantity type selection -->
-                <div class="quantity-type-selection-senior">
-                    <h3 class="section-title-senior">🔢 Kako mjeriti?</h3>
-                    <div class="quantity-type-buttons-senior">
-                        <button type="button" id="quantity-type-weight" class="quantity-type-btn-senior active" data-type="WEIGHT">
-                            <div class="qty-icon">⚖️</div>
-                            <div class="qty-text">
-                                <div class="qty-title">Kilogrami</div>
-                                <div class="qty-desc">Teška riba</div>
-                            </div>
+                <!-- EU 2023/2842 Dual Quantity System -->
+                <div class="quantity-type-selection">
+                    <h3>🔢 Tip mjerenja</h3>
+                    <div class="quantity-type-buttons">
+                        <button type="button" id="quantity-type-weight" class="quantity-type-btn active" data-type="WEIGHT">
+                            ⚖️ Kilograma (kg)
                         </button>
-                        <button type="button" id="quantity-type-units" class="quantity-type-btn-senior" data-type="UNITS">
-                            <div class="qty-icon">🐟</div>
-                            <div class="qty-text">
-                                <div class="qty-title">Komada</div>
-                                <div class="qty-desc">Broj riba</div>
-                            </div>
+                        <button type="button" id="quantity-type-units" class="quantity-type-btn" data-type="UNITS">
+                            🐟 Broj jedinki (kom)
                         </button>
                     </div>
                 </div>
                 
-                <div class="quantity-input-senior">
-                    <label id="quantity-label-senior" class="quantity-label-senior">KOLIKO KILOGRAM?</label>
-                    <div class="weight-display-container-senior">
-                        <input type="text" id="weight-display" class="weight-display-senior" readonly value="0">
-                        <span class="weight-unit-senior">kg</span>
-                    </div>
+                <div class="quantity-input">
+                    <label id="quantity-label">UKUPNO KILOGRAM:</label>
+                    <input type="text" id="weight-display" readonly value="0">
                 </div>
                 
-                <div class="keypad-senior">
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('1')">1</button>
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('2')">2</button>
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('3')">3</button>
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('4')">4</button>
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('5')">5</button>
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('6')">6</button>
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('7')">7</button>
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('8')">8</button>
-                    <button class="key-btn-senior" onclick="professionalFishermanApp.addDigit('9')">9</button>
-                    <button class="key-btn-senior decimal" onclick="professionalFishermanApp.addDigit('.')">.</button>
-                    <button class="key-btn-senior zero" onclick="professionalFishermanApp.addDigit('0')">0</button>
-                    <button class="key-btn-senior delete" onclick="professionalFishermanApp.deleteDigit()">⌫</button>
+                <div class="keypad">
+                    <button class="key-btn" onclick="addDigit('1')">1</button>
+                    <button class="key-btn" onclick="addDigit('2')">2</button>
+                    <button class="key-btn" onclick="addDigit('3')">3</button>
+                    <button class="key-btn" onclick="addDigit('4')">4</button>
+                    <button class="key-btn" onclick="addDigit('5')">5</button>
+                    <button class="key-btn" onclick="addDigit('6')">6</button>
+                    <button class="key-btn" onclick="addDigit('7')">7</button>
+                    <button class="key-btn" onclick="addDigit('8')">8</button>
+                    <button class="key-btn" onclick="addDigit('9')">9</button>
+                    <button class="key-btn" onclick="addDigit('.')">.</button>
+                    <button class="key-btn" onclick="addDigit('0')">0</button>
+                    <button class="key-btn delete" onclick="deleteDigit()">⌫</button>
+                    <button class="key-btn clear" onclick="clearWeight()">C</button>
                 </div>
                 
-                <div class="keypad-actions-senior">
-                    <button class="key-btn-senior clear" onclick="professionalFishermanApp.clearWeight()">
-                        🗑️ OBRIŠI SVE
-                    </button>
-                </div>
-                
-                <div class="undersized-catch-section-senior">
-                    <h4 class="section-title-senior">⚠️ Mala riba?</h4>
-                    <div class="help-text-senior">
-                        <span class="help-icon">ℹ️</span>
-                        Ima li ribe koja je premala (ispod dozvoljene veličine)?
-                    </div>
-                    
-                    <div class="radio-group-senior">
-                        <label class="radio-label-senior">
+                <div class="undersized-catch-section">
+                    <h4>⚠️ Riba ispod minimalne veličine</h4>
+                    <div class="radio-group">
+                        <label class="radio-label">
                             <input type="radio" name="undersized" value="false" id="undersized-no" checked>
-                            <div class="radio-content-senior">
-                                <span class="radio-icon">✅</span>
-                                <span class="radio-text-senior">Ne - sve ribe su dovoljno velike</span>
-                            </div>
+                            <span class="radio-text">Ne - nema ribe ispod minimalne veličine</span>
                         </label>
-                        <label class="radio-label-senior">
+                        <label class="radio-label">
                             <input type="radio" name="undersized" value="true" id="undersized-yes">
-                            <div class="radio-content-senior">
-                                <span class="radio-icon">⚠️</span>
-                                <span class="radio-text-senior">Da - ima malih riba</span>
-                            </div>
+                            <span class="radio-text">Da - ima ribe ispod minimalne veličine</span>
                         </label>
                     </div>
                     
-                    <div id="undersized-quantity-input" class="undersized-input-senior hidden">
-                        <label for="undersized-quantity" class="label-senior">Koliko ima malih riba?</label>
+                    <div id="undersized-quantity-input" class="hidden">
+                        <label for="undersized-quantity" id="undersized-quantity-label">Količina ribe ispod min. veličine (kg) *</label>
                         <input type="number" id="undersized-quantity" step="0.1" min="0.1" 
-                               class="input-senior" placeholder="0.5">
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            Unesite količinu premale ribe (u kg ili kom)
-                        </div>
+                               placeholder="0.0" class="quantity-input-small">
+                        <small id="undersized-quantity-note">Obavezno ako postoji riba ispod minimalne veličine</small>
                     </div>
                 </div>
                 
-                <button id="continue-btn" class="btn-senior-primary">
-                    ✅ NASTAVI NA ODREDIŠTE
-                </button>
+                <button id="continue-btn" class="btn btn-primary">Nastavi → Sljedivost 🎯</button>
             </main>
         </div>
 
         <!-- Traceability Screen -->
         <div id="screen-traceability" class="screen">
-            <header class="header-senior">
-                <h1>📦 PODACI O RIBI</h1>
-                <p class="header-subtitle-senior">Još nekoliko pitanja o ribi koju prodajete</p>
-            </header>
-            
-            <main class="main-content-senior">
-                <div class="progress-indicator-senior">
-                    <div class="progress-step active">4</div>
-                    <div class="progress-label">Podaci o prodaji</div>
+            <div class="main-content">
+                <div class="screen-header">
+                    <h2>📦 Sljedivost proizvoda</h2>
+                    <p>Ministarstvo traži dodatne podatke o obliku, namjeni i odredištu</p>
                 </div>
                 
-                <div class="form-container-senior">
-                    <div class="form-group-senior">
-                        <label for="product-form-select" class="label-senior">🐟 Kakva je riba? *</label>
-                        <select id="product-form-select" class="select-senior" required>
-                            <option value="">Odaberite stanje ribe...</option>
-                            <option value="SVJEŽ">Svježa riba</option>
-                            <option value="SMRZNUT">Smrznuta riba</option>
-                            <option value="FILETI">Fileti (bez kostiju)</option>
-                            <option value="CIJELI">Cijela riba</option>
-                            <option value="POLU-PRERAĐEN">Djelomično obrađena</option>
-                            <option value="KONZERVIRAN">Konzervirana riba</option>
+                <div class="form-container">
+                    <div class="form-group">
+                        <label for="product-form-select">Oblik proizvoda *</label>
+                        <select id="product-form-select" required>
+                            <option value="">-- Odaberi oblik --</option>
+                            <option value="SVJEŽ">SVJEŽ - svježa riba</option>
+                            <option value="SMRZNUT">SMRZNUT - smrznuta riba</option>
+                            <option value="FILETI">FILETI - fileti ribe</option>
+                            <option value="CIJELI">CIJELI - cijela riba</option>
+                            <option value="POLU-PRERAĐEN">POLU-PRERAĐEN - poluprerađeni proizvod</option>
+                            <option value="KONZERVIRAN">KONZERVIRAN - konzervirani proizvod</option>
                         </select>
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            U kakvom stanju je riba koju prodajete
-                        </div>
-                    </div>
-                    
-                    <div class="form-group-senior">
-                        <label for="purpose-phase-select" class="label-senior">💰 Kome prodajete? *</label>
-                        <select id="purpose-phase-select" class="select-senior" required>
-                            <option value="">Odaberite kupca...</option>
-                            <option value="PRODAJA">Direktno kupcima</option>
-                            <option value="TRGOVINA">Trgovini (veleprodaja)</option>
-                            <option value="RESTORAN">Restoranu ili hotelu</option>
-                            <option value="PRERADA">Za daljnju preradu</option>
-                            <option value="KONZUM">Za sebe (osobno)</option>
-                            <option value="IZVOZ">Izvoz u inozemstvo</option>
-                        </select>
-                        <div class="help-text-senior">
-                            <span class="help-icon">ℹ️</span>
-                            Tko će kupiti vašu ribu
-                        </div>
+                        <small>Oblik u kojem se proizvod stavlja u promet</small>
                     </div>
                     
                     <div class="form-group">
-                        <label for="destination-select">Gdje ide riba? *</label>
-                        <small>Odaberite gdje ćete prodati ili odnijeti ribu</small>
-                        
-                        <div class="destination-selection">
-                            <div class="destination-buttons-large">
-                                <button type="button" class="destination-btn-large selected" data-destination="NA PLOVILU">
-                                    <div class="dest-icon">🚢</div>
-                                    <div class="dest-text">
-                                        <div class="dest-title">Na plovilu</div>
-                                        <div class="dest-desc">Ostaje na brodu</div>
-                                    </div>
-                                </button>
-                                
-                                <button type="button" class="destination-btn-large" data-destination="TRŽNICA">
-                                    <div class="dest-icon">🏪</div>
-                                    <div class="dest-text">
-                                        <div class="dest-title">Tržnica</div>
-                                        <div class="dest-desc">Split, Rijeka, Zagreb...</div>
-                                    </div>
-                                </button>
-                                
-                                <button type="button" class="destination-btn-large" data-destination="HLADNJAČA">
-                                    <div class="dest-icon">❄️</div>
-                                    <div class="dest-text">
-                                        <div class="dest-title">Hladnjača</div>
-                                        <div class="dest-desc">Skladište, čuvar</div>
-                                    </div>
-                                </button>
-                                
-                                <button type="button" class="destination-btn-large" data-destination="RESTORAN">
-                                    <div class="dest-icon">🍽️</div>
-                                    <div class="dest-text">
-                                        <div class="dest-title">Restoran</div>
-                                        <div class="dest-desc">Hotel, konoba</div>
-                                    </div>
-                                </button>
-                                
-                                <button type="button" class="destination-btn-large" data-destination="PRIVATNO">
-                                    <div class="dest-icon">🏠</div>
-                                    <div class="dest-text">
-                                        <div class="dest-title">Privatno</div>
-                                        <div class="dest-desc">Susjedima, prijateljima</div>
-                                    </div>
-                                </button>
-                                
-                                <button type="button" class="destination-btn-large" data-destination="DRUGO">
-                                    <div class="dest-icon">📝</div>
-                                    <div class="dest-text">
-                                        <div class="dest-title">Drugo</div>
-                                        <div class="dest-desc">Napišite sami</div>
-                                    </div>
-                                </button>
-                            </div>
-                            
-                            <!-- Hidden text input - only shows when "Drugo" is selected -->
-                            <div id="custom-destination-input" class="custom-destination hidden">
-                                <input type="text" id="destination-input" placeholder="Napišite gdje ide riba..." 
-                                       maxlength="100">
-                            </div>
-                        </div>
+                        <label for="purpose-phase-select">Namjena / faza *</label>
+                        <select id="purpose-phase-select" required>
+                            <option value="">-- Odaberi namjenu --</option>
+                            <option value="PRODAJA">PRODAJA - direktna prodaja potrošačima</option>
+                            <option value="PRERADA">PRERADA - daljnja prerada</option>
+                            <option value="KONZUM">KONZUM - vlastiti konzum</option>
+                            <option value="TRGOVINA">TRGOVINA - trgovina na veliko</option>
+                            <option value="RESTORAN">RESTORAN - ugostiteljstvo</option>
+                            <option value="IZVOZ">IZVOZ - izvoz u inozemstvo</option>
+                        </select>
+                        <small>Namjena ili faza u lancu opskrbe</small>
                     </div>
                     
-                    <div class="traceability-summary-senior">
-                        <div id="traceability-preview" class="preview-senior">
-                            <div class="preview-card-senior">
-                                <h4>📋 PREGLED PODATAKA</h4>
-                                <p class="preview-note-senior">Podaci će se prikazati kada odaberete sve opcije</p>
-                            </div>
+                    <div class="form-group">
+                        <label for="destination-select" class="simple-label">KAMO IDE RIBA? *</label>
+                        <select id="destination-select" class="simple-select" required>
+                            <option value="">-- Odaberite gdje ide riba --</option>
+                            <option value="NA PLOVILU">🚢 Ostaje na plovilu</option>
+                            <option value="TRŽNICA">🏪 Ide na tržnicu</option>
+                            <option value="RESTORAN">🍽️ Ide u restoran</option>
+                            <option value="HLADNJAČA">❄️ Ide u hladnjaču</option>
+                            <option value="DRUGO">✏️ Drugo mjesto...</option>
+                        </select>
+                        
+                        <input type="text" id="destination-custom" class="hidden simple-input" 
+                               placeholder="Upišite gdje ide riba..." maxlength="100">
+                        
+                        <small class="simple-help">Odaberite najčešće odredište ili upišite svoje</small>
+                    </div>
+                    
+                    <div class="traceability-summary">
+                        <div id="traceability-preview">
+                            <p class="preview-note">Pregled sljedivosti će se prikazati nakon odabira svih polja</p>
                         </div>
                     </div>
                 </div>
                 
-                <div class="button-container-senior">
-                    <button id="back-to-quantity-btn" class="btn-senior-secondary">
-                        ← NATRAG NA KOLIČINU
-                    </button>
-                    <button id="generate-lot-btn" class="btn-senior-primary" disabled>
-                        🎯 ZAVRŠI I NAPRAVI LOT
-                    </button>
+                <div class="button-container">
+                    <button id="back-to-quantity-btn" class="btn btn-secondary">← Natrag na količinu</button>
+                    <button id="generate-lot-btn" class="btn btn-primary" disabled>Generiraj LOT 🎯</button>
                 </div>
-            </main>
             </div>
         </div>
 
