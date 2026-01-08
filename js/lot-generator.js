@@ -13,11 +13,11 @@ class LOTGenerator {
         if (!this.vesselConfig) {
             // Default vessel config - should be set up during first use
             this.vesselConfig = {
-                cfr_number: 'HRV000123456789', // 14-character EU CFR format
+                cfr_number: 'HRV000000000', // Croatian CFR format: 3 letters + 9-12 digits
                 name: 'Demo Plovilo',
                 license_number: 'HR-12345',
                 default_gear: 'GNS',
-                logbook_series: 'HR-LOG-2026' // CRITICAL: Missing logbook number
+                logbook_series: 'HRVLOG0000000000001' // Croatian logbook format
             };
         }
     }
@@ -271,9 +271,9 @@ class LOTGenerator {
             errors.push('GPS koordinate su obavezne za verifikaciju zone ulova');
         }
 
-        // VALIDATION: CFR format (14 characters)
-        if (lotData.vessel_info?.cfr_number && lotData.vessel_info.cfr_number.length !== 14) {
-            errors.push('CFR broj mora imati točno 14 znakova (EU standard)');
+        // VALIDATION: CFR format (Croatian: 3 letters + 9-12 digits)
+        if (lotData.vessel_info?.cfr_number && !/^[A-Z]{3}\d{9,12}$/.test(lotData.vessel_info.cfr_number)) {
+            errors.push('CFR broj mora biti format: 3 slova + 9-12 brojki (npr. HRV000000000)');
         }
 
         // VALIDATION: LOT ID format check
@@ -351,7 +351,7 @@ class LOTGenerator {
 
         // Validate logbook number
         if (!this.validateLogbookNumber(logbookNumber)) {
-            throw new Error('Broj očevidnika mora biti format: HRV LOGI + točno 13 brojki');
+            throw new Error('Broj očevidnika mora biti format: HRVLOG + točno 13 brojki');
         }
 
         // Validate registration number
@@ -374,10 +374,10 @@ class LOTGenerator {
     }
 
     validateLogbookNumber(logbookNumber) {
-        if (!logbookNumber || !logbookNumber.startsWith('HRV LOGI')) {
+        if (!logbookNumber || !logbookNumber.startsWith('HRVLOG')) {
             return false;
         }
-        const digits = logbookNumber.replace('HRV LOGI', '').trim();
+        const digits = logbookNumber.replace('HRVLOG', '');
         return digits.length === 13 && /^\d{13}$/.test(digits);
     }
 
