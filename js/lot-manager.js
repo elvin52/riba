@@ -11,7 +11,8 @@ class LOTManager {
         this.currentPattern = this.lotPatterns.SIMPLE;
     }
 
-    // Generate LOT identifier (separate from traceability record)
+    // Generate LOT identifier according to Croatian EU 2023/2842 regulation
+    // Format: LLOG + YY + XXXXX + YYY + /FAO_CODE
     generateLOTIdentifier(species, vesselConfig, options = {}) {
         const validation = this.validateLOTPrerequisites(species, vesselConfig);
         if (!validation.valid) {
@@ -19,49 +20,29 @@ class LOTManager {
         }
 
         const faoCode = species.fao_code;
-        const logbookNumber = vesselConfig.logbook_number;
-        // Use actual catch date, not current timestamp
         const catchDate = options.catch_date || new Date();
-        const dateStr = this.formatDateForLOT(catchDate);
         
-        let lotId;
+        // Extract required components per Croatian regulation
+        const year = catchDate.getFullYear();
+        const yearSuffix = year.toString().slice(-2); // Last 2 digits (26 for 2026)
         
-        switch (options.pattern || this.currentPattern) {
-            case this.lotPatterns.SIMPLE:
-                lotId = `${logbookNumber}-${faoCode}`;
-                break;
-                
-            case this.lotPatterns.WITH_DATE:
-                lotId = `${logbookNumber}-${faoCode}-${dateStr}`;
-                break;
-                
-            case this.lotPatterns.WITH_COUNTER:
-                const counter = options.useCounter ? this.getDailyCounter(logbookNumber, faoCode, dateStr) : this.getSimpleCounter(logbookNumber, faoCode);
-                lotId = `${logbookNumber}-${faoCode}-${counter.toString().padStart(3, '0')}`;
-                break;
-                
-            case this.lotPatterns.CUSTOM:
-                if (!options.customPattern) {
-                    throw new Error('Custom pattern specified but not provided');
-                }
-                lotId = this.applyCustomPattern(options.customPattern, {
-                    logbook: logbookNumber,
-                    species: faoCode,
-                    date: dateStr,
-                    counter: options.useCounter ? this.getDailyCounter(logbookNumber, faoCode, dateStr) : this.getSimpleCounter(logbookNumber, faoCode)
-                });
-                break;
-                
-            default:
-                // Croatian fishermen prefer predictable LOT numbers
-                lotId = `${logbookNumber}-${faoCode}`;
-        }
-
-        // Optional validation: LOT may contain species code (per EU flexibility)
-        if (!lotId.includes(faoCode)) {
-            console.log(`Info: LOT ID ${lotId} does not contain species code ${faoCode} (allowed per EU regulations)`);
-        }
-
+        // Extract last 5 digits of CFR number
+        const cfrNumber = vesselConfig.cfr_number;
+        const cfrSuffix = cfrNumber.slice(-5); // Last 5 digits
+        
+        // Extract last 3 digits of logbook number
+        const logbookNumber = vesselConfig.logbook_number;
+        const logbookSuffix = logbookNumber.replace(/\D/g, '').slice(-3); // Last 3 digits only
+        
+        // Generate Croatian compliant LOT ID: LLOG + YY + XXXXX + YYY + /FAO
+        const lotId = `LLOG${yearSuffix}${cfrSuffix}${logbookSuffix}/${faoCode}`;
+        
+        console.log(`🏷️ Croatian LOT generated: ${lotId}`);
+        console.log(`   Year: ${year} → ${yearSuffix}`);
+        console.log(`   CFR: ${cfrNumber} → ${cfrSuffix}`);
+        console.log(`   Logbook: ${logbookNumber} → ${logbookSuffix}`);
+        console.log(`   Species: ${faoCode}`);
+        
         return lotId;
     }
     
