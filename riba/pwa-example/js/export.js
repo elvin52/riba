@@ -85,28 +85,66 @@ class ExportManager {
         ).join('\n');
     }
 
-    // Generate and display QR code
+    // Generate QR code per Croatian EU 2023/2842 regulation (lines 275-304)
     generateQRCode(lotData) {
         try {
-            const qrData = {
-                lot_id: lotData.lot_id,
-                species: lotData.species.fao_code,
-                weight: lotData.quantity.net_weight_kg || lotData.quantity.unit_count,
-                date: lotData.fishing.catch_date,
-                vessel: lotData.vessel.cfr_number,
-                zone: lotData.production_area.fao_zone
-            };
+            // Format according to Croatian regulation examples
+            const catchDate = new Date(lotData.fishing.catch_date);
+            const issueDate = new Date();
             
-            const qrString = JSON.stringify(qrData);
+            // Croatian regulation compliant QR content
+            const qrContent = this.createCroatianQRContent(lotData, catchDate, issueDate);
             
-            // Simple QR code generation using external library or manual approach
-            this.displayQRCode(qrString, lotData.lot_id);
+            // Display QR code with regulation-compliant content
+            this.displayQRCode(qrContent, lotData.lot_id);
             
             return true;
         } catch (error) {
             console.error('QR code generation failed:', error);
             throw new Error('Greška pri generiranju QR koda');
         }
+    }
+
+    // Create Croatian regulation compliant QR content
+    createCroatianQRContent(lotData, catchDate, issueDate) {
+        // Format dates per Croatian standard (DD.MM.YYYY)
+        const formatCroatianDate = (date) => {
+            const dd = String(date.getDate()).padStart(2, '0');
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const yyyy = date.getFullYear();
+            return `${dd}.${mm}.${yyyy}.`;
+        };
+
+        // Build QR content exactly per regulation example (lines 275-285)
+        const qrLines = [
+            `Naziv proizvoda: ${lotData.species.local_name} (${lotData.species.scientific_name})`,
+            `LOT broj/serija: ${lotData.lot_id}`,
+            `Područje ulova: ${lotData.production_area.fao_zone}, ${lotData.production_area.description}`,
+            `Datum ulova: ${formatCroatianDate(catchDate)}`,
+            `Kategorija ribolovnog alata: ${lotData.fishing.fishing_gear_category}`,
+            `Prezervacija: ${lotData.traceability.preservation_method || 'FRE'}, A klasa`,
+            `Prezentacija: ${lotData.traceability.presentation_format || 'WHL'}`,
+            `Količina: ${lotData.quantity.net_weight_kg ? lotData.quantity.net_weight_kg + ' kg' : lotData.quantity.unit_count + ' kom'}`,
+            `Naziv proizvođača: ${lotData.producer.business_name}`,
+            `Adresa: ${lotData.producer.business_address}`,
+        ];
+
+        // Add buyer information if available (per lines 289-304 for first buyer)
+        if (lotData.buyer && lotData.buyer.buyer_name) {
+            qrLines.push(`Naziv prvog kupca: ${lotData.buyer.buyer_name}`);
+            if (lotData.buyer.buyer_address) {
+                qrLines.push(`Adresa: ${lotData.buyer.buyer_address}`);
+            }
+            if (lotData.buyer.buyer_registration) {
+                qrLines.push(`Registracijski broj: ${lotData.buyer.buyer_registration}`);
+            }
+        }
+
+        qrLines.push(`Datum izdavanja: ${formatCroatianDate(issueDate)}`);
+
+        console.log('🇭🇷 Croatian QR content generated:', qrLines.join('\n'));
+        
+        return qrLines.join('\n');
     }
 
     // Display QR code in modal
