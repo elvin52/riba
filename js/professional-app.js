@@ -690,14 +690,23 @@ class ProfessionalFishermanApp {
     updateDailyStats() {
         if (this.currentLOTRecord) {
             this.dailyStats.count++;
-            this.dailyStats.total_weight_kg += this.currentLOTRecord.quantity.net_weight_kg;
+            
+            // Handle both WEIGHT and UNITS quantity types
+            if (this.currentLOTRecord.quantity.quantity_type === 'WEIGHT' && this.currentLOTRecord.quantity.net_weight_kg) {
+                this.dailyStats.total_weight_kg += this.currentLOTRecord.quantity.net_weight_kg;
+            } else if (this.currentLOTRecord.quantity.quantity_type === 'UNITS' && this.currentLOTRecord.quantity.unit_count) {
+                // For units, we can't add to weight - could track units separately if needed
+                // For now, keep weight stats for WEIGHT type only
+            }
             
             // Update UI
             const countElement = document.getElementById('daily-count');
             const weightElement = document.getElementById('daily-weight');
             
             if (countElement) countElement.textContent = this.dailyStats.count;
-            if (weightElement) weightElement.textContent = this.dailyStats.total_weight_kg.toFixed(1) + ' kg';
+            if (weightElement && this.dailyStats.total_weight_kg > 0) {
+                weightElement.textContent = this.dailyStats.total_weight_kg.toFixed(1) + ' kg';
+            }
         }
     }
 
@@ -765,7 +774,7 @@ class ProfessionalFishermanApp {
                 
                 categorySpecies.forEach(species => {
                     gridHTML += `
-                        <div class="species-card" onclick="window.professionalApp.selectSpecies('${species.fao_code}')">
+                        <div class="species-card" onclick="window.professionalFishermanApp.selectSpecies('${species.fao_code}')">
                             <div class="species-name">${species.local_name}</div>
                             <div class="species-fao">${species.fao_code}</div>
                         </div>`;
@@ -783,7 +792,7 @@ class ProfessionalFishermanApp {
             gridHTML += `<div class="species-category"><h4>Ostalo</h4></div>`;
             remainingSpecies.forEach(species => {
                 gridHTML += `
-                    <div class="species-card" onclick="window.professionalApp.selectSpecies('${species.fao_code}')">
+                    <div class="species-card" onclick="window.professionalFishermanApp.selectSpecies('${species.fao_code}')">
                         <div class="species-name">${species.local_name}</div>
                         <div class="species-fao">${species.fao_code}</div>
                     </div>`;
@@ -811,7 +820,7 @@ class ProfessionalFishermanApp {
         let gridHTML = '';
         filtered.forEach(species => {
             gridHTML += `
-                <div class="species-card" onclick="window.professionalApp.selectSpecies('${species.fao_code}')">
+                <div class="species-card" onclick="window.professionalFishermanApp.selectSpecies('${species.fao_code}')">
                     <div class="species-name">${species.local_name}</div>
                     <div class="species-fao">${species.fao_code}</div>
                 </div>`;
@@ -1064,5 +1073,57 @@ window.generateLabel = function() {
     } catch (error) {
         console.error('❌ Label generation failed:', error);
         app.showError('Greška pri generiranju nalijepnice: ' + error.message);
+    }
+};
+
+window.downloadPDF = function() {
+    const app = window.professionalFishermanApp;
+    if (app && app.downloadPDF) {
+        app.downloadPDF();
+    } else {
+        console.error('❌ PDF download not available');
+    }
+};
+
+window.downloadCSV = function() {
+    const app = window.professionalFishermanApp;
+    if (app && app.exportLOT) {
+        app.exportLOT('csv');
+    } else {
+        console.error('❌ CSV download not available');
+    }
+};
+
+window.showQR = function() {
+    const app = window.professionalFishermanApp;
+    if (!app.currentLOTRecord) {
+        app.showError('Nema LOT podataka za QR kod');
+        return;
+    }
+    
+    // Simple QR code placeholder - could be enhanced with QR library
+    const modal = document.getElementById('qr-modal');
+    const lotIdSpan = document.getElementById('qr-lot-id');
+    if (modal && lotIdSpan) {
+        lotIdSpan.textContent = app.currentLOTRecord.lot_id;
+        modal.classList.remove('hidden');
+    }
+};
+
+window.newCatch = function() {
+    const app = window.professionalFishermanApp;
+    if (app && app.goToScreen) {
+        // Reset to fishing zone selection for new catch
+        app.goToScreen('screen-fishing-zone');
+        app.renderFishingZones();
+    } else {
+        console.error('❌ New catch function not available');
+    }
+};
+
+window.closeModal = function() {
+    const modal = document.getElementById('qr-modal');
+    if (modal) {
+        modal.classList.add('hidden');
     }
 };

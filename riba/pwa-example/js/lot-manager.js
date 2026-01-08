@@ -158,7 +158,7 @@ class LOTManager {
         record.lot_identifier = record.lot_id;
         record.species_fao_code = record.species.fao_code;
         record.species_scientific_name = record.species.scientific_name;
-        record.production_area = record.production_area.description;
+        record.production_area_description = record.production_area.description; // Keep nested structure intact
         record.catch_date = record.fishing.catch_date;
         record.cfr_number = record.vessel.cfr_number;
         record.logbook_number = record.vessel.logbook_number;
