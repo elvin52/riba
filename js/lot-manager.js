@@ -24,24 +24,19 @@ class LOTManager {
         const catchDate = options.catch_date || new Date();
         const dateStr = this.formatDateForLOT(catchDate);
         
-        // Generate unique timestamp suffix for uniqueness
-        const timestamp = Date.now().toString().slice(-6); // Last 6 digits of timestamp
-        const randomSuffix = Math.floor(Math.random() * 100).toString().padStart(2, '0');
-        const uniqueSuffix = `${timestamp}${randomSuffix}`;
-        
         let lotId;
         
         switch (options.pattern || this.currentPattern) {
             case this.lotPatterns.SIMPLE:
-                lotId = `${logbookNumber}-${faoCode}-${uniqueSuffix}`;
+                lotId = `${logbookNumber}-${faoCode}`;
                 break;
                 
             case this.lotPatterns.WITH_DATE:
-                lotId = `${logbookNumber}-${faoCode}-${dateStr}-${uniqueSuffix}`;
+                lotId = `${logbookNumber}-${faoCode}-${dateStr}`;
                 break;
                 
             case this.lotPatterns.WITH_COUNTER:
-                const counter = options.useCounter ? this.getDailyCounter(logbookNumber, faoCode, dateStr) : uniqueSuffix;
+                const counter = options.useCounter ? this.getDailyCounter(logbookNumber, faoCode, dateStr) : this.getSimpleCounter(logbookNumber, faoCode);
                 lotId = `${logbookNumber}-${faoCode}-${counter.toString().padStart(3, '0')}`;
                 break;
                 
@@ -53,12 +48,13 @@ class LOTManager {
                     logbook: logbookNumber,
                     species: faoCode,
                     date: dateStr,
-                    counter: options.useCounter ? this.getDailyCounter(logbookNumber, faoCode, dateStr) : uniqueSuffix
+                    counter: options.useCounter ? this.getDailyCounter(logbookNumber, faoCode, dateStr) : this.getSimpleCounter(logbookNumber, faoCode)
                 });
                 break;
                 
             default:
-                lotId = `${logbookNumber}-${faoCode}-${uniqueSuffix}`;
+                // Croatian fishermen prefer predictable LOT numbers
+                lotId = `${logbookNumber}-${faoCode}`;
         }
 
         // Optional validation: LOT may contain species code (per EU flexibility)
@@ -318,6 +314,15 @@ class LOTManager {
     // Get daily counter for vessel+species (optional)
     getDailyCounter(logbookNumber, faoCode, dateStr) {
         const counterKey = `daily_counter_${logbookNumber}_${faoCode}_${dateStr}`;
+        let counter = parseInt(localStorage.getItem(counterKey) || '0');
+        counter++;
+        localStorage.setItem(counterKey, counter.toString());
+        return counter;
+    }
+
+    // Get simple counter for vessel+species (Croatian style - predictable)
+    getSimpleCounter(logbookNumber, faoCode) {
+        const counterKey = `simple_counter_${logbookNumber}_${faoCode}`;
         let counter = parseInt(localStorage.getItem(counterKey) || '0');
         counter++;
         localStorage.setItem(counterKey, counter.toString());
