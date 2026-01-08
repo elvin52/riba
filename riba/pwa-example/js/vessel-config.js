@@ -48,11 +48,11 @@ class VesselConfigManager {
     validateConfig(config) {
         const errors = [];
 
-        // CFR Number validation (15 characters, 3 letters + 12 digits)
+        // CFR Number validation (Croatian format: 3 letters + 9-12 digits)
         if (!config.cfr_number) {
             errors.push('CFR number is mandatory');
-        } else if (!/^[A-Z]{3}\d{12}$/.test(config.cfr_number)) {
-            errors.push('CFR number must be 3 letters + 12 digits (e.g., HRV123456789012)');
+        } else if (!/^[A-Z]{3}\d{9,12}$/.test(config.cfr_number)) {
+            errors.push('CFR number must be 3 letters + 9-12 digits (e.g., HRV000002476)');
         }
 
         // Registration Mark validation
@@ -72,15 +72,6 @@ class VesselConfigManager {
         // Croatian fisherman requirements
         if (!config.fisherman_name || config.fisherman_name.length < 2) {
             errors.push('Fisherman name is mandatory (minimum 2 characters)');
-        }
-
-        // OIB validation (11 digits, Croatian tax number)
-        if (!config.oib) {
-            errors.push('OIB is mandatory');
-        } else if (!/^\d{11}$/.test(config.oib)) {
-            errors.push('OIB must be exactly 11 digits');
-        } else if (!this.validateOIB(config.oib)) {
-            errors.push('OIB is not valid (failed checksum)');
         }
 
         // Fishing Gear Category - optional for Croatian fishermen, auto-set to default

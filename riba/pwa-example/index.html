@@ -31,9 +31,9 @@
                 <div class="vessel-form">
                     <div class="form-group">
                         <label for="cfr-input">CFR broj plovila *</label>
-                        <input type="text" id="cfr-input" placeholder="HRV123456789" 
+                        <input type="text" id="cfr-input" placeholder="HRV000002476" 
                                maxlength="15" style="text-transform: uppercase;">
-                        <small>Format: 3 slova + 9-12 brojki (npr. HRV123456789)</small>
+                        <small>Format: 3 slova + 9-12 brojki (npr. HRV000002476)</small>
                     </div>
                     
                     <div class="form-group">
@@ -65,20 +65,6 @@
                         <input type="text" id="fisherman-name-input" placeholder="Ivo Marić" 
                                maxlength="100" required>
                         <small>Ime i prezime ribara koji će biti na papirnatoj deklaraciji</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="company-name-input">Ime firme</label>
-                        <input type="text" id="company-name-input" placeholder="Ribarstvo Marić d.o.o." 
-                               maxlength="100">
-                        <small>Neobavezno - ime firme ako je registrirana</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="oib-input">OIB *</label>
-                        <input type="text" id="oib-input" placeholder="12345678901" 
-                               maxlength="11" pattern="[0-9]{11}" required>
-                        <small>OIB ribara ili firme - 11 brojki</small>
                     </div>
                     
                     <div class="validation-errors" id="vessel-errors" style="display: none;"></div>

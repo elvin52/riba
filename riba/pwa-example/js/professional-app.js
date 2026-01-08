@@ -184,8 +184,6 @@ class ProfessionalFishermanApp {
         const logbookInput = document.getElementById('logbook-input');
         const vesselNameInput = document.getElementById('vessel-name-input');
         const fishermanNameInput = document.getElementById('fisherman-name-input');
-        const companyNameInput = document.getElementById('company-name-input');
-        const oibInput = document.getElementById('oib-input');
 
         if (cfrInput) cfrInput.value = savedConfig.cfr_number || '';
         if (registrationInput) registrationInput.value = savedConfig.registration_mark || '';
@@ -194,8 +192,6 @@ class ProfessionalFishermanApp {
         }
         if (vesselNameInput) vesselNameInput.value = savedConfig.vessel_name || '';
         if (fishermanNameInput) fishermanNameInput.value = savedConfig.fisherman_name || '';
-        if (companyNameInput) companyNameInput.value = savedConfig.company_name || '';
-        if (oibInput) oibInput.value = savedConfig.oib || '';
     }
 
     // Get vessel form data from DOM elements
@@ -205,8 +201,6 @@ class ProfessionalFishermanApp {
         const logbookInput = document.getElementById('logbook-input');
         const vesselNameInput = document.getElementById('vessel-name-input');
         const fishermanNameInput = document.getElementById('fisherman-name-input');
-        const companyNameInput = document.getElementById('company-name-input');
-        const oibInput = document.getElementById('oib-input');
 
         const logbookDigits = logbookInput ? logbookInput.value.trim() : '';
         const logbookNumber = logbookDigits ? 'HRVLOG' + logbookDigits : '';
@@ -217,8 +211,6 @@ class ProfessionalFishermanApp {
             logbook_number: logbookNumber,
             vessel_name: vesselNameInput ? vesselNameInput.value.trim() : '',
             fisherman_name: fishermanNameInput ? fishermanNameInput.value.trim() : '',
-            company_name: companyNameInput ? companyNameInput.value.trim() : '',
-            oib: oibInput ? oibInput.value.trim() : '',
             // Default gear for EU compliance (not user-visible)
             fishing_gear_category: 'MIXED'
         };
