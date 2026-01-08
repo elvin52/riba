@@ -81,12 +81,27 @@ class ProfessionalFishermanApp {
             destinationInput.addEventListener('input', () => this.updateTraceabilityPreview());
         }
         
-        // Quick destination buttons
-        const destinationBtns = document.querySelectorAll('.destination-btn');
-        destinationBtns.forEach(btn => {
+        // Senior-friendly destination buttons
+        const destinationBtnsLarge = document.querySelectorAll('.destination-btn-large');
+        destinationBtnsLarge.forEach(btn => {
             btn.addEventListener('click', (e) => {
-                const destination = e.target.getAttribute('data-destination');
-                destinationInput.value = destination;
+                // Remove selected from all buttons
+                destinationBtnsLarge.forEach(b => b.classList.remove('selected'));
+                // Add selected to clicked button
+                btn.classList.add('selected');
+                
+                const destination = btn.getAttribute('data-destination');
+                
+                // Handle special case for "DRUGO" (custom input)
+                const customInput = document.getElementById('custom-destination-input');
+                if (destination === 'DRUGO') {
+                    customInput.classList.remove('hidden');
+                    destinationInput.focus();
+                } else {
+                    customInput.classList.add('hidden');
+                    destinationInput.value = destination;
+                }
+                
                 this.updateTraceabilityPreview();
             });
         });
