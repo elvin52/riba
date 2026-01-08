@@ -83,12 +83,9 @@ class VesselConfigManager {
             errors.push('OIB is not valid (failed checksum)');
         }
 
-        // Fishing Gear Category validation
-        const validGearCategories = this.getValidGearCategories();
+        // Fishing Gear Category - optional for Croatian fishermen, auto-set to default
         if (!config.fishing_gear_category) {
-            errors.push('Fishing gear category is mandatory');
-        } else if (!validGearCategories.includes(config.fishing_gear_category)) {
-            errors.push('Invalid fishing gear category');
+            config.fishing_gear_category = 'MIXED'; // Auto-set default for Croatian compliance
         }
 
         return {
@@ -100,6 +97,7 @@ class VesselConfigManager {
     // Get predefined FAO/EU fishing gear categories
     getValidGearCategories() {
         return [
+            'MIXED', // Mixed gear types - Croatian default
             'GNS', // Gillnets and entangling nets - Set gillnets (anchored)
             'GND', // Gillnets and entangling nets - Driftnets
             'GTR', // Gillnets and entangling nets - Trammel nets
