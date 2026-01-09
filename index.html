@@ -148,25 +148,34 @@
             </main>
         </div>
 
-        <!-- Ekran 2: Novi ulov -->
+        <!-- Ekran 2: Home Dashboard -->
         <div id="screen-home" class="screen">
             <header class="header">
                 <h1>🐟 RIBAR LOT</h1>
                 <div class="status-bar">
-                    <span id="location-status">📍 Dohvaćam lokaciju...</span>
-                    <span id="date-time">📅 Loading...</span>
-                    <span id="offline-status" class="offline">💾 Offline: ✓</span>
+                    <div class="status-item">
+                        <span class="icon">📅</span>
+                        <span id="current-date"></span>
+                    </div>
+                    <div class="status-item">
+                        <span class="icon">⏰</span>
+                        <span id="current-time"></span>
+                    </div>
                 </div>
             </header>
             
             <main class="main-content">
+                <div id="vessel-info-display" class="vessel-info-display">
+                    <!-- Vessel info will be dynamically updated here -->
+                </div>
+                
+                <div id="daily-stats-display" class="daily-stats-display">
+                    <!-- Daily stats will be dynamically updated here -->
+                </div>
+                
                 <button id="new-catch-btn" class="primary-btn large">
                     🎣 NOVI ULOV
                 </button>
-                
-                <div class="daily-stats">
-                    <p>📊 Današnji ulovi: <span id="daily-count">0</span></p>
-                </div>
             </main>
         </div>
 
