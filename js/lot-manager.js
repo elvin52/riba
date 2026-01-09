@@ -195,6 +195,7 @@ class LOTManager {
                 product_form: catchData.product_form,        // e.g., "SVJEŽ", "SMRZNUT", "FILETI"
                 purpose_phase: catchData.purpose_phase,      // e.g., "PRODAJA", "PRERADA", "KONZUM"
                 destination: catchData.destination,          // e.g., "TRŽNICA SPLIT", "NA PLOVILU", "HLADNJAČA"
+                freshness_grade: catchData.freshness_grade,  // EU 2023/2842: "EXTRA", "A", "B"
                 presentation_format: catchData.presentation_format || "WHL",  // "WHL" (whole), "FIL" (fillet), etc.
                 preservation_method: catchData.preservation_method || "FRE"   // "FRE" (fresh), "FRZ" (frozen), etc.
             },
