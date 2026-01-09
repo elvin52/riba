@@ -899,7 +899,7 @@ class ProfessionalFishermanApp {
             },
             '🦞 Školjke i rakovi': {
                 description: 'Školjkaši i rakovi',
-                species: ['LBE', 'SLO', 'NEP', 'DPS', 'MSM', 'OYF', 'SVE', 'SCR'],
+                species: ['RKQ','KLK','CTG','VEV','LBE', 'SLO', 'NEP', 'DPS', 'MSM', 'OYF', 'SVE', 'SCR'],
                 color: 'bg-orange-50 border-orange-200'
             },
             '🦈 Hrskavičnjače': {
@@ -909,7 +909,7 @@ class ProfessionalFishermanApp {
             },
             '🌊 Ostala morska riba': {
                 description: 'Dodatne uobičajene vrste (20 najčešćih)',
-                species: ['VEV', 'CTG', 'RKQ', 'KLK', 'AMB', 'TTO', 'MYL', 'JAI', 'UGR', 'CRA', 'FLE', 'TUR', 'RSK', 'GUG', 'GFB', 'WHB', 'BLU', 'ALB', 'BOG', 'MUL'], // Limited to 20 most common additional species
+                species: ['AMB', 'TTO', 'MYL', 'JAI', 'UGR', 'CRA', 'FLE', 'TUR', 'RSK', 'GUG', 'GFB', 'WHB', 'BLU', 'ALB', 'BOG', 'MUL'], // Limited to 20 most common additional species
                 color: 'bg-teal-50 border-teal-200'
             }
         };
