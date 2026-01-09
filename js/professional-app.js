@@ -19,8 +19,7 @@ class ProfessionalFishermanApp {
             product_form: null,
             purpose_phase: null,
             destination: null,
-            size_grade: null,      // EU common market standard 1-9
-            freshness_grade: null  // EU common market standard Extra/A/B
+            freshness_grade: null  // EU freshness standard Extra/A/B
         };
     }
 
@@ -86,12 +85,7 @@ class ProfessionalFishermanApp {
             destinationCustom.addEventListener('input', () => this.updateTraceabilityPreview());
         }
         
-        // EU Common Market Standards (2023/2842 requirement)
-        const sizeGradeSelect = document.getElementById('size-grade-select');
-        if (sizeGradeSelect) {
-            sizeGradeSelect.addEventListener('change', () => this.updateTraceabilityPreview());
-        }
-        
+        // EU Freshness Standard (2023/2842 requirement)
         const freshnessGradeSelect = document.getElementById('freshness-grade-select');
         if (freshnessGradeSelect) {
             freshnessGradeSelect.addEventListener('change', () => this.updateTraceabilityPreview());
@@ -538,8 +532,7 @@ class ProfessionalFishermanApp {
             product_form: null,
             purpose_phase: null,
             destination: null,
-            size_grade: null,      // EU common market standard 1-9
-            freshness_grade: null  // EU common market standard Extra/A/B
+            freshness_grade: null  // EU freshness standard Extra/A/B
         };
         
         // Clear form
@@ -579,7 +572,6 @@ class ProfessionalFishermanApp {
     updateTraceabilityPreview() {
         const productForm = document.getElementById('product-form-select')?.value;
         const purposePhase = document.getElementById('purpose-phase-select')?.value;
-        const sizeGrade = document.getElementById('size-grade-select')?.value;
         const freshnessGrade = document.getElementById('freshness-grade-select')?.value;
         
         const destinationSelect = document.getElementById('destination-select')?.value;
@@ -590,11 +582,10 @@ class ProfessionalFishermanApp {
         this.traceabilityData.product_form = productForm || null;
         this.traceabilityData.purpose_phase = purposePhase || null;
         this.traceabilityData.destination = destination || null;
-        this.traceabilityData.size_grade = sizeGrade || null;
         this.traceabilityData.freshness_grade = freshnessGrade || null;
         
-        // Check if all required fields are filled (including EU market standards)
-        const isComplete = productForm && purposePhase && destination && sizeGrade && freshnessGrade;
+        // Check if all required fields are filled (including EU freshness standard)
+        const isComplete = productForm && purposePhase && destination && freshnessGrade;
         
         const generateBtn = document.getElementById('generate-lot-btn');
         if (generateBtn) {
@@ -611,14 +602,13 @@ class ProfessionalFishermanApp {
                         <p><strong>Oblik:</strong> ${productForm}</p>
                         <p><strong>Namjena:</strong> ${purposePhase}</p>
                         <p><strong>Odredište:</strong> ${destination}</p>
-                        <p><strong>Veličina:</strong> ${sizeGrade}</p>
                         <p><strong>Svježina:</strong> ${freshnessGrade}</p>
-                        <small class="eu-compliance">🇪🇺 Sukladno EU 2023/2842 - Zajednički tržišni standardi</small>
+                        <small class="eu-compliance">🇪🇺 Sukladno EU 2023/2842 - Standard svježine</small>
                     </div>
                 `;
             } else {
                 previewDiv.innerHTML = `
-                    <p class="preview-note">Molimo unesite sve potrebne podatke za sljedivost uključujući EU tržišne standarde</p>
+                    <p class="preview-note">Molimo unesite sve potrebne podatke za sljedivost uključujući EU standard svježine</p>
                 `;
             }
         }
@@ -662,9 +652,9 @@ class ProfessionalFishermanApp {
                 throw new Error('Svi podaci o sljedivosti su obavezni');
             }
             
-            // Validate EU common market standards
-            if (!this.traceabilityData.size_grade || !this.traceabilityData.freshness_grade) {
-                throw new Error('EU tržišni standardi (veličina i svježina) su obavezni');
+            // Validate EU freshness standard
+            if (!this.traceabilityData.freshness_grade) {
+                throw new Error('EU standard svježine je obavezan');
             }
 
             // Generate LOT using new architecture
@@ -692,8 +682,7 @@ class ProfessionalFishermanApp {
                 product_form: this.traceabilityData.product_form,
                 purpose_phase: this.traceabilityData.purpose_phase,
                 destination: this.traceabilityData.destination,
-                // EU 2023/2842 common market standards
-                size_grade: this.traceabilityData.size_grade,
+                // EU 2023/2842 freshness standard
                 freshness_grade: this.traceabilityData.freshness_grade
             };
 
