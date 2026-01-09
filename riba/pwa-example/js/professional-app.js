@@ -128,6 +128,15 @@ class ProfessionalFishermanApp {
     }
 
     setupEventListeners() {
+        // New Catch button (home screen)
+        const newCatchBtn = document.getElementById('new-catch-btn');
+        if (newCatchBtn) {
+            newCatchBtn.addEventListener('click', () => {
+                console.log('🎣 NOVI ULOV button clicked');
+                window.newCatch();
+            });
+        }
+
         // Vessel setup form
         const saveVesselBtn = document.getElementById('save-vessel-btn');
         if (saveVesselBtn) {
