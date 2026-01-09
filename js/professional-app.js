@@ -40,28 +40,11 @@ class ProfessionalFishermanApp {
             // Set up event listeners
             this.setupEventListeners();
             
-            // Determine starting screen based on vessel configuration
+            // Always start with vessel setup screen (allows editing existing data)
+            console.log('🚢 Starting with vessel setup screen for data entry/editing');
             this.vesselConfig = window.vesselConfigManager.getConfig();
-            
-            // Check if vessel is PROPERLY configured (all required fields present)
-            const isProperlyConfigured = this.vesselConfig && 
-                this.vesselConfig.cfr_number && 
-                this.vesselConfig.cfr_number.length >= 3 &&
-                this.vesselConfig.registration_mark && 
-                this.vesselConfig.logbook_number &&
-                this.vesselConfig.fisherman_name &&
-                this.vesselConfig.fishing_gear_category;
-                
-            if (!isProperlyConfigured) {
-                console.log('🚢 Vessel not properly configured - starting with setup');
-                console.log('Config status:', this.vesselConfig ? 'Incomplete' : 'Missing');
-                this.goToScreen('screen-vessel-setup');
-                this.loadVesselSetupForm();
-            } else {
-                console.log('✅ Vessel properly configured - starting with home screen');
-                this.goToScreen('screen-home');
-                this.updateDashboard();
-            }
+            this.goToScreen('screen-vessel-setup');
+            this.loadVesselSetupForm();
             
             // Start time updates
             setInterval(() => this.updateDateTime(), 1000);
@@ -137,14 +120,6 @@ class ProfessionalFishermanApp {
             });
         }
 
-        // Edit Vessel button (home screen)
-        const editVesselBtn = document.getElementById('edit-vessel-btn');
-        if (editVesselBtn) {
-            editVesselBtn.addEventListener('click', () => {
-                console.log('⚙️ Edit vessel data button clicked');
-                this.goToVesselSetup();
-            });
-        }
 
         // Vessel setup form
         const saveVesselBtn = document.getElementById('save-vessel-btn');
