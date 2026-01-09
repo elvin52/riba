@@ -27,7 +27,7 @@
 <body>
     <div id="app">
         <!-- Ekran 0: Vessel Setup (First Time) -->
-        <div id="screen-vessel-setup" class="screen">
+        <div id="screen-vessel-setup" class="screen" style="display: none;">
             <header class="header">
                 <h2>🚢 PODACI O PLOVILU</h2>
                 <p>Podaci se unose jednom i spremaju za sve buduće LOT-ove</p>
@@ -126,7 +126,7 @@
         </div>
 
         <!-- Ekran 1: Fishing Zone Selection -->
-        <div id="screen-fishing-zone" class="screen">
+        <div id="screen-fishing-zone" class="screen" style="display: none;">
             <header class="header">
                 <h2>🎣 ODABIR RIBOLOVNE ZONE</h2>
                 <p>Odabir zone je obavezan prije generiranja LOT-a</p>
@@ -149,7 +149,7 @@
         </div>
 
         <!-- Ekran 2: Home Dashboard -->
-        <div id="screen-home" class="screen">
+        <div id="screen-home" class="screen" style="display: none;">
             <header class="header">
                 <h1>🐟 RIBAR LOT</h1>
                 <div class="status-bar">
@@ -180,7 +180,7 @@
         </div>
 
         <!-- Ekran 3: Odabir vrste -->
-        <div id="screen-species" class="screen">
+        <div id="screen-species" class="screen" style="display: none;">
             <header class="header">
                 <button class="back-btn" onclick="goToScreen('screen-home')">← NATRAG</button>
                 <h2>ODABERI VRSTU</h2>
@@ -198,7 +198,7 @@
         </div>
 
         <!-- Ekran 4: Unos količine -->
-        <div id="screen-quantity" class="screen">
+        <div id="screen-quantity" class="screen" style="display: none;">
             <header class="header">
                 <button class="back-btn" onclick="goToScreen('screen-species')">← NATRAG</button>
                 <h2 id="selected-species-name">VRSTA</h2>
@@ -270,7 +270,7 @@
         </div>
 
         <!-- Traceability Screen -->
-        <div id="screen-traceability" class="screen">
+        <div id="screen-traceability" class="screen" style="display: none;">
             <div class="main-content">
                 <div class="screen-header">
                     <h2>📦 Sljedivost proizvoda</h2>
@@ -367,7 +367,7 @@
         </div>
 
         <!-- Ekran 4: LOT rezultat -->
-        <div id="screen-result" class="screen">
+        <div id="screen-result" class="screen" style="display: none;">
             <header class="header">
                 <h2>LOT KREIRAN</h2>
             </header>
