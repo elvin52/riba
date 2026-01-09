@@ -314,6 +314,35 @@
                         <small class="simple-help">Odaberite najčešće odredište ili upišite svoje</small>
                     </div>
                     
+                    <!-- EU COMMON MARKET STANDARDS (2023/2842 REQUIREMENT) -->
+                    <div class="form-group">
+                        <label for="size-grade-select">Veličina (razred) *</label>
+                        <select id="size-grade-select" required>
+                            <option value="">-- Odaberi veličinu --</option>
+                            <option value="1">1 - Vrlo mala</option>
+                            <option value="2">2 - Mala</option>
+                            <option value="3">3 - Srednja mala</option>
+                            <option value="4">4 - Srednja</option>
+                            <option value="5">5 - Srednja velika</option>
+                            <option value="6">6 - Velika</option>
+                            <option value="7">7 - Vrlo velika</option>
+                            <option value="8">8 - Posebno velika</option>
+                            <option value="9">9 - Iznimno velika</option>
+                        </select>
+                        <small>Obavezno za proizvode s propisanim tržišnim standardima (EU 2023/2842)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="freshness-grade-select">Svježina (klasa) *</label>
+                        <select id="freshness-grade-select" required>
+                            <option value="">-- Odaberi svježinu --</option>
+                            <option value="EXTRA">EXTRA - Izuzetna kvaliteta</option>
+                            <option value="A">A - Prva klasa</option>
+                            <option value="B">B - Druga klasa</option>
+                        </select>
+                        <small>Klasifikacija svježine prema zajedničkim tržišnim standardima</small>
+                    </div>
+                    
                     <div class="traceability-summary">
                         <div id="traceability-preview">
                             <p class="preview-note">Pregled sljedivosti će se prikazati nakon odabira svih polja</p>

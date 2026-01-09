@@ -14,11 +14,13 @@ class ProfessionalFishermanApp {
         this.currentCatch = null;
         this.dailyStats = { count: 0, total_weight_kg: 0 };
         
-        // Traceability data
+        // Traceability data (EU 2023/2842 compliant)
         this.traceabilityData = {
             product_form: null,
             purpose_phase: null,
-            destination: null
+            destination: null,
+            size_grade: null,      // EU common market standard 1-9
+            freshness_grade: null  // EU common market standard Extra/A/B
         };
     }
 
@@ -99,6 +101,17 @@ class ProfessionalFishermanApp {
         const destinationCustom = document.getElementById('destination-custom');
         if (destinationCustom) {
             destinationCustom.addEventListener('input', () => this.updateTraceabilityPreview());
+        }
+        
+        // EU Common Market Standards (2023/2842 requirement)
+        const sizeGradeSelect = document.getElementById('size-grade-select');
+        if (sizeGradeSelect) {
+            sizeGradeSelect.addEventListener('change', () => this.updateTraceabilityPreview());
+        }
+        
+        const freshnessGradeSelect = document.getElementById('freshness-grade-select');
+        if (freshnessGradeSelect) {
+            freshnessGradeSelect.addEventListener('change', () => this.updateTraceabilityPreview());
         }
         
         // Back to quantity button
@@ -519,11 +532,13 @@ class ProfessionalFishermanApp {
             return;
         }
         
-        // Reset traceability data
+        // Reset traceability data (EU 2023/2842 compliant)
         this.traceabilityData = {
             product_form: null,
             purpose_phase: null,
-            destination: null
+            destination: null,
+            size_grade: null,      // EU common market standard 1-9
+            freshness_grade: null  // EU common market standard Extra/A/B
         };
         
         // Clear form
@@ -563,26 +578,29 @@ class ProfessionalFishermanApp {
     updateTraceabilityPreview() {
         const productForm = document.getElementById('product-form-select')?.value;
         const purposePhase = document.getElementById('purpose-phase-select')?.value;
+        const sizeGrade = document.getElementById('size-grade-select')?.value;
+        const freshnessGrade = document.getElementById('freshness-grade-select')?.value;
         
-        // Get destination from either dropdown or custom input
         const destinationSelect = document.getElementById('destination-select')?.value;
         const destinationCustom = document.getElementById('destination-custom')?.value;
         const destination = destinationSelect === 'DRUGO' ? destinationCustom : destinationSelect;
         
-        // Update internal state
+        // Update internal state (EU 2023/2842 compliant)
         this.traceabilityData.product_form = productForm || null;
         this.traceabilityData.purpose_phase = purposePhase || null;
         this.traceabilityData.destination = destination || null;
+        this.traceabilityData.size_grade = sizeGrade || null;
+        this.traceabilityData.freshness_grade = freshnessGrade || null;
         
-        // Check if all required fields are filled
-        const isComplete = productForm && purposePhase && destination;
+        // Check if all required fields are filled (including EU market standards)
+        const isComplete = productForm && purposePhase && destination && sizeGrade && freshnessGrade;
+        
         const generateBtn = document.getElementById('generate-lot-btn');
         if (generateBtn) {
             generateBtn.disabled = !isComplete;
-            generateBtn.style.opacity = isComplete ? '1' : '0.5';
         }
         
-        // Update preview
+        // Update preview with EU market standards
         const previewDiv = document.getElementById('traceability-preview');
         if (previewDiv) {
             if (isComplete) {
@@ -592,16 +610,14 @@ class ProfessionalFishermanApp {
                         <p><strong>Oblik:</strong> ${productForm}</p>
                         <p><strong>Namjena:</strong> ${purposePhase}</p>
                         <p><strong>Odredište:</strong> ${destination}</p>
+                        <p><strong>Veličina:</strong> ${sizeGrade}</p>
+                        <p><strong>Svježina:</strong> ${freshnessGrade}</p>
+                        <small class="eu-compliance">🇪🇺 Sukladno EU 2023/2842 - Zajednički tržišni standardi</small>
                     </div>
                 `;
             } else {
-                const missing = [];
-                if (!productForm) missing.push('Oblik proizvoda');
-                if (!purposePhase) missing.push('Namjena/faza');
-                if (!destination) missing.push('Odredište');
-                
                 previewDiv.innerHTML = `
-                    <p class="preview-note">⚠️ Nedostaju podaci: ${missing.join(', ')}</p>
+                    <p class="preview-note">Molimo unesite sve potrebne podatke za sljedivost uključujući EU tržišne standarde</p>
                 `;
             }
         }
@@ -640,9 +656,14 @@ class ProfessionalFishermanApp {
                 }
             }
             
-            // Validate traceability data
+            // Validate traceability data (EU 2023/2842 compliant)
             if (!this.traceabilityData.product_form || !this.traceabilityData.purpose_phase || !this.traceabilityData.destination) {
                 throw new Error('Svi podaci o sljedivosti su obavezni');
+            }
+            
+            // Validate EU common market standards
+            if (!this.traceabilityData.size_grade || !this.traceabilityData.freshness_grade) {
+                throw new Error('EU tržišni standardi (veličina i svježina) su obavezni');
             }
 
             // Generate LOT using new architecture
@@ -669,7 +690,10 @@ class ProfessionalFishermanApp {
                 // Ministry-required traceability fields
                 product_form: this.traceabilityData.product_form,
                 purpose_phase: this.traceabilityData.purpose_phase,
-                destination: this.traceabilityData.destination
+                destination: this.traceabilityData.destination,
+                // EU 2023/2842 common market standards
+                size_grade: this.traceabilityData.size_grade,
+                freshness_grade: this.traceabilityData.freshness_grade
             };
 
             const traceabilityRecord = window.lotManager.createTraceabilityRecord(
