@@ -136,7 +136,7 @@ class FishermanDB {
             // Cartilaginous fish (sharks, rays)
             { fao_code: 'TTO', scientific_name: 'Tetronarce nobiliana', local_name: 'Drhtulja mrkulja', emoji: '🐟', min_size_cm: 0, category: 'cartilaginous' },
             { fao_code: 'TTR', scientific_name: 'Dasyatis marmorata', local_name: 'Drhtulja šarulja', emoji: '🐟', min_size_cm: 0, category: 'cartilaginous' },
-            { fao_code: 'MYL', scientific_name: 'Myliobatis aquila', local_name: 'Golub', emoji: '🐟', min_size_cm: 0, category: 'cartilaginous' },
+            { fao_code: 'MYL', scientific_name: 'Myliobatis aquila', local_name: 'Golub', emoji: '🐟', min_size_cm: 0, category: 'fish' },
             { fao_code: 'SYC', scientific_name: 'Scyliorhinus canicula', local_name: 'Mačka bljedica', emoji: '🦈', min_size_cm: 0, category: 'cartilaginous' },
             { fao_code: 'SYT', scientific_name: 'Scyliorhinus stellaris', local_name: 'Mačka mrkulja', emoji: '🦈', min_size_cm: 0, category: 'cartilaginous' },
             { fao_code: 'SCL', scientific_name: 'Scyliorhinus spp', local_name: 'Mačke', emoji: '🦈', min_size_cm: 0, category: 'cartilaginous' },
