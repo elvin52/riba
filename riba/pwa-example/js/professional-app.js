@@ -576,6 +576,8 @@ class ProfessionalFishermanApp {
         const purposePhase = document.getElementById('purpose-phase-select')?.value;
         const freshnessGrade = document.getElementById('freshness-grade-select')?.value;
         
+        console.log('🌟 DEBUG - Freshness grade from form:', freshnessGrade);
+        
         const destinationSelect = document.getElementById('destination-select')?.value;
         const destinationCustom = document.getElementById('destination-custom')?.value;
         const destination = destinationSelect === 'DRUGO' ? destinationCustom : destinationSelect;
@@ -585,6 +587,8 @@ class ProfessionalFishermanApp {
         this.traceabilityData.purpose_phase = purposePhase || null;
         this.traceabilityData.destination = destination || null;
         this.traceabilityData.freshness_grade = freshnessGrade || null;
+        
+        console.log('🌟 DEBUG - Stored freshness_grade:', this.traceabilityData.freshness_grade);
         
         // Check if all required fields are filled (including EU freshness standard)
         const isComplete = productForm && purposePhase && destination && freshnessGrade;
@@ -655,6 +659,7 @@ class ProfessionalFishermanApp {
             }
             
             // Validate EU freshness standard
+            console.log('🌟 DEBUG - Before validation, freshness_grade is:', this.traceabilityData.freshness_grade);
             if (!this.traceabilityData.freshness_grade) {
                 throw new Error('EU standard svježine je obavezan');
             }
@@ -687,6 +692,8 @@ class ProfessionalFishermanApp {
                 // EU 2023/2842 freshness standard
                 freshness_grade: this.traceabilityData.freshness_grade
             };
+            
+            console.log('🌟 DEBUG - catchData freshness_grade:', catchData.freshness_grade);
 
             const traceabilityRecord = window.lotManager.createTraceabilityRecord(
                 lotId,
