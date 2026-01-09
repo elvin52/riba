@@ -629,6 +629,7 @@ LOT ${record.lot_id}
 📦 Oblik: ${record.traceability.product_form}
 🎯 Namjena: ${record.traceability.purpose_phase}
 📍 Odredište: ${record.traceability.destination}
+🌟 Svježina: ${record.traceability.freshness_grade}
 `.trim();
     }
 
@@ -639,7 +640,7 @@ LOT ${record.lot_id}
             'PRODUCTION_AREA_TYPE', 'FAO_ZONE', 'AREA_DESCRIPTION', 
             'QUANTITY_TYPE', 'NET_WEIGHT_KG', 'UNIT_COUNT', 'GEAR_CATEGORY', 'CFR_NUMBER', 
             'LOGBOOK_NUMBER', 'UNDERSIZED_PRESENT', 'UNDERSIZED_WEIGHT_KG', 'UNDERSIZED_UNIT_COUNT',
-            'PRODUCT_FORM', 'PURPOSE_PHASE', 'DESTINATION'
+            'PRODUCT_FORM', 'PURPOSE_PHASE', 'DESTINATION', 'FRESHNESS_GRADE'
         ];
         
         const values = [
@@ -661,7 +662,8 @@ LOT ${record.lot_id}
             record.quantity.undersized_unit_count || 0,
             record.traceability.product_form,
             record.traceability.purpose_phase,
-            record.traceability.destination
+            record.traceability.destination,
+            record.traceability.freshness_grade
         ];
 
         return headers.join(',') + '\n' + values.join(',');
