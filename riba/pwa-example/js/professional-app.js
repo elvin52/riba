@@ -837,12 +837,18 @@ class ProfessionalFishermanApp {
     goToScreen(screenId) {
         document.querySelectorAll('.screen').forEach(screen => {
             screen.classList.remove('active');
+            screen.style.display = 'none'; // Ensure all screens are hidden
         });
         
         const targetScreen = document.getElementById(screenId);
         if (targetScreen) {
             targetScreen.classList.add('active');
+            targetScreen.style.display = 'flex'; // Override inline display:none
+            targetScreen.style.flexDirection = 'column'; // Match CSS
             this.currentScreen = screenId;
+            console.log(`✅ Screen switched to: ${screenId}`);
+        } else {
+            console.error(`❌ Screen not found: ${screenId}`);
         }
     }
 
