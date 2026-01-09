@@ -540,6 +540,7 @@ class ProfessionalFishermanApp {
         const purposePhaseSelect = document.getElementById('purpose-phase-select');
         const destinationSelect = document.getElementById('destination-select');
         const destinationCustom = document.getElementById('destination-custom');
+        const freshnessGradeSelect = document.getElementById('freshness-grade-select');
         
         if (productFormSelect) productFormSelect.value = '';
         if (purposePhaseSelect) purposePhaseSelect.value = '';
@@ -548,6 +549,7 @@ class ProfessionalFishermanApp {
             destinationCustom.value = '';
             destinationCustom.classList.add('hidden');
         }
+        if (freshnessGradeSelect) freshnessGradeSelect.value = '';
         
         this.updateTraceabilityPreview();
         this.goToScreen('screen-traceability');
