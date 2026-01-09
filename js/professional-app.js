@@ -137,6 +137,15 @@ class ProfessionalFishermanApp {
             });
         }
 
+        // Edit Vessel button (home screen)
+        const editVesselBtn = document.getElementById('edit-vessel-btn');
+        if (editVesselBtn) {
+            editVesselBtn.addEventListener('click', () => {
+                console.log('⚙️ Edit vessel data button clicked');
+                this.goToVesselSetup();
+            });
+        }
+
         // Vessel setup form
         const saveVesselBtn = document.getElementById('save-vessel-btn');
         if (saveVesselBtn) {
@@ -836,6 +845,12 @@ class ProfessionalFishermanApp {
             errorDiv.textContent = message;
             errorDiv.style.display = 'block';
         }
+    }
+
+    goToVesselSetup() {
+        // Load existing vessel data for editing
+        this.loadVesselSetupForm();
+        this.goToScreen('screen-vessel-setup');
     }
 
     showError(message) {
