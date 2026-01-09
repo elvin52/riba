@@ -378,6 +378,14 @@
     <script>
         console.log('🔧 Development mode - selective cache management');
         
+        // Ensure no screens are active during initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            console.log('🚫 All screens hidden during initialization');
+        });
+        
         // Only clear application caches, preserve vessel configuration
         if ('caches' in window) {
             caches.keys().then(names => {
