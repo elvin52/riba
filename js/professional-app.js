@@ -241,6 +241,43 @@ class ProfessionalFishermanApp {
             this.showError('Greška pri spremanju podataka o plovilu: ' + error.message);
         }
     }
+
+    // Update home screen dashboard
+    updateDashboard() {
+        try {
+            console.log('📊 Updating dashboard...');
+            
+            // Update vessel info display
+            if (this.vesselConfig) {
+                const vesselInfoEl = document.getElementById('vessel-info-display');
+                if (vesselInfoEl) {
+                    vesselInfoEl.innerHTML = `
+                        <div class="vessel-summary">
+                            <h3>🚢 ${this.vesselConfig.registration_mark || 'N/A'}</h3>
+                            <p><strong>CFR:</strong> ${this.vesselConfig.cfr_number || 'N/A'}</p>
+                            <p><strong>Ribar:</strong> ${this.vesselConfig.fisherman_name || 'N/A'}</p>
+                        </div>
+                    `;
+                }
+            }
+            
+            // Update daily stats
+            const statsEl = document.getElementById('daily-stats-display');
+            if (statsEl) {
+                statsEl.innerHTML = `
+                    <div class="daily-stats">
+                        <h3>📈 Dnevni ulov</h3>
+                        <p><strong>Broj LOT-ova:</strong> ${this.dailyStats.count || 0}</p>
+                        <p><strong>Ukupno:</strong> ${(this.dailyStats.total_weight_kg || 0).toFixed(1)} kg</p>
+                    </div>
+                `;
+            }
+            
+            console.log('✅ Dashboard updated');
+        } catch (error) {
+            console.error('❌ Dashboard update failed:', error);
+        }
+    }
     
     // Real-time vessel input validation (less strict)
     validateVesselInputs(showErrors = true) {
