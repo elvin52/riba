@@ -245,9 +245,17 @@ class ProfessionalFishermanApp {
             
             console.log(' Vessel configuration saved');
             
-            // Proceed to fishing zone selection
-            this.goToScreen('screen-fishing-zone');
-            this.renderFishingZones();
+            // Skip zone selection - automatically use Adriatic Sea
+            this.currentFAOZone = {
+                code: "37.2.1",
+                name: "Jadransko more",
+                description: "Jadransko more - hrvatska obala"
+            };
+            console.log('🌊 Automatically set zone: Adriatic Sea');
+            
+            // Go directly to species selection
+            this.goToScreen('screen-species');
+            this.renderSpeciesGrid();
             
         } catch (error) {
             console.error(' Error saving vessel data:', error);
@@ -1381,9 +1389,17 @@ window.showQR = function() {
 window.newCatch = function() {
     const app = window.professionalFishermanApp;
     if (app && app.goToScreen) {
-        // Reset to fishing zone selection for new catch
-        app.goToScreen('screen-fishing-zone');
-        app.renderFishingZones();
+        // Skip zone selection - automatically use Adriatic Sea for new catch
+        app.currentFAOZone = {
+            code: "37.2.1",
+            name: "Jadransko more",
+            description: "Jadransko more - hrvatska obala"
+        };
+        console.log('🌊 New catch - automatically set zone: Adriatic Sea');
+        
+        // Go directly to species selection
+        app.goToScreen('screen-species');
+        app.renderSpeciesGrid();
     } else {
         console.error('❌ New catch function not available');
     }
